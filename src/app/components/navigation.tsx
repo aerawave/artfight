@@ -8,6 +8,7 @@ import {
     faQuestionCircle,
     faMagnifyingGlass,
     faPlus,
+    faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import Chip from "./chip";
@@ -58,6 +59,7 @@ const shop: NavLinkData = {
             </Chip>
         </>
     ),
+    icon: faShoppingCart,
     subs: [
         { href: "/donate", label: "Support Art Fight" },
         "divider",
@@ -128,45 +130,71 @@ export default function Navigation(props: NavigationProps) {
         links.push(browse, submit);
     }
 
+    const banner_counts: { [key: string]: number } = {
+        seafoam: 3,
+        stardust: 3,
+    };
+
+    const banners = Object.keys(banner_counts).flatMap((key) =>
+        new Array(banner_counts[key]).fill(0).map((v, i) => `${key}_${i + 1}`)
+    );
+
+    const banner_src = `/assets/img/banners/${
+        banners[Math.floor(Math.random() * banners.length)]
+    }.png`;
+
     return (
-        <Disclosure as="nav" className="bg-gray-800 px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 items-center justify-between">
-                <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                        <Link href="/" className="flex flex-row items-center">
-                            <Image
-                                alt="ArtFight"
-                                src="/assets/img/logos/logo40.png"
-                                className="h-8 w-8"
-                                width="40"
-                                height="40"
-                            />
-                            <span className="uppercase ml-2 text-1xl">
-                                Art Fight
-                            </span>
-                        </Link>
+        <>
+            <Disclosure as="nav" className="bg-gray-800 px-4 sm:px-6 lg:px-8">
+                <div className="flex h-16 items-center justify-between">
+                    <div className="flex items-center">
+                        <div className="flex-shrink-0">
+                            <Link
+                                href="/"
+                                className="flex flex-row items-center"
+                            >
+                                <Image
+                                    alt="ArtFight"
+                                    src="/assets/img/logos/logo40.png"
+                                    className="h-8 w-8"
+                                    width="40"
+                                    height="40"
+                                />
+                                <span className="uppercase ml-2 text-1xl">
+                                    Art Fight
+                                </span>
+                            </Link>
+                        </div>
+                        <div className="hidden ml-8 md:flex flex-row">
+                            {links.map((link, i) => (
+                                <NavLink key={i} data={link} className="ml-8" />
+                            ))}
+                        </div>
                     </div>
-                    <div className="hidden ml-8 md:flex flex-row">
-                        {links.map((link, i) => (
-                            <NavLink key={i} data={link} className="ml-8" />
-                        ))}
+                    <div className="hidden md:block">
+                        {props.user ? (
+                            <UserLink user={props.user} />
+                        ) : (
+                            <>
+                                <Link href="/register" className="m-4">
+                                    Register
+                                </Link>
+                                <Link href="/login" className="m-4">
+                                    Log In
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
-                <div className="hidden md:block">
-                    {props.user ? (
-                        <UserLink user={props.user} />
-                    ) : (
-                        <>
-                            <Link href="/register" className="m-4">
-                                Register
-                            </Link>
-                            <Link href="/login" className="m-4">
-                                Log In
-                            </Link>
-                        </>
-                    )}
-                </div>
-            </div>
-        </Disclosure>
+            </Disclosure>
+            <Image
+                alt="banner"
+                src={banner_src}
+                width="6000"
+                height="696"
+                quality={1}
+                className="w-max"
+            />
+        </>
     );
 }
