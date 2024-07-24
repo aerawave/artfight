@@ -1,4 +1,4 @@
-"use client";
+"use server";
 import React from "react";
 import { Disclosure } from "@headlessui/react";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import Chip from "./chip";
 import NavLink, { NavLinkData } from "./navigation/nav-link";
 import UserLink from "./navigation/user-link";
+import Banner from "./navigation/banner";
 
 type NavLink = {
     href: string;
@@ -123,25 +124,12 @@ type NavigationProps = {
     user?: string;
 };
 
-export default function Navigation(props: NavigationProps) {
+export default async function Navigation(props: NavigationProps) {
     const links: NavLinkData[] = [discord, help, shop];
 
     if (props.user) {
         links.push(browse, submit);
     }
-
-    const banner_counts: { [key: string]: number } = {
-        seafoam: 3,
-        stardust: 3,
-    };
-
-    const banners = Object.keys(banner_counts).flatMap((key) =>
-        new Array(banner_counts[key]).fill(0).map((v, i) => `${key}_${i + 1}`)
-    );
-
-    const banner_src = `/assets/img/banners/${
-        banners[Math.floor(Math.random() * banners.length)]
-    }.png`;
 
     return (
         <>
@@ -187,14 +175,7 @@ export default function Navigation(props: NavigationProps) {
                     </div>
                 </div>
             </Disclosure>
-            <Image
-                alt="banner"
-                src={banner_src}
-                width="6000"
-                height="696"
-                quality={1}
-                className="w-max"
-            />
+            <Banner />
         </>
     );
 }
