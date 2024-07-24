@@ -7,7 +7,8 @@ import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import Chip from "./chip";
-import NavLink, { NavLinkData } from "./nav-link";
+import NavLink, { NavLinkData } from "./navigation/nav-link";
+import UserLink from "./navigation/user-link";
 
 type NavLink = {
     href: string;
@@ -80,7 +81,11 @@ const links: NavLinkData[] = [
     },
 ];
 
-export default function Navigation() {
+type NavigationProps = {
+    user?: string;
+};
+
+export default function Navigation(props: NavigationProps) {
     return (
         <Disclosure as="nav" className="bg-gray-800 px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
@@ -99,19 +104,25 @@ export default function Navigation() {
                             </span>
                         </Link>
                     </div>
-                    <div className="hidden md:block ml-8">
+                    <div className="hidden ml-8 md:flex flex-row">
                         {links.map((link, i) => (
                             <NavLink key={i} data={link} className="ml-8" />
                         ))}
                     </div>
                 </div>
                 <div className="hidden md:block">
-                    <Link href="/register" className="m-4">
-                        Register
-                    </Link>
-                    <Link href="/login" className="m-4">
-                        Log In
-                    </Link>
+                    {props.user ? (
+                        <UserLink user={props.user} />
+                    ) : (
+                        <>
+                            <Link href="/register" className="m-4">
+                                Register
+                            </Link>
+                            <Link href="/login" className="m-4">
+                                Log In
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </Disclosure>

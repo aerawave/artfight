@@ -36,7 +36,9 @@ export default function NavLink({ className, data: link }: NavLinkProps) {
     if (link.subs && link.subs.length > 0)
         return (
             <Menu>
-                <MenuButton className={`cursor-pointer ${className}`}>
+                <MenuButton
+                    className={`cursor-pointer flex flex-row items-center ${className}`}
+                >
                     {label}
                     <FontAwesomeIcon className="ml-1" icon={faCaretDown} />
                 </MenuButton>
