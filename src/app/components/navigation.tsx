@@ -24,13 +24,12 @@ type NavLink = {
 };
 
 const discord: NavLinkData = {
-    href: "/",
+    href: "https://discord.gg/artfight",
     label: "Discord",
     icon: faDiscord,
 };
 
 const help: NavLinkData = {
-    href: "/",
     label: "Help",
     icon: faQuestionCircle,
     subs: [
@@ -51,7 +50,6 @@ const help: NavLinkData = {
 };
 
 const shop: NavLinkData = {
-    href: "/",
     label: (
         <>
             <span>Shop</span>
@@ -89,20 +87,19 @@ const shop: NavLinkData = {
 };
 
 const browse: NavLinkData = {
-    href: "/",
     label: "Browse",
     icon: faMagnifyingGlass,
     subs: [
-        { href: "/", label: "Rate Attacks" },
+        { href: "/rate", label: "Rate Attacks" },
         "divider",
         { label: "Browse" },
-        { href: "/", label: "Members" },
-        { href: "/", label: "Attacks" },
-        { href: "/", label: "Characters" },
-        { href: "/", label: "Random Character" },
-        { href: "/", label: "Random User" },
+        { href: "/members", label: "Members" },
+        { href: "/attacks", label: "Attacks" },
+        { href: "/characters", label: "Characters" },
+        { href: "/character/random", label: "Random Character" },
+        { href: "/user/random", label: "Random User" },
         {
-            href: "/",
+            href: "/browse/tags",
             label: (
                 <>
                     <span>Tag Search</span>
@@ -114,10 +111,9 @@ const browse: NavLinkData = {
 };
 
 const submit: NavLinkData = {
-    href: "/",
     label: "Submit",
     icon: faPlus,
-    subs: [{ href: "/", label: "Character" }],
+    subs: [{ href: "/submit/character", label: "Character" }],
 };
 
 type NavigationProps = {
