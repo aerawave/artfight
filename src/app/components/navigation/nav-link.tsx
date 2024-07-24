@@ -20,9 +20,14 @@ export type NavLinkData =
 interface NavLinkProps {
     className?: string;
     data: NavLinkData;
+    isSub?: boolean;
 }
 
-export default function NavLink({ className, data: link }: NavLinkProps) {
+export default function NavLink({
+    className,
+    data: link,
+    isSub,
+}: NavLinkProps) {
     if (link === "divider")
         return <hr className={`my-2 border-gray-700 ${className}`} />;
 
@@ -48,7 +53,7 @@ export default function NavLink({ className, data: link }: NavLinkProps) {
                 >
                     {link.subs.map((sub, i) => (
                         <MenuItem key={i}>
-                            <NavLink data={sub} className="block px-8" />
+                            <NavLink data={sub} className="block px-8" isSub />
                         </MenuItem>
                     ))}
                 </MenuItems>
@@ -67,7 +72,9 @@ export default function NavLink({ className, data: link }: NavLinkProps) {
     return (
         <Link
             href={link.href}
-            className={`hover:bg-gray-400 cursor-pointer py-0.5 ${className}`}
+            className={`cursor-pointer py-0.5 ${className} ${
+                isSub ? "hover:bg-gray-400" : ""
+            }`}
         >
             {label}
         </Link>
