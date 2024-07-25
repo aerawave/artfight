@@ -32,7 +32,7 @@ export default async function UserLink() {
                     width="48"
                     height="48"
                 />
-                <span className="ml-2">{user.username}</span>
+                <span>{user.username}</span>
             </span>
         ),
         subs: [
