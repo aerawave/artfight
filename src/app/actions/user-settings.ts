@@ -1,5 +1,6 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { ClerkAPIResponseError } from "@clerk/shared/error";
+import { z } from "zod";
 
 type ChangePasswordState = {
     success?: boolean;
@@ -17,6 +18,14 @@ type ChangeAvatarState = {
     newImageUrl?: string;
     errors?: {
         image?: string[];
+    };
+};
+
+type ChangeEmailState = {
+    success?: boolean;
+    cleared?: boolean;
+    errors?: {
+        email?: string[];
     };
 };
 
@@ -131,6 +140,56 @@ export async function changeAvatar(
         return {
             errors: {
                 image: err.errors
+                    .map((err) => err.longMessage)
+                    .filter((m) => m) as string[],
+            },
+        };
+    }
+}
+
+export async function changeEmail(
+    state: ChangeEmailState,
+    data: FormData
+): Promise<ChangeEmailState> {
+    const { userId } = auth();
+    if (!userId) {
+        return {
+            errors: {
+                email: ["User not authenticated."],
+            },
+        };
+    }
+
+    const validation = z
+        .object({
+            email: z.string().email(),
+        })
+        .safeParse({
+            email: data.get("email"),
+        });
+
+    if (validation.error) {
+        return {
+            errors: validation.error.flatten().fieldErrors,
+        };
+    }
+
+    const { email } = validation.data;
+
+    const client = clerkClient();
+
+    try {
+        await client.emailAddresses.createEmailAddress({
+            userId: userId,
+            emailAddress: email,
+        });
+
+        return { success: true };
+    } catch (err_) {
+        const err = err_ as ClerkAPIResponseError;
+        return {
+            errors: {
+                email: err.errors
                     .map((err) => err.longMessage)
                     .filter((m) => m) as string[],
             },

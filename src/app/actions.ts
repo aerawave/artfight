@@ -3,6 +3,7 @@ import {
     changePassword,
     getCurrentUser,
     changeAvatar,
+    changeEmail,
 } from "./actions/user-settings";
 
-export { changePassword, getCurrentUser, changeAvatar };
+export { changePassword, getCurrentUser, changeAvatar, changeEmail };
