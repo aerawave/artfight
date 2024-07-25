@@ -1,5 +1,6 @@
 "use client";
 
+import { changeSiteTheme } from "@/app/actions";
 import { Section } from "@/app/components/section";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +15,8 @@ import {
     MenuItems,
 } from "@headlessui/react";
 import React, { useState } from "react";
+import { useFormState } from "react-dom";
+import { ErrorList } from "./error-list";
 
 type SiteTheme = "dark" | "light";
 
@@ -35,10 +38,18 @@ export default function ChangeSiteTheme({
 }: ChangeSiteThemeProps) {
     const [customThemes, setCustomThemes] = useState(customThemesInitial);
     const [style, setStyle] = useState(styleInitial);
+    const [state, action] = useFormState(changeSiteTheme, {});
 
     return (
         <Section className={className} title={<h4>Site Theme</h4>}>
-            <form className="flex flex-col gap-4">
+            <div>
+                {state.success ? (
+                    <h5 className="text-green-400">Settings updated!</h5>
+                ) : (
+                    <ErrorList errors={state.errors?.general} />
+                )}
+            </div>
+            <form className="flex flex-col gap-4" action={action}>
                 <Field className="flex flex-row">
                     <Label className="text-sm text-white/50">
                         Show custom themes on user profiles by default
@@ -46,12 +57,19 @@ export default function ChangeSiteTheme({
                     <Input
                         type="checkbox"
                         className="ml-2"
+                        name="show_custom_themes"
                         checked={customThemes}
                         onChange={() => setCustomThemes(!customThemes)}
                     />
                 </Field>
                 <Field className="flex flex-col">
                     <Label className="text-sm text-white/50">Style</Label>
+                    <input
+                        hidden
+                        name="dark_mode"
+                        value={style}
+                        onChange={() => {}}
+                    />
                     <Menu>
                         <MenuButton className="input text-left hover:bg-white/20">
                             <span className="flex flex-row justify-between">

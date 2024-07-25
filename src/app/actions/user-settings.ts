@@ -1,5 +1,8 @@
+import db from "@/db/database";
+import { UserProperties, Users } from "@/db/schema";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { ClerkAPIResponseError } from "@clerk/shared/error";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 type ChangePasswordState = {
@@ -26,6 +29,14 @@ type ChangeEmailState = {
     cleared?: boolean;
     errors?: {
         email?: string[];
+    };
+};
+
+type ChangeSiteThemeState = {
+    success?: boolean;
+    cleared?: boolean;
+    errors?: {
+        general?: string[];
     };
 };
 
@@ -195,4 +206,63 @@ export async function changeEmail(
             },
         };
     }
+}
+
+export async function changeSiteTheme(
+    state: ChangeSiteThemeState,
+    data: FormData
+): Promise<ChangeSiteThemeState> {
+    const { userId: clerkId } = auth();
+    if (!clerkId) {
+        return {
+            errors: {
+                general: ["User not authenticated."],
+            },
+        };
+    }
+
+    const userId = (
+        await db
+            .select()
+            .from(Users)
+            .where((u) => eq(u.clerkId, clerkId))
+            .limit(1)
+    )[0].id;
+
+    const validation = z
+        .object({
+            show_custom_themes: z.boolean(),
+            dark_mode: z.string(),
+        })
+        .safeParse({
+            show_custom_themes: data.get("show_custom_themes") === "on",
+            dark_mode: data.get("dark_mode"),
+        });
+
+    if (validation.error) {
+        return {
+            errors: {
+                general: validation.error.flatten().formErrors,
+            },
+        };
+    }
+
+    const { show_custom_themes, dark_mode } = validation.data;
+
+    await db.insert(UserProperties).values([
+        {
+            userId,
+            key: "show_custom_themes",
+            value: show_custom_themes ? "true" : "false",
+        },
+        {
+            userId,
+            key: "dark_mode",
+            value: dark_mode,
+        },
+    ]);
+
+    return {
+        success: true,
+    };
 }
