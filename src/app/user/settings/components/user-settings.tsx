@@ -11,8 +11,10 @@ type UserSettingsProps = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function UserSettings({ user }: UserSettingsProps) {
     return (
-        <>
-            <ChangePassword />
-        </>
+        <div className="w-max flex flex-row">
+            <div className="flex flex-col">
+                <ChangePassword />
+            </div>
+        </div>
     );
 }

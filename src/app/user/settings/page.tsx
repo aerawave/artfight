@@ -40,7 +40,7 @@ export default async function UserSettingsPage() {
     return (
         <>
             <Navigation />
-            <div className="flex flex-col justify-center items-center pt-8">
+            <div className="pt-8">
                 <TabGroup>
                     <TabList className="flex gap-4">
                         {settings_tabs.map((tab) => (
@@ -54,12 +54,7 @@ export default async function UserSettingsPage() {
                     </TabList>
                     <TabPanels className="mt-3">
                         {settings_tabs.map((tab) => (
-                            <TabPanel
-                                key={tab.key}
-                                className="rounded-xl bg-white/5"
-                            >
-                                {tab.content}
-                            </TabPanel>
+                            <TabPanel key={tab.key}>{tab.content}</TabPanel>
                         ))}
                     </TabPanels>
                 </TabGroup>
