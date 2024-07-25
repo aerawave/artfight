@@ -2,9 +2,8 @@ import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const Users = pgTable("Users", {
     id: serial("id").primaryKey(),
-    email: text("email").notNull().unique(),
-    handle: text("handle").notNull().unique(),
-    birthdate: timestamp("birthdate").notNull(),
+    clerkId: text("clerk_id").notNull().unique(),
+    birthdate: timestamp("birthdate").notNull().defaultNow(),
     // password
     createdAt: timestamp("created_at").notNull().defaultNow(),
 });

@@ -1,6 +1,13 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
+import { verifyUser } from "./app/actions/auth";
 
-export default clerkMiddleware();
+export default clerkMiddleware(async (auth) => {
+    const user_id = auth().userId;
+
+    if (user_id) {
+        await verifyUser(user_id);
+    }
+});
 
 export const config = {
     matcher: [
