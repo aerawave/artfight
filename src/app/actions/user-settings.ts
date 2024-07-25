@@ -1,4 +1,5 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import { ClerkAPIResponseError } from "@clerk/shared/error";
 
 type ChangePasswordState = {
     success?: boolean;
@@ -7,6 +8,15 @@ type ChangePasswordState = {
         old_password?: string[];
         new_password?: string[];
         verification?: string[];
+    };
+};
+
+type ChangeAvatarState = {
+    success?: boolean;
+    cleared?: boolean;
+    newImageUrl?: string;
+    errors?: {
+        image?: string[];
     };
 };
 
@@ -73,6 +83,56 @@ export async function changePassword(
         return {
             errors: {
                 verification: erro.errors.map((e) => e.longMessage) as string[],
+            },
+        };
+    }
+}
+
+export async function getCurrentUser() {
+    const { userId } = auth();
+
+    if (!userId) {
+        return undefined;
+    }
+    return await clerkClient().users.getUser(userId);
+}
+
+export async function changeAvatar(
+    state: ChangeAvatarState,
+    data: FormData
+): Promise<ChangeAvatarState> {
+    const { userId } = auth();
+    if (!userId) {
+        return {
+            errors: {
+                image: ["User not authenticated."],
+            },
+        };
+    }
+
+    const file = data.get("image")?.valueOf() as File;
+
+    if (file.size === 0) {
+        return {
+            errors: {
+                image: ["No image uploaded."],
+            },
+        };
+    }
+    const client = clerkClient();
+
+    try {
+        const { imageUrl } = await client.users.updateUserProfileImage(userId, {
+            file,
+        });
+        return { success: true, newImageUrl: imageUrl };
+    } catch (err_) {
+        const err = err_ as ClerkAPIResponseError;
+        return {
+            errors: {
+                image: err.errors
+                    .map((err) => err.longMessage)
+                    .filter((m) => m) as string[],
             },
         };
     }

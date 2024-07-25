@@ -8,10 +8,14 @@ import { ErrorList } from "./error-list";
 import { Section } from "@/app/components/section";
 
 type ChangePasswordProps = {
+    className?: string;
     provideErrors?: string[];
 };
 
-export default function ChangePassword({ provideErrors }: ChangePasswordProps) {
+export default function ChangePassword({
+    className,
+    provideErrors,
+}: ChangePasswordProps) {
     const [errors, setErrors] = useState(provideErrors ?? []);
     const [state, action] = useFormState(changePassword, {});
 
@@ -27,7 +31,7 @@ export default function ChangePassword({ provideErrors }: ChangePasswordProps) {
     }
 
     return (
-        <Section title={<h4>Change Password</h4>}>
+        <Section className={className} title={<h4>Change Password</h4>}>
             <div>
                 {state.success ? (
                     <h5 className="text-green-400">Password updated!</h5>

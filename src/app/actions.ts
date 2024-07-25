@@ -1,4 +1,8 @@
 "use server";
-import { changePassword } from "./actions/user-settings";
+import {
+    changePassword,
+    getCurrentUser,
+    changeAvatar,
+} from "./actions/user-settings";
 
-export { changePassword };
+export { changePassword, getCurrentUser, changeAvatar };

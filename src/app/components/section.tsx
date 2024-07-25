@@ -7,6 +7,7 @@ type SectionProps = {
     children?: React.ReactNode | React.ReactNode[];
     backgroundColor?: string;
     titleBackgroundColor?: string;
+    className?: string;
 };
 
 export function Section(props: SectionProps) {
@@ -14,7 +15,7 @@ export function Section(props: SectionProps) {
         <div
             className={`shadow-xl ${
                 props.backgroundColor ?? "bg-white/5"
-            } rounded-xl`}
+            } rounded-xl ${props.className}`}
         >
             {props.title && (
                 <div
