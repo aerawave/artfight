@@ -34,7 +34,7 @@ export default async function UserSettingsPage() {
     const settings_tabs: SettingsTab[] = [
         {
             key: "user/site",
-            label: "User/Site",
+            label: "User / Site",
             content: <UserSettings user={user} />,
         },
     ];
