@@ -46,11 +46,11 @@ export default async function UserSettingsPage() {
             <Navigation />
             <div className="pt-8">
                 <Breadcrumb className="rounded-md bg-gray-600 p-4 m-4 mt-0">
-                    <Link href="/">
+                    <Link className="highlight" href="/">
                         <FontAwesomeIcon icon={faHome} className="mr-2" />
                         <span>Home</span>
                     </Link>
-                    <Link href="/user/settings">
+                    <Link className="highlight" href="/user/settings">
                         <span>Settings</span>
                     </Link>
                 </Breadcrumb>
