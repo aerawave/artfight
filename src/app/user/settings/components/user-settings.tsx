@@ -14,7 +14,6 @@ type UserSettingsProps = {
     user: User;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function UserSettings({ user }: UserSettingsProps) {
     const { show_custom_themes, dark_mode } = await getUserProperties(user.id, [
         "show_custom_themes",

@@ -120,7 +120,6 @@ export async function changePassword(
             };
         }
     } catch (err) {
-        console.error(err);
         const erro = err as { errors: { longMessage: string }[] };
         return {
             errors: {
@@ -380,7 +379,6 @@ export async function changeFilters(
             success: true,
         };
     } catch (err) {
-        console.error("ERR", err);
         return {
             errors: {
                 general: ["There was an unexpected error."],
