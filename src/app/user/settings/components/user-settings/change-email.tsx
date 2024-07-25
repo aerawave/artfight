@@ -26,6 +26,12 @@ export default function ChangeEmail({ email }: ChangeEmailProps) {
                     <ErrorList errors={state.errors?.email} />
                 )}
             </div>
+            <div className="p-4 bg-orange-500/75 text-white/90 rounded-md mb-4">
+                <p>
+                    You will be required to verify your new email by clicking a
+                    link in an email sent to your new address.
+                </p>
+            </div>
             <form className="flex flex-col gap-4" action={action}>
                 <Field className="flex flex-col">
                     <Label className="text-sm text-white/50">
