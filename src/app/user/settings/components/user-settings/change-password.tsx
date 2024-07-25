@@ -68,7 +68,6 @@ export default function ChangePassword({
                     <Input
                         name="old_password"
                         type="password"
-                        className="text-black"
                         value={old_password}
                         onChange={(e) => setOldPassword(e.currentTarget.value)}
                     />
@@ -81,7 +80,6 @@ export default function ChangePassword({
                     <Input
                         name="password"
                         type="password"
-                        className="text-black"
                         value={new_password}
                         onChange={(e) => setNewPassword(e.currentTarget.value)}
                     />
@@ -94,7 +92,6 @@ export default function ChangePassword({
                     <Input
                         name="password_confirmation"
                         type="password"
-                        className="text-black"
                         value={password_confirmation}
                         onChange={(e) =>
                             setPasswordConfirmation(e.currentTarget.value)
