@@ -24,7 +24,6 @@ export default function ChangeUsername({
 }: ChangeUsernameProps) {
     const [state, action] = useFormState(changeUsername, {});
     const [username, setUsername] = useState("");
-    const [checked_username, setCheckedUsername] = useState("");
     const [check, setCheck] = useState<UsernameAvailability>("unchecked");
     const [check_message, setCheckMessage] = useState("");
 
@@ -73,7 +72,6 @@ export default function ChangeUsername({
                                 const [available, message] =
                                     await checkAvailability(username);
 
-                                setCheckedUsername(username);
                                 setCheck(
                                     available ? "available" : "unavailable"
                                 );
