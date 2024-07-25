@@ -8,6 +8,10 @@ import { redirect } from "next/navigation";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import UserSettings from "./components/user-settings";
+import { Breadcrumb } from "@/app/components/breadcrumb";
+import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 type SettingsTab = {
     icon?: IconProp;
@@ -41,6 +45,15 @@ export default async function UserSettingsPage() {
         <>
             <Navigation />
             <div className="pt-8">
+                <Breadcrumb className="rounded-md bg-gray-600 p-4 m-4 mt-0">
+                    <Link href="/">
+                        <FontAwesomeIcon icon={faHome} className="mr-2" />
+                        <span>Home</span>
+                    </Link>
+                    <Link href="/user/settings">
+                        <span>Settings</span>
+                    </Link>
+                </Breadcrumb>
                 <TabGroup>
                     <TabList className="flex flex-row">
                         {settings_tabs.map((tab) => (
