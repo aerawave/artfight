@@ -15,6 +15,7 @@ import Chip from "./chip";
 import NavLink, { NavLinkData } from "./navigation/nav-link";
 import UserLink from "./navigation/user-link";
 import Banner from "./navigation/banner";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 type NavLink = {
     href: string;
@@ -156,18 +157,14 @@ export default async function Navigation(props: NavigationProps) {
                         </div>
                     </div>
                     <div className="hidden md:block">
-                        {props.user ? (
-                            <UserLink user={props.user} />
-                        ) : (
-                            <>
-                                <Link href="/register" className="m-4">
-                                    Register
-                                </Link>
-                                <Link href="/login" className="m-4">
-                                    Log In
-                                </Link>
-                            </>
-                        )}
+                        <SignedIn>
+                            <UserLink />
+                        </SignedIn>
+                        <SignedOut>
+                            <Link href="/login" className="m-4">
+                                Register / Log In
+                            </Link>
+                        </SignedOut>
                     </div>
                 </div>
             </Disclosure>
