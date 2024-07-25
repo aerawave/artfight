@@ -8,6 +8,7 @@ import ChangeEmail from "./user-settings/change-email";
 import ChangeSiteTheme from "./user-settings/site-theme";
 import { checkUsernameExists, getUserProperties } from "@/app/actions/user";
 import ChangeUsername from "./user-settings/change-username";
+import ChangeImageFilters from "./user-settings/change-image-filters";
 
 type UserSettingsProps = {
     user: User;
@@ -67,6 +68,7 @@ export default async function UserSettings({ user }: UserSettingsProps) {
                     }}
                 />
             )}
+            <ChangeImageFilters />
         </div>
     );
 }

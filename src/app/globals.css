@@ -10,7 +10,7 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --foreground-rgb: 255, 255, 255;
+        --foreground-rgb: 200, 200, 200;
         --background-start-rgb: 0, 0, 0;
         --background-end-rgb: 0, 0, 0;
     }
@@ -39,4 +39,23 @@ input,
 input[disabled],
 .input[disabled] {
     @apply bg-white/30 border-white/10;
+}
+
+.button-group > span {
+    @apply px-2 py-1 cursor-pointer bg-white/10;
+}
+
+.button-group > span:not([data-checked]) {
+    @apply hover:bg-white/20;
+}
+
+.button-group > span:first-child {
+    @apply rounded-l-lg;
+}
+
+.button-group > span:last-child {
+    @apply rounded-r-lg;
+}
+a.highlight {
+    @apply border-dotted border-b-2 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
 }

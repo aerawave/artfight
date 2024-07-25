@@ -1,10 +1,16 @@
 import db from "@/db/database";
-import { UserProperties, Users } from "@/db/schema";
+import { Users } from "@/db/schema";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { ClerkAPIResponseError } from "@clerk/shared/error";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { checkUsernameExists } from "./user";
+import {
+    checkUsernameExists,
+    ImageFilter,
+    updateUserProperties,
+    updateUserProperty,
+} from "./user";
+import { ImageFilterLevel } from "../user/settings/components/user-settings/change-image-filters/change-image-filter";
 
 type ChangePasswordState = {
     success?: boolean;
@@ -46,6 +52,13 @@ type ChangeUsernameState = {
     cleared?: boolean;
     errors?: {
         username?: string[];
+    };
+};
+
+type ChangeFiltersState = {
+    success?: boolean;
+    errors?: {
+        general?: string[];
     };
 };
 
@@ -258,18 +271,12 @@ export async function changeSiteTheme(
 
     const { show_custom_themes, dark_mode } = validation.data;
 
-    await db.insert(UserProperties).values([
-        {
-            userId,
-            key: "show_custom_themes",
-            value: show_custom_themes ? "true" : "false",
-        },
-        {
-            userId,
-            key: "dark_mode",
-            value: dark_mode,
-        },
-    ]);
+    await updateUserProperty(
+        userId,
+        "show_custom_themes",
+        show_custom_themes ? "true" : "false"
+    );
+    await updateUserProperty(userId, "dark_mode", dark_mode);
 
     return {
         success: true,
@@ -326,6 +333,57 @@ export async function changeUsername(
         return {
             errors: {
                 username: err.errors.map((err) => err.longMessage) as string[],
+            },
+        };
+    }
+}
+
+export async function changeFilters(
+    state: ChangeFiltersState,
+    data: FormData
+): Promise<ChangeFiltersState> {
+    const { userId: clerkId } = auth();
+    if (!clerkId) {
+        return {
+            errors: {
+                general: ["User not authenticated"],
+            },
+        };
+    }
+
+    const filters: { [key in ImageFilter]: ImageFilterLevel } = {
+        filter_moderate_gore: data.get(
+            "filter_moderate_gore"
+        ) as ImageFilterLevel,
+        filter_extreme_gore: data.get(
+            "filter_extreme_gore"
+        ) as ImageFilterLevel,
+        filter_body_horror: data.get("filter_body_horror") as ImageFilterLevel,
+        filter_moderate_nudity: data.get(
+            "filter_moderate_nudity"
+        ) as ImageFilterLevel,
+        filter_extreme_nudity: data.get(
+            "filter_extreme_nudity"
+        ) as ImageFilterLevel,
+        filter_suggestive_themes: data.get(
+            "filter_suggestive_themes"
+        ) as ImageFilterLevel,
+        filter_eyestrain: data.get("filter_eyestrain") as ImageFilterLevel,
+        filter_sensitive_content: data.get(
+            "filter_sensitive_content"
+        ) as ImageFilterLevel,
+    };
+
+    try {
+        await updateUserProperties(clerkId, filters);
+        return {
+            success: true,
+        };
+    } catch (err) {
+        console.error("ERR", err);
+        return {
+            errors: {
+                general: ["There was an unexpected error."],
             },
         };
     }
