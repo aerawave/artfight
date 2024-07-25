@@ -20,7 +20,7 @@ export function Section(props: SectionProps) {
             {props.title && (
                 <div
                     className={`w-full ${
-                        props.titleBackgroundColor ?? "bg-gray-400"
+                        props.titleBackgroundColor ?? "bg-white/20"
                     } p-3 rounded-t-md`}
                 >
                     {props.title}

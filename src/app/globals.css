@@ -32,9 +32,11 @@ body {
     }
 }
 
-input {
+input,
+.input {
     @apply p-2 rounded-md border-white/15 border-2 bg-white/5 text-white/90;
 }
-input[disabled] {
+input[disabled],
+.input[disabled] {
     @apply bg-white/30 border-white/10;
 }

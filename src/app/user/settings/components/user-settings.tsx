@@ -5,6 +5,7 @@ import { User } from "@clerk/nextjs/server";
 import ChangePassword from "./user-settings/change-password";
 import ChangeAvatar from "./user-settings/change-avatar";
 import ChangeEmail from "./user-settings/change-email";
+import ChangeSiteTheme from "./user-settings/site-theme";
 
 type UserSettingsProps = {
     user: User;
@@ -21,6 +22,7 @@ export default async function UserSettings({ user }: UserSettingsProps) {
             ) : (
                 <div>...</div>
             )}
+            <ChangeSiteTheme customThemesInitial styleInitial="dark" />
         </div>
     );
 }
