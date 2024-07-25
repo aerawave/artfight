@@ -10,11 +10,7 @@ export const Users = pgTable("Users", {
 
 export const UserProperties = pgTable("UserProperties", {
     id: serial("id").primaryKey(),
-    name: text("name").notNull().unique(),
-});
-
-export const UserPropertyValues = pgTable("UserPropertyValues", {
-    id: serial("id").primaryKey(),
-    propertyId: integer("property_id").references(() => Users.id),
+    userId: integer("user_id").references(() => Users.id),
+    key: text("key"),
     value: text("value"),
 });
