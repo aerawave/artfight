@@ -42,11 +42,11 @@ export default async function UserSettingsPage() {
             <Navigation />
             <div className="pt-8">
                 <TabGroup>
-                    <TabList className="flex gap-4">
+                    <TabList className="flex flex-row">
                         {settings_tabs.map((tab) => (
                             <Tab
                                 key={tab.key}
-                                className="rounded-full py-1 px-3 text-sm/6 font-semibold text-white focus:outline-none data-[selected]:bg-white/10 data-[hover]:bg-white/5 data-[selected]:data-[hover]:bg-white/10 data-[focus]:outline-1 data-[focus]:outline-white"
+                                className="rounded-t-sm border-2 border-b-0 border-transparent data-[selected]:border-white/50 hover:border-white/75 p-1 text-cyan-300/75 data-[selected]:text-white hover:text-cyan-300/50"
                             >
                                 {tab.label}
                             </Tab>
