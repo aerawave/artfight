@@ -4,6 +4,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import { ClerkAPIResponseError } from "@clerk/shared/error";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { checkUsernameExists } from "./user";
 
 type ChangePasswordState = {
     success?: boolean;
@@ -37,6 +38,14 @@ type ChangeSiteThemeState = {
     cleared?: boolean;
     errors?: {
         general?: string[];
+    };
+};
+
+type ChangeUsernameState = {
+    success?: boolean;
+    cleared?: boolean;
+    errors?: {
+        username?: string[];
     };
 };
 
@@ -265,4 +274,59 @@ export async function changeSiteTheme(
     return {
         success: true,
     };
+}
+
+export async function changeUsername(
+    state: ChangeUsernameState,
+    data: FormData
+): Promise<ChangeUsernameState> {
+    const { userId: clerkId } = auth();
+    if (!clerkId) {
+        return {
+            errors: {
+                username: ["User not authenticated"],
+            },
+        };
+    }
+    const validation = z
+        .object({
+            username: z.string(),
+        })
+        .safeParse({
+            username: data.get("username"),
+        });
+
+    if (validation.error) {
+        return {
+            errors: validation.error.flatten().fieldErrors,
+        };
+    }
+
+    const { username } = validation.data;
+
+    if (await checkUsernameExists(username)) {
+        return {
+            errors: {
+                username: ["Username is already taken."],
+            },
+        };
+    }
+
+    const client = clerkClient();
+
+    try {
+        await client.users.updateUser(clerkId, { username });
+
+        return {
+            success: true,
+        };
+    } catch (err_) {
+        const err = err_ as ClerkAPIResponseError;
+
+        return {
+            errors: {
+                username: err.errors.map((err) => err.longMessage) as string[],
+            },
+        };
+    }
 }

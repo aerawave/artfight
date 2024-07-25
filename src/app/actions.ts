@@ -5,6 +5,7 @@ import {
     changeAvatar,
     changeEmail,
     changeSiteTheme,
+    changeUsername,
 } from "./actions/user-settings";
 
 export {
@@ -13,4 +14,5 @@ export {
     changeAvatar,
     changeEmail,
     changeSiteTheme,
+    changeUsername,
 };

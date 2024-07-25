@@ -6,7 +6,8 @@ import ChangePassword from "./user-settings/change-password";
 import ChangeAvatar from "./user-settings/change-avatar";
 import ChangeEmail from "./user-settings/change-email";
 import ChangeSiteTheme from "./user-settings/site-theme";
-import { getUserProperties } from "@/app/actions/user";
+import { checkUsernameExists, getUserProperties } from "@/app/actions/user";
+import ChangeUsername from "./user-settings/change-username";
 
 type UserSettingsProps = {
     user: User;
@@ -33,6 +34,39 @@ export default async function UserSettings({ user }: UserSettingsProps) {
                     (dark_mode as "dark" | "light" | null | undefined) ?? "dark"
                 }
             />
+            {user.username && (
+                <ChangeUsername
+                    username={user.username}
+                    checkAvailability={async (username) => {
+                        "use server";
+                        if (username.trim().length < 4) {
+                            return [
+                                false,
+                                `Username must be at least 4 characters long.`,
+                            ];
+                        }
+                        if (username.trim().length > 64) {
+                            return [
+                                false,
+                                `Username must be at most 64 characters long.`,
+                            ];
+                        }
+
+                        const exists = await checkUsernameExists(username);
+
+                        if (exists) {
+                            return [
+                                !exists,
+                                `Username '${username}' is not available.`,
+                            ];
+                        } else
+                            return [
+                                !exists,
+                                `Username '${username}' is available!`,
+                            ];
+                    }}
+                />
+            )}
         </div>
     );
 }
