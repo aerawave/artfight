@@ -3,7 +3,6 @@ import { Users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function verifyUser(user_id: string) {
-    console.log("VERIFYING...");
     const users = await db
         .select()
         .from(Users)
@@ -12,8 +11,6 @@ export async function verifyUser(user_id: string) {
 
     if (users.length > 0) {
         const user = users[0];
-
-        console.log("UCI", user.clerkId);
 
         return user.clerkId;
     } else {
