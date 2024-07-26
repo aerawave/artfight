@@ -1,0 +1,44 @@
+.markdown {
+    @apply bg-white/5 p-4 rounded-md;
+}
+.markdown h1 {
+    @apply text-6xl font-bold;
+}
+.markdown h2 {
+    @apply text-4xl font-bold;
+}
+.markdown h3 {
+    @apply text-2xl font-bold;
+}
+.markdown h4 {
+    @apply text-lg font-bold;
+}
+.markdown h5 {
+    @apply text-sm font-bold;
+}
+.markdown h6 {
+    @apply text-xs font-bold;
+}
+.markdown hr {
+    @apply my-4;
+}
+
+.markdown blockquote {
+    @apply border-l-4 border-white/20 pl-2 rounded-l-sm my-2;
+}
+
+.markdown ul {
+    @apply list-disc ml-4;
+}
+.markdown ol {
+    @apply list-decimal ml-4;
+}
+
+.markdown ul li,
+.markdown ol li {
+    @apply list-item;
+}
+
+.markdown a {
+    @apply border-dotted border-b-2 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
+}

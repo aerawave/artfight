@@ -57,7 +57,8 @@ input[disabled],
     @apply rounded-r-lg;
 }
 a.highlight {
-    @apply border-dotted border-b-2 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
+    @apply border-dotted border-b-4 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
 }
 
 @import "./styles/tabs.css";
+@import "./styles/markdown.css";
