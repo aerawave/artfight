@@ -7,15 +7,8 @@ import { Crumb, HomeCrumb } from "@/app/components/crumb";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import UserSettings from "./components/user-settings";
-
-type SettingsTab = {
-    icon?: IconProp;
-    key: string;
-    label: React.ReactNode;
-    content: React.ReactNode;
-};
+import Tabs, { TabData } from "@/app/components/tabs";
 
 export default async function UserSettingsPage() {
     const { userId } = auth();
@@ -28,7 +21,7 @@ export default async function UserSettingsPage() {
 
     const user = await client.users.getUser(userId);
 
-    const settings_tabs: SettingsTab[] = [
+    const tabs: TabData[] = [
         {
             key: "user/site",
             label: "User / Site",
@@ -48,22 +41,7 @@ export default async function UserSettingsPage() {
     return (
         <>
             <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
-            <div className="pt-8">
-                <TabGroup>
-                    <TabList className="tab-list">
-                        {settings_tabs.map((tab) => (
-                            <Tab key={tab.key} className="tab">
-                                {tab.label}
-                            </Tab>
-                        ))}
-                    </TabList>
-                    <TabPanels className="mt-3">
-                        {settings_tabs.map((tab) => (
-                            <TabPanel key={tab.key}>{tab.content}</TabPanel>
-                        ))}
-                    </TabPanels>
-                </TabGroup>
-            </div>
+            <Tabs tabs={tabs} />
         </>
     );
 }
