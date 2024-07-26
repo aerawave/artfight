@@ -27,7 +27,7 @@ export default function Tooltipper(props: TooltipperProps) {
                 <PopoverPanel
                     static={hover}
                     anchor="top"
-                    className={props.popoverClassName}
+                    className={`w-40 text-center text-xs ${props.popoverClassName}`}
                 >
                     {props.content}
                 </PopoverPanel>

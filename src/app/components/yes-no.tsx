@@ -3,7 +3,7 @@
 import { Radio, RadioGroup } from "@headlessui/react";
 import React, { useState } from "react";
 
-type YesNoType = "yes" | "no";
+export type YesNoType = "yes" | "no";
 
 type YesNoProps = {
     name?: string;
