@@ -1,6 +1,6 @@
 import { ImageFilter } from "@/app/actions/user";
 
-export const filters: { [key in ImageFilter]: [string, string] } = {
+export const filters: Record<ImageFilter, [string, string]> = {
     filter_moderate_gore: [
         "Gore (moderate)",
         "Large amounts of realistic/fake blood, fresh unhealed scars, wounds, or major bruising.",
