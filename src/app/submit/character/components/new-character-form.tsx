@@ -5,6 +5,7 @@ import CharacterBasicInformation from "./new-character-form/character-basic-info
 import CharacterCredits from "./new-character-form/character-credits";
 import CharacterFilters from "./new-character-form/character-filters";
 import CharacterTags from "./new-character-form/character-tags";
+import CharacterMainImage from "./new-character-form/character-main-image";
 
 export default function NewCharacterForm() {
     return (
@@ -12,6 +13,7 @@ export default function NewCharacterForm() {
             <CharacterBasicInformation />
             <CharacterCredits />
             <CharacterFilters />
+            <CharacterMainImage />
             <CharacterTags />
         </form>
     );

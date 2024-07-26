@@ -15,7 +15,7 @@ export function Section(props: SectionProps) {
         <div
             className={`shadow-xl ${
                 props.backgroundColor ?? "bg-white/5"
-            } rounded-xl ${props.className} m-2`}
+            } rounded-xl m-2`}
         >
             {props.title && (
                 <div
@@ -26,7 +26,7 @@ export function Section(props: SectionProps) {
                     {props.title}
                 </div>
             )}
-            <div className="p-4">{props.children}</div>
+            <div className={`p-4 ${props.className}`}>{props.children}</div>
         </div>
     );
 }
