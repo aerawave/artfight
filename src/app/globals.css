@@ -59,3 +59,18 @@ input[disabled],
 a.highlight {
     @apply border-dotted border-b-2 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
 }
+
+.tab-list {
+    @apply flex flex-row border-b-2 border-white/20;
+}
+.tab-list > .tab {
+    @apply rounded-t-md border-2 border-b-0 border-transparent p-1 text-cyan-300/50;
+}
+
+.tab-list > .tab[data-selected] {
+    @apply border-white/50 text-white;
+}
+
+.tab-list > .tab:not([data-selected]):hover {
+    @apply border-white/25 text-cyan-300/75;
+}

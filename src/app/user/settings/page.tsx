@@ -50,12 +50,9 @@ export default async function UserSettingsPage() {
             <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="pt-8">
                 <TabGroup>
-                    <TabList className="flex flex-row">
+                    <TabList className="tab-list">
                         {settings_tabs.map((tab) => (
-                            <Tab
-                                key={tab.key}
-                                className="rounded-t-sm border-2 border-b-0 border-transparent data-[selected]:border-white/50 hover:border-white/75 p-1 text-cyan-300/75 data-[selected]:text-white hover:text-cyan-300/50"
-                            >
+                            <Tab key={tab.key} className="tab">
                                 {tab.label}
                             </Tab>
                         ))}
