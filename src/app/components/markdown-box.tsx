@@ -43,12 +43,14 @@ export default function MarkdownBox(props: TextBoxProps) {
                         <Radio
                             value="edit"
                             className="p-2 rounded-l-lg border-white/10 border-2 boder-r-0  hover:bg-white/5 data-[checked]:bg-white/15"
+                            title="Edit"
                         >
                             <FontAwesomeIcon icon={faPencil} />
                         </Radio>
                         <Radio
                             value="preview"
                             className="p-2 rounded-r-lg border-white/10 border-2 border-l-0 hover:bg-white/5 data-[checked]:bg-white/15"
+                            title="Preview"
                         >
                             <FontAwesomeIcon icon={faRuler} />
                         </Radio>
