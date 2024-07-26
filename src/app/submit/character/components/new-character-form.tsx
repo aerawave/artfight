@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import CharacterBasicInformation from "./new-character-form/basic-information";
-import CharacterCredits from "./new-character-form/credits";
+import CharacterBasicInformation from "./new-character-form/character-basic-information";
+import CharacterCredits from "./new-character-form/character-credits";
 import CharacterFilters from "./new-character-form/character-filters";
 
 export default function NewCharacterForm() {
