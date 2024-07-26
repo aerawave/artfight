@@ -76,7 +76,7 @@ export default function MarkdownBox(props: TextBoxProps) {
                     </Markdown>
                 ) : (
                     <span className="italic text-white/30">
-                        No description provided
+                        No content to display
                     </span>
                 ))}
         </Field>
