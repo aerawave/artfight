@@ -16,6 +16,9 @@ import NavLink, { NavLinkData } from "./navigation/nav-link";
 import UserLink from "./navigation/user-link";
 import Banner from "./navigation/banner";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { Breadcrumb } from "./breadcrumb";
+import { Crumb } from "./crumb";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type NavLink = {
     href: string;
@@ -119,6 +122,7 @@ const submit: NavLinkData = {
 
 type NavigationProps = {
     user?: string;
+    crumbs?: Crumb[];
 };
 
 export default async function Navigation(props: NavigationProps) {
@@ -169,6 +173,29 @@ export default async function Navigation(props: NavigationProps) {
                 </div>
             </Disclosure>
             <Banner />
+            {props.crumbs && (
+                <div className="pt-8">
+                    <Breadcrumb className="rounded-md bg-gray-600 p-4 m-4 mt-0">
+                        {props.crumbs.map((crumb, i) => (
+                            <Link
+                                key={i}
+                                className="highlight"
+                                href={crumb.href}
+                            >
+                                {crumb.icon && (
+                                    <>
+                                        <FontAwesomeIcon
+                                            icon={crumb.icon}
+                                            className="mr-2"
+                                        />
+                                    </>
+                                )}
+                                {crumb.label}
+                            </Link>
+                        ))}
+                    </Breadcrumb>
+                </div>
+            )}
         </>
     );
 }

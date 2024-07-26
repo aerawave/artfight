@@ -3,15 +3,12 @@
 import React from "react";
 
 import Navigation from "@/app/components/navigation";
+import { Crumb, HomeCrumb } from "@/app/components/crumb";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import UserSettings from "./components/user-settings";
-import { Breadcrumb } from "@/app/components/breadcrumb";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 type SettingsTab = {
     icon?: IconProp;
@@ -41,19 +38,17 @@ export default async function UserSettingsPage() {
 
     //await clerkClient.users.updateUser(userId, { password: "TestTest1412" });
 
+    const local_crumbs: Crumb[] = [
+        {
+            label: "Settings",
+            href: "/user/settings",
+        },
+    ];
+
     return (
         <>
-            <Navigation />
+            <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="pt-8">
-                <Breadcrumb className="rounded-md bg-gray-600 p-4 m-4 mt-0">
-                    <Link className="highlight" href="/">
-                        <FontAwesomeIcon icon={faHome} className="mr-2" />
-                        <span>Home</span>
-                    </Link>
-                    <Link className="highlight" href="/user/settings">
-                        <span>Settings</span>
-                    </Link>
-                </Breadcrumb>
                 <TabGroup>
                     <TabList className="flex flex-row">
                         {settings_tabs.map((tab) => (
