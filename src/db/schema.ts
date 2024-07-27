@@ -8,11 +8,13 @@ import {
     timestamp,
 } from "drizzle-orm/pg-core";
 
-const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
-    dataType() {
-        return "bytea";
-    },
-});
+const bytea = customType<{ data: ArrayBuffer; notNull: false; default: false }>(
+    {
+        dataType() {
+            return "bytea";
+        },
+    }
+);
 
 export const Users = pgTable("Users", {
     id: serial("id").primaryKey(),
@@ -31,16 +33,16 @@ export const UserProperties = pgTable("UserProperties", {
 
 export const Images = pgTable("Images", {
     id: serial("id").primaryKey(),
-    image: bytea("image"),
-    thumbnail: bytea("thumbnail"),
-    containsModerateGore: boolean("contains_moderate_gore"),
-    containsExtremeGore: boolean("contains_extreme_gore"),
-    containsBodyHorror: boolean("contains_body_horror"),
-    containsModerateNudity: boolean("contains_moderate_nudity"),
-    containsExtremeNudity: boolean("contains_extreme_nudity"),
-    containsSuggestiveThemes: boolean("contains_suggestive_themes"),
-    containsEyestrain: boolean("contains_eyestrain"),
-    containsSensitiveContent: boolean("contains_sensitive_content"),
+    image: bytea("image").notNull(),
+    thumbnail: bytea("thumbnail").notNull(),
+    containsModerateGore: boolean("contains_moderate_gore").notNull(),
+    containsExtremeGore: boolean("contains_extreme_gore").notNull(),
+    containsBodyHorror: boolean("contains_body_horror").notNull(),
+    containsModerateNudity: boolean("contains_moderate_nudity").notNull(),
+    containsExtremeNudity: boolean("contains_extreme_nudity").notNull(),
+    containsSuggestiveThemes: boolean("contains_suggestive_themes").notNull(),
+    containsEyestrain: boolean("contains_eyestrain").notNull(),
+    containsSensitiveContent: boolean("contains_sensitive_content").notNull(),
 });
 
 export const Characters = pgTable("Characters", {
@@ -62,7 +64,7 @@ export const Characters = pgTable("Characters", {
     designerUrl: text("designer_url"),
     doesLinkSpeciesSheet: boolean("does_link_species_sheet"),
     speciesName: text("species_name"),
-    speciesUrl: text("species_url"),
+    speciesSheetUrl: text("species_sheet_url"),
     additionalCredits: text("additional_credits"),
     // "Character Filters"
     containsModerateGore: boolean("contains_moderate_gore"),
@@ -74,9 +76,12 @@ export const Characters = pgTable("Characters", {
     containsEyestrain: boolean("contains_eyestrain"),
     containsSensitiveContent: boolean("contains_sensitive_content"),
     // "Main Image"
-    imageId: integer("image_id").references(() => Images.id),
+    imageId: integer("image_id")
+        .notNull()
+        .references(() => Images.id),
     isArtist: boolean("is_artist"),
     artistName: text("artist_name"),
     artistUrl: text("artist_url"),
+    // "Tags"
     tags: text("tags"),
 });

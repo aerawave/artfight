@@ -4,11 +4,13 @@ import { Radio, RadioGroup } from "@headlessui/react";
 import React, { useState } from "react";
 
 export type YesNoType = "yes" | "no";
+export const YesNoValues = (): string[] => ["yes", "no"];
 
 type YesNoProps = {
     name?: string;
     value?: YesNoType;
     onChange?: (value: YesNoType) => void;
+    form?: string;
 };
 
 export default function YesNo(props: YesNoProps) {
@@ -27,6 +29,7 @@ export default function YesNo(props: YesNoProps) {
             className="cursor-pointer"
             value={value}
             onChange={onChange}
+            form={props.form}
         >
             <Radio
                 value="yes"

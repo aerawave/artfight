@@ -8,8 +8,13 @@ import { Field, Input, Label } from "@headlessui/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { filters } from "./filters";
+import { NEW_CHARACTER_FORM } from "../new-character-form";
+import { CharacterFiltersErrors } from "@/app/actions/errors/submissions-errors";
+import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 
-export default function CharacterFilters() {
+export default function CharacterFilters(props: {
+    errors?: CharacterFiltersErrors;
+}) {
     const [needs_filters, setNeedsFilters] = useState<YesNoType | undefined>(
         undefined
     );
@@ -22,16 +27,21 @@ export default function CharacterFilters() {
                     description and other content on the profile.
                 </p>
             </div>
-            <Field className="flex flex-row justify-between">
-                <Label className="font-bold text-sm text-white/75">
-                    Does this character need a content filter?
-                    <span className="text-red-500">*</span>
-                </Label>
-                <YesNo
-                    name="needs_filters"
-                    value={needs_filters}
-                    onChange={setNeedsFilters}
-                />
+            <ErrorList errors={props.errors?.general} />
+            <Field>
+                <div className="flex flex-row justify-between items-center">
+                    <Label className="font-bold text-sm text-white/75">
+                        Does this character need a content filter?
+                        <span className="text-red-500">*</span>
+                    </Label>
+                    <YesNo
+                        name="needs_filters"
+                        value={needs_filters}
+                        onChange={setNeedsFilters}
+                        form={NEW_CHARACTER_FORM}
+                    />
+                </div>
+                <ErrorList errors={props.errors?.needs_filters} />
             </Field>
             <div>
                 <p>
@@ -61,7 +71,11 @@ export default function CharacterFilters() {
 
                     {Object.keys(filters).map((key) => (
                         <Field key={key} className="flex flex-row gap-2">
-                            <Input type="checkbox" name={`character_${key}`} />
+                            <Input
+                                type="checkbox"
+                                name={`character_${key}`}
+                                form={NEW_CHARACTER_FORM}
+                            />
                             <div>
                                 <Label className="font-bold text-sm text-white/75">
                                     {filters[key as ImageFilter][0]}
@@ -92,6 +106,8 @@ export default function CharacterFilters() {
                             type="checkbox"
                             name={`character_${key}`}
                             hidden
+                            readOnly
+                            form={NEW_CHARACTER_FORM}
                         />
                     ))}
                 </>

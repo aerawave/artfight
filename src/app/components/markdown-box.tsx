@@ -17,6 +17,7 @@ type TextBoxProps = {
     onChange?: (value: string) => void;
     defaultMode?: EditorMode;
     readOnly?: boolean;
+    form?: string;
 };
 
 export default function MarkdownBox(props: TextBoxProps) {
@@ -57,7 +58,13 @@ export default function MarkdownBox(props: TextBoxProps) {
                     </RadioGroup>
                 )}
             </div>
-            <input name={props.name} value={value} hidden readOnly />
+            <input
+                name={props.name}
+                value={value}
+                hidden
+                readOnly
+                form={props.form}
+            />
             {mode === "edit" && (
                 <Editor
                     className="h-40"

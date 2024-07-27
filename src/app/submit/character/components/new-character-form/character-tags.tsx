@@ -6,8 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Field, Input } from "@headlessui/react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { NEW_CHARACTER_FORM } from "../new-character-form";
+import { GeneralErrors } from "@/app/actions/errors/general";
+import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 
-export default function CharacterTags() {
+export default function CharacterTags(props: { errors?: GeneralErrors }) {
     const [tags, setTags] = useState<string[]>([]);
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [current_tag, setCurrentTag] = useState("");
@@ -85,6 +88,7 @@ export default function CharacterTags() {
             </div>
 
             <hr className="my-4" />
+            <ErrorList errors={props.errors?.general} />
 
             <div className="flex flex-row gap-2 my-4">
                 {tags.map((tag, i) => (
@@ -100,7 +104,13 @@ export default function CharacterTags() {
             </div>
 
             <Field className="flex flex-row gap-2">
-                <input type="hidden" name="tags" value={tags.join(" ")} />
+                <input
+                    type="hidden"
+                    name="tags"
+                    value={tags.join(" ")}
+                    readOnly
+                    form={NEW_CHARACTER_FORM}
+                />
                 <Input
                     placeholder="Add a new tag..."
                     value={current_tag}

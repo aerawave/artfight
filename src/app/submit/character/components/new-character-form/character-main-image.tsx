@@ -10,8 +10,13 @@ import YesNo, { YesNoType } from "@/app/components/yes-no";
 import Link from "next/link";
 import { filters } from "./filters";
 import { ImageFilter } from "@/app/actions/user";
+import { NEW_CHARACTER_FORM } from "../new-character-form";
+import { CharacterMainImageErrors } from "@/app/actions/errors/submissions-errors";
+import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 
-export default function CharacterMainImage() {
+export default function CharacterMainImage(props: {
+    errors?: CharacterMainImageErrors;
+}) {
     const [is_artist, setIsArtist] = useState<YesNoType | undefined>(undefined);
     const [needs_filters, setNeedsFilters] = useState<YesNoType | undefined>(
         undefined
@@ -34,13 +39,18 @@ export default function CharacterMainImage() {
                     submitted.
                 </p>
             </div>
-
+            <ErrorList errors={props.errors?.general} />
             <Field className="flex flex-col gap-2">
                 <Label className="font-bold text-sm text-white/75">
                     Main Image
                     <span className="text-red-500">*</span>
                 </Label>
-                <Input name="main_image" type="file" />
+                <Input
+                    name="main_image"
+                    type="file"
+                    required
+                    form={NEW_CHARACTER_FORM}
+                />
                 <p>
                     The uploaded image must be in .png, .jpg, or .gif format and
                     have a file size no larger than 5MB.
@@ -70,19 +80,31 @@ export default function CharacterMainImage() {
                         }
                     />
                 </Label>
-                <Input name="main_image" type="file" />
+                <Input
+                    name="main_image"
+                    type="file"
+                    form={NEW_CHARACTER_FORM}
+                />
                 <p>
                     The thumbnail (if any) must be 200x200 in size. The uploaded
                     image must be in .png, .jpg, or .gif format.
                 </p>
             </Field>
 
-            <Field className="flex flex-row justify-between">
-                <Label className="font-bold text-sm text-white/75">
-                    Did you create this image?
-                    <span className="text-red-500">*</span>
-                </Label>
-                <YesNo name="artist" value={is_artist} onChange={setIsArtist} />
+            <Field>
+                <div className="flex flex-row justify-between items-center">
+                    <Label className="font-bold text-sm text-white/75">
+                        Did you create this image?
+                        <span className="text-red-500">*</span>
+                    </Label>
+                    <YesNo
+                        name="is_artist"
+                        value={is_artist}
+                        onChange={setIsArtist}
+                        form={NEW_CHARACTER_FORM}
+                    />
+                </div>
+                <ErrorList errors={props.errors?.is_artist} />
             </Field>
 
             {is_artist === "no" ? (
@@ -92,14 +114,26 @@ export default function CharacterMainImage() {
                             Artist Name
                             <span className="text-red-500">*</span>
                         </Label>
-                        <Input name="artist_name" />
+                        <ErrorList
+                            errors={props.errors?.main_image_artist_name}
+                        />
+                        <Input
+                            name="main_image_artist_name"
+                            form={NEW_CHARACTER_FORM}
+                        />
                     </Field>
                     <Field className="flex flex-col gap-2">
                         <Label className="font-bold text-sm text-white/75">
                             Artist URL
                             <span className="text-red-500">*</span>
                         </Label>
-                        <Input name="artist_url" />
+                        <ErrorList
+                            errors={props.errors?.main_image_artist_url}
+                        />
+                        <Input
+                            name="main_image_artist_url"
+                            form={NEW_CHARACTER_FORM}
+                        />
                     </Field>
                 </div>
             ) : (
@@ -107,30 +141,36 @@ export default function CharacterMainImage() {
                     <input
                         hidden
                         type="hidden"
-                        name="artist_name"
+                        name="main_image_artist_name"
                         value=""
                         readOnly
+                        form={NEW_CHARACTER_FORM}
                     />
                     <input
                         hidden
                         type="hidden"
-                        name="artist_url"
+                        name="main_image_artist_url"
                         value=""
                         readOnly
+                        form={NEW_CHARACTER_FORM}
                     />
                 </>
             )}
 
-            <Field className="flex flex-row justify-between">
-                <Label className="font-bold text-sm text-white/75">
-                    Did you create this image?
-                    <span className="text-red-500">*</span>
-                </Label>
-                <YesNo
-                    name="needs_filters"
-                    value={needs_filters}
-                    onChange={setNeedsFilters}
-                />
+            <Field>
+                <div className="flex flex-row justify-between items-center">
+                    <Label className="font-bold text-sm text-white/75">
+                        Does this image need a content filter?
+                        <span className="text-red-500">*</span>
+                    </Label>
+                    <YesNo
+                        name="main_image_needs_filters"
+                        value={needs_filters}
+                        onChange={setNeedsFilters}
+                        form={NEW_CHARACTER_FORM}
+                    />
+                </div>
+                <ErrorList errors={props.errors?.main_image_needs_filters} />
             </Field>
             <div>
                 <p>
@@ -160,7 +200,11 @@ export default function CharacterMainImage() {
 
                     {Object.keys(filters).map((key) => (
                         <Field key={key} className="flex flex-row gap-2">
-                            <Input type="checkbox" name={`main_image_${key}`} />
+                            <Input
+                                type="checkbox"
+                                name={`main_image_${key}`}
+                                form={NEW_CHARACTER_FORM}
+                            />
                             <div>
                                 <Label className="font-bold text-sm text-white/75">
                                     {filters[key as ImageFilter][0]}
@@ -191,6 +235,8 @@ export default function CharacterMainImage() {
                             type="checkbox"
                             name={`main_image_${key}`}
                             hidden
+                            readOnly
+                            form={NEW_CHARACTER_FORM}
                         />
                     ))}
                 </>
