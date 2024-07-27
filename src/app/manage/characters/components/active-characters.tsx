@@ -1,8 +1,13 @@
 "use server";
 
+import { Characters } from "@/db/schema";
 import React from "react";
 
-export default async function ActiveCharacters() {
+type ActiveCharactersProps = {
+    characters: (typeof Characters.$inferSelect)[];
+};
+
+export default async function ActiveCharacters(props: ActiveCharactersProps) {
     return (
         <div>
             <div className="p-4 bg-cyan-400/40 rounded-md mb-4">
@@ -30,9 +35,14 @@ export default async function ActiveCharacters() {
                     again.
                 </p>
             </div>
-            <h1 className="text-4xl">
-                <strong>Active character total</strong>: 0 / 100
+            <h1 className="text-4xl pb-2 border-b border-b-white/10">
+                <strong>Active character total</strong>:{" "}
+                {props.characters.length} / 100
             </h1>
+
+            <div>
+                <div className="flex flex-row"></div>
+            </div>
         </div>
     );
 }

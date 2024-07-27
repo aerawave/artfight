@@ -80,11 +80,7 @@ export default function CharacterMainImage(props: {
                         }
                     />
                 </Label>
-                <Input
-                    name="main_image"
-                    type="file"
-                    form={NEW_CHARACTER_FORM}
-                />
+                <Input name="thumbnail" type="file" form={NEW_CHARACTER_FORM} />
                 <p>
                     The thumbnail (if any) must be 200x200 in size. The uploaded
                     image must be in .png, .jpg, or .gif format.

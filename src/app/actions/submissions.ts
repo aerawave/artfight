@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { Characters, Images } from "@/db/schema";
+import { Characters, Files, Images } from "@/db/schema";
 import db from "@/db/database";
 import { auth } from "@clerk/nextjs/server";
 import { ClerkAPIResponseError } from "@clerk/shared/error";
@@ -13,6 +13,10 @@ import {
     CharacterMainImageErrors,
 } from "./errors/submissions-errors";
 import { GeneralErrors } from "./errors/general";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import { eq } from "drizzle-orm";
+import * as fs from "fs";
 
 type SubmitCharacterState = {
     success?: boolean;
@@ -430,7 +434,9 @@ export async function submitCharacter(
     let image_id: number = -1;
 
     try {
-        image_id = await uploadImage(
+        // FIXME: Should only upload once. If the files are uploaded and the submission errors out later, the files will be re-uploaded in future attempts.
+        image_id = await uploadImages(
+            userId,
             data.get("main_image")?.valueOf() as File,
             data.get("thumbnail")?.valueOf() as File | null,
             main_image_filter_moderate_gore,
@@ -443,14 +449,13 @@ export async function submitCharacter(
             main_image_filter_sensitive_content
         );
     } catch (err_) {
-        const err = err_ as ClerkAPIResponseError;
-
         return {
             errors: {
                 main_image: {
-                    general: err.errors
-                        .map((err) => err.longMessage)
-                        .filter((message) => message) as string[],
+                    general: [
+                        `${Math.floor(Math.random() * 100)}`,
+                        JSON.stringify(`${err_}`),
+                    ],
                 },
             },
         };
@@ -509,7 +514,8 @@ export async function submitCharacter(
     }
 }
 
-async function uploadImage(
+async function uploadImages(
+    owner_id: number,
     image: File,
     thumbnail: File | null,
     contains_moderate_gore: boolean,
@@ -522,15 +528,21 @@ async function uploadImage(
     contains_sensitive_content: boolean
 ): Promise<number> {
     thumbnail = thumbnail && thumbnail.size > 0 ? thumbnail : image;
-    const image_buffer = await image.arrayBuffer();
-    const thumbnail_buffer = await thumbnail.arrayBuffer();
+
+    const image_file_id = await uploadFile(owner_id, image);
+    const thumbnail_file_id = await uploadFile(owner_id, thumbnail);
+
+    console.error("uploadImage ERR", {
+        image_file_id,
+        thumbnail_file_id,
+    });
 
     const { id } = (
         await db
             .insert(Images)
             .values({
-                image: image_buffer,
-                thumbnail: thumbnail_buffer,
+                imageFileId: image_file_id,
+                thumbnailFileId: thumbnail_file_id,
                 containsModerateGore: contains_moderate_gore,
                 containsExtremeGore: contains_extreme_gore,
                 containsBodyHorror: contains_body_horror,
@@ -540,8 +552,64 @@ async function uploadImage(
                 containsEyestrain: contains_eyestrain,
                 containsSensitiveContent: contains_sensitive_content,
             })
-            .returning()
+            .returning({ id: Images.id })
     )[0];
 
     return id;
+}
+
+async function uploadFile(owner_id: number, file: File): Promise<number> {
+    const ext = path.extname(file.name);
+    const uuid = await getNewFileUUID(ext);
+    const file_name = `${uuid}${ext}`;
+
+    const { id } = (
+        await db
+            .insert(Files)
+            .values({
+                ownerId: owner_id,
+                name: file_name,
+                type: file.type,
+            })
+            .returning({ id: Files.id })
+    )[0];
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    const file_path = `${process.env.FILE_PATH_BEGIN}/${file_name}`;
+
+    await new Promise((resolve, reject) => {
+        try {
+            fs.writeFile(file_path, buffer, resolve);
+        } catch (err) {
+            reject(err);
+        }
+    });
+
+    return id;
+}
+
+async function getNewFileUUID(ext: string, max_attempts: number = 10) {
+    let uuid = "";
+    let found = false;
+    for (let i = 0; !found && i < max_attempts; i++) {
+        uuid = uuidv4();
+        console.log;
+        found =
+            (
+                await db
+                    .select({ id: Files.id, name: Files.name })
+                    .from(Files)
+                    .where((file) => eq(file.name, `${uuid}${ext}`))
+                    .limit(1)
+            ).length === 0;
+    }
+
+    if (!found) {
+        throw {
+            error: "No UUID was able to be obtained.",
+        };
+    }
+
+    return uuid;
 }

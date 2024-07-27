@@ -40,3 +40,4 @@ drizzle/**
 
 # FIXME: temporary
 public/**
+src/uploads/**

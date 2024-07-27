@@ -1,6 +1,5 @@
 import {
     boolean,
-    customType,
     integer,
     pgTable,
     serial,
@@ -8,15 +7,7 @@ import {
     timestamp,
 } from "drizzle-orm/pg-core";
 
-const bytea = customType<{ data: ArrayBuffer; notNull: false; default: false }>(
-    {
-        dataType() {
-            return "bytea";
-        },
-    }
-);
-
-export const Users = pgTable("Users", {
+export const Users = pgTable("users", {
     id: serial("id").primaryKey(),
     clerkId: text("clerk_id").notNull().unique(),
     birthdate: timestamp("birthdate").notNull().defaultNow(),
@@ -24,17 +15,25 @@ export const Users = pgTable("Users", {
     createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const UserProperties = pgTable("UserProperties", {
+export const UserProperties = pgTable("user_properties", {
     id: serial("id").primaryKey(),
     userId: integer("user_id").references(() => Users.id),
     key: text("key"),
     value: text("value"),
 });
 
-export const Images = pgTable("Images", {
+export const Files = pgTable("files", {
     id: serial("id").primaryKey(),
-    image: bytea("image").notNull(),
-    thumbnail: bytea("thumbnail").notNull(),
+    ownerId: integer("owner_id").references(() => Users.id),
+    name: text("name").unique().notNull(),
+    type: text("type").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const Images = pgTable("images", {
+    id: serial("id").primaryKey(),
+    imageFileId: integer("image_file_id").references(() => Files.id),
+    thumbnailFileId: integer("thumbnail_file_id").references(() => Files.id),
     containsModerateGore: boolean("contains_moderate_gore").notNull(),
     containsExtremeGore: boolean("contains_extreme_gore").notNull(),
     containsBodyHorror: boolean("contains_body_horror").notNull(),
@@ -45,11 +44,12 @@ export const Images = pgTable("Images", {
     containsSensitiveContent: boolean("contains_sensitive_content").notNull(),
 });
 
-export const Characters = pgTable("Characters", {
+export const Characters = pgTable("characters", {
     id: serial("id").primaryKey(),
     ownerId: integer("owner_id")
         .notNull()
         .references(() => Users.id),
+    status: text("status"), // active, hidden, archived
     // "Basic Information"
     name: text("name"),
     description: text("description"),
