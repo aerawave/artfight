@@ -430,10 +430,6 @@ export async function submitCharacter(
     let image_id: number = -1;
 
     try {
-        console.error("IMAGE ERR", {
-            main_image: data.get("main_image"),
-            thumbnail: data.get("thumbnail"),
-        });
         image_id = await uploadImage(
             data.get("main_image")?.valueOf() as File,
             data.get("thumbnail")?.valueOf() as File | null,
@@ -452,10 +448,9 @@ export async function submitCharacter(
         return {
             errors: {
                 main_image: {
-                    general: [JSON.stringify(err_)],
-                    // general: err.errors
-                    //     .map((err) => err.longMessage)
-                    //     .filter((message) => message) as string[],
+                    general: err.errors
+                        .map((err) => err.longMessage)
+                        .filter((message) => message) as string[],
                 },
             },
         };
@@ -530,16 +525,6 @@ async function uploadImage(
     const image_buffer = await image.arrayBuffer();
     const thumbnail_buffer = await thumbnail.arrayBuffer();
 
-    console.error("UPLOADING IMAGE...", {
-        image: {
-            name: image.name,
-            size: image.size,
-        },
-        thumbnail: {
-            name: thumbnail.name,
-            size: thumbnail.size,
-        },
-    });
     const { id } = (
         await db
             .insert(Images)

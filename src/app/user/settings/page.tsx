@@ -6,7 +6,6 @@ import Navigation from "@/app/components/navigation";
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import UserSettings from "./components/user-settings";
 import Tabs, { TabData } from "@/app/components/tabs";
 
