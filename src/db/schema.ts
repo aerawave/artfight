@@ -1,11 +1,18 @@
 import {
     boolean,
     integer,
+    pgEnum,
     pgTable,
     serial,
     text,
     timestamp,
 } from "drizzle-orm/pg-core";
+
+export const characterStatus = pgEnum("status", [
+    "active",
+    "hidden",
+    "archived",
+]);
 
 export const Users = pgTable("users", {
     id: serial("id").primaryKey(),
@@ -49,7 +56,8 @@ export const Characters = pgTable("characters", {
     ownerId: integer("owner_id")
         .notNull()
         .references(() => Users.id),
-    status: text("status"), // active, hidden, archived
+    status: characterStatus("status"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
     // "Basic Information"
     name: text("name"),
     description: text("description"),

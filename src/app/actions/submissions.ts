@@ -465,6 +465,7 @@ export async function submitCharacter(
         await db.insert(Characters).values({
             ownerId: userId,
             name,
+            status: "active",
             // "Basic Information"
             description,
             permissions,
