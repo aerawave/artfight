@@ -46,8 +46,7 @@ export default async function ActiveCharacters(props: ActiveCharactersProps) {
                 </p>
             </div>
             <h1 className="text-4xl pb-2 border-b border-b-white/10">
-                <strong>Active character total</strong>: {props.data.length} /
-                100
+                <strong>Active characters</strong>: {props.data.length} / 100
             </h1>
 
             <div className="flex flex-row flex-wrap gap-16 m-8">
