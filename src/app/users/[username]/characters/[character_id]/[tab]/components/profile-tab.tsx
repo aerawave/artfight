@@ -203,8 +203,11 @@ export default async function CharacterProfileTab(props: {
                                     Owner:
                                 </div>
                                 <div className="flex-grow p-2">
-                                    <Link href="/" className="highlight">
-                                        Test
+                                    <Link
+                                        href={`/users/${user.username}`}
+                                        className="highlight"
+                                    >
+                                        {user.username}
                                     </Link>
                                 </div>
                             </div>
@@ -213,8 +216,11 @@ export default async function CharacterProfileTab(props: {
                                     Designer:
                                 </div>
                                 <div className="flex-grow p-2">
-                                    <Link href="/" className="highlight">
-                                        Designer
+                                    <Link
+                                        href={`/users/${user.username}`}
+                                        className="highlight"
+                                    >
+                                        {user.username}
                                     </Link>
                                 </div>
                             </div>
