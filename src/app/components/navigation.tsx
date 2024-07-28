@@ -10,7 +10,6 @@ import {
     faPlus,
     faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import Chip from "./chip";
 import NavLink, { NavLinkData } from "./navigation/nav-link";
 import UserLink from "./navigation/user-link";
@@ -19,13 +18,6 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { Breadcrumb } from "./breadcrumb";
 import { Crumb } from "./crumb";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-type NavLink = {
-    href: string;
-    label: React.ReactNode;
-    icon?: IconProp;
-    subs?: NavLink[];
-};
 
 const discord: NavLinkData = {
     href: "https://discord.gg/artfight",
