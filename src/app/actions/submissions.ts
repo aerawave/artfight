@@ -533,11 +533,6 @@ async function uploadImages(
     const image_file_id = await uploadFile(owner_id, image);
     const thumbnail_file_id = await uploadFile(owner_id, thumbnail);
 
-    console.error("uploadImage ERR", {
-        image_file_id,
-        thumbnail_file_id,
-    });
-
     const { id } = (
         await db
             .insert(Images)
@@ -595,7 +590,6 @@ async function getNewFileUUID(ext: string, max_attempts: number = 10) {
     let found = false;
     for (let i = 0; !found && i < max_attempts; i++) {
         uuid = uuidv4();
-        console.log;
         found =
             (
                 await db
