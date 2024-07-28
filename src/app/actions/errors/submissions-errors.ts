@@ -2,6 +2,7 @@ import { GeneralErrors } from "./general";
 
 export type CharacterBasicInformationErrors = GeneralErrors & {
     name?: string[];
+    slug?: string[];
     description?: string[];
     permissions?: string[];
     external_link_name?: string[];

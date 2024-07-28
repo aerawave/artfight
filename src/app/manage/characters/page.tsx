@@ -7,8 +7,24 @@ import Link from "next/link";
 import React from "react";
 import ActiveCharacters from "./components/active-characters";
 import ArchivedCharacters from "./components/archived-characters";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { getCharacters } from "@/app/actions/data/characters/character-list";
+import { getUser } from "@/app/actions/user";
+import { redirect } from "next/navigation";
 
 export default async function ManageCharactersPage() {
+    const { userId: clerkId } = auth();
+    if (!clerkId) {
+        redirect("/");
+    }
+    const { username } = await clerkClient().users.getUser(clerkId);
+    if (!username) {
+        redirect("/");
+    }
+    const { id: userId } = await getUser(clerkId);
+
+    const characters = await getCharacters(userId);
+
     const local_crumbs: Crumb[] = [
         {
             label: "Manage Characters",
@@ -20,7 +36,9 @@ export default async function ManageCharactersPage() {
         {
             key: "active",
             label: "Active Characters",
-            content: <ActiveCharacters />,
+            content: (
+                <ActiveCharacters ownerUsername={username} data={characters} />
+            ),
         },
         {
             key: "archived",

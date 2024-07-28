@@ -25,6 +25,7 @@ export default function CharacterBasicInformation(props: {
                 <ErrorList errors={props.errors?.name} />
                 <Input name="name" required form={NEW_CHARACTER_FORM} />
             </Field>
+            {/* TODO: add slug field */}
             <Field>
                 <ErrorList errors={props.errors?.description} />
                 <MarkdownBox

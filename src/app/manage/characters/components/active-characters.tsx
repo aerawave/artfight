@@ -1,10 +1,20 @@
 "use server";
 
-import { Characters } from "@/db/schema";
 import React from "react";
+import { getCharacters } from "@/app/actions/data/characters/character-list";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@headlessui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark as faBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
+import {
+    faBookmark as faBookmarkSolid,
+    faPencil,
+} from "@fortawesome/free-solid-svg-icons";
 
 type ActiveCharactersProps = {
-    characters: (typeof Characters.$inferSelect)[];
+    ownerUsername: string;
+    data: Awaited<ReturnType<typeof getCharacters>>;
 };
 
 export default async function ActiveCharacters(props: ActiveCharactersProps) {
@@ -36,12 +46,54 @@ export default async function ActiveCharacters(props: ActiveCharactersProps) {
                 </p>
             </div>
             <h1 className="text-4xl pb-2 border-b border-b-white/10">
-                <strong>Active character total</strong>:{" "}
-                {props.characters.length} / 100
+                <strong>Active character total</strong>: {props.data.length} /
+                100
             </h1>
 
-            <div>
-                <div className="flex flex-row"></div>
+            <div className="flex flex-row flex-wrap gap-16 m-8">
+                {props.data.map((character) => {
+                    const character_url = `/users/${props.ownerUsername}/characters/${character.id}`;
+                    return (
+                        <div key={character.id} className="flex flex-col w-60">
+                            <Link
+                                href={character_url}
+                                title={`${character.name} by ${props.ownerUsername}`}
+                            >
+                                <Image
+                                    className="rounded-md p-1 border-2 border-dotted border-indigo-400"
+                                    src={
+                                        character.thumbnailFile
+                                            ? `/assets/${character.thumbnailFile.name}`
+                                            : "undefined"
+                                    }
+                                    width="240"
+                                    height="240"
+                                    alt={`${character.name} thumbnail`}
+                                />
+                            </Link>
+                            <div className="flex flex-row">
+                                <Link
+                                    className="h-8 bg-gray-800 m-2 ml-0 flex-grow hover:underline flex flex-row justify-center items-center rounded-md italic text-indigo-400"
+                                    href={character_url}
+                                >
+                                    {character.name}
+                                </Link>
+                                <Button
+                                    className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
+                                    title="Bookmark this character"
+                                >
+                                    <FontAwesomeIcon icon={faBookmarkRegular} />
+                                </Button>
+                                <Button
+                                    className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
+                                    title="Edit this character"
+                                >
+                                    <FontAwesomeIcon icon={faPencil} />
+                                </Button>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

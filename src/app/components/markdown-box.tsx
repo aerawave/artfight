@@ -58,7 +58,7 @@ export default function MarkdownBox(props: TextBoxProps) {
                     </RadioGroup>
                 )}
             </div>
-            <input
+            <textarea
                 name={props.name}
                 value={value}
                 hidden
@@ -76,7 +76,7 @@ export default function MarkdownBox(props: TextBoxProps) {
             {mode === "preview" &&
                 (value ? (
                     <Markdown
-                        className="markdown"
+                        className="markdown border border-white/5 p-4 rounded-md"
                         skipHtml
                         disallowedElements={["img"]} // should images be allowed?
                         unwrapDisallowed

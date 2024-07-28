@@ -59,7 +59,8 @@ export const Characters = pgTable("characters", {
     status: characterStatus("status"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     // "Basic Information"
-    name: text("name"),
+    name: text("name").notNull(),
+    slug: text("slug"),
     description: text("description"),
     permissions: text("permissions"),
     disableGlobalUserPermissions: boolean("disable_global_user_permissions"),

@@ -1,6 +1,6 @@
 import db from "@/db/database";
 import { UserProperties, Users } from "@/db/schema";
-import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient, User } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 
 export type ImageFilter =
@@ -21,6 +21,33 @@ export async function checkUsernameExists(username: string): Promise<boolean> {
     });
 
     return users.totalCount > 0;
+}
+
+export async function getUserByUsername(username: string) {
+    const clerk_user = (
+        await clerkClient().users.getUserList({
+            username: [username],
+            limit: 1,
+        })
+    ).data[0] as User | undefined;
+
+    if (!clerk_user) {
+        return undefined;
+    }
+
+    const record = (
+        await db
+            .select()
+            .from(Users)
+            .where((user) => eq(user.clerkId, clerk_user.id))
+            .limit(1)
+    )[0] as typeof Users.$inferSelect | undefined;
+
+    if (!record) {
+        return undefined;
+    }
+
+    return { username: clerk_user.username, ...record };
 }
 
 export async function getUser(userId: number | string) {
