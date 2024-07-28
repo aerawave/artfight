@@ -1,22 +1,22 @@
 .tab-group {
-    @apply pt-8;
+    @apply m-4;
 }
 
 .tab-group > .tab-list {
     @apply flex flex-row border-b-2 border-white/20;
 }
-.tab-list > .tab {
-    @apply rounded-t-md border-2 border-b-0 border-transparent p-1 text-cyan-300/50;
+.tab-list > .tab > .tab-content {
+    @apply block rounded-t-md border-2 border-b-0 border-transparent p-1 text-cyan-300/50;
 }
 
-.tab-list > .tab[data-selected] {
+.tab-list > .tab[data-selected] > .tab-content {
     @apply border-white/50 text-white;
 }
 
-.tab-list > .tab:not([data-selected]):hover {
+.tab-list > .tab:not([data-selected]):hover > .tab-content {
     @apply border-white/25 text-cyan-300/75;
 }
 
 .tab-group > .tab-panel-list {
-    @apply mt-3;
+    @apply mt-3 mx-2;
 }

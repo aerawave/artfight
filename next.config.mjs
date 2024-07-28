@@ -4,8 +4,10 @@ const nextConfig = {
             {
                 protocol: "https",
                 hostname: "img.clerk.com",
-                port: "",
-                pathname: "/**",
+            },
+            {
+                protocol: "https",
+                hostname: "placehold.co",
             },
         ],
     },
