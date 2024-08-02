@@ -350,7 +350,7 @@ export async function changeFilters(
         };
     }
 
-    const filters: { [key in ImageFilter]: ImageFilterLevel } = {
+    const filters: Record<ImageFilter, ImageFilterLevel> = {
         filter_moderate_gore: data.get(
             "filter_moderate_gore"
         ) as ImageFilterLevel,

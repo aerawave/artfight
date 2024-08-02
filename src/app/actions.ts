@@ -8,6 +8,7 @@ import {
     changeUsername,
     changeFilters,
 } from "./actions/user-settings";
+import { submitCharacter } from "./actions/submissions";
 
 export {
     changePassword,
@@ -17,4 +18,5 @@ export {
     changeSiteTheme,
     changeUsername,
     changeFilters,
+    submitCharacter,
 };

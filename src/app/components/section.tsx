@@ -1,32 +1,44 @@
 "use client";
 
 import React from "react";
+import { clsx } from "../util";
 
 type SectionProps = {
     title?: React.ReactNode;
-    children?: React.ReactNode | React.ReactNode[];
-    backgroundColor?: string;
-    titleBackgroundColor?: string;
+    children?: React.ReactNode;
+    titleClass?: string;
     className?: string;
+    contentClassName?: string;
+    noContentPadding?: boolean;
 };
 
 export function Section(props: SectionProps) {
     return (
         <div
-            className={`shadow-xl ${
-                props.backgroundColor ?? "bg-white/5"
-            } rounded-xl ${props.className} m-2`}
+            className={clsx(
+                "shadow-xl overflow-clip rounded-xl m-2 bg-white/5",
+                props.className
+            )}
         >
             {props.title && (
                 <div
-                    className={`w-full ${
-                        props.titleBackgroundColor ?? "bg-white/20"
-                    } p-3 rounded-t-md`}
+                    className={clsx(
+                        "w-full p-3 rounded-t-md",
+                        props.titleClass ?? "bg-white/20"
+                    )}
                 >
                     {props.title}
                 </div>
             )}
-            <div className="p-4">{props.children}</div>
+            <div
+                className={clsx(
+                    "",
+                    !props.noContentPadding && "p-4",
+                    props.contentClassName
+                )}
+            >
+                {props.children}
+            </div>
         </div>
     );
 }
