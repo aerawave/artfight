@@ -232,7 +232,7 @@ export default async function CharacterProfileTab(props: {
                         titleClass="bg-cyan-600 text-white/80"
                     >
                         <div className="flex flex-row flex-wrap gap-2">
-                            {"hyena circus fursona furry demon plainswalker anthro"
+                            {"lorem ipsum dolor sit amet consectetur adipisicing"
                                 .split(" ")
                                 .map((tag) => (
                                     <Chip
