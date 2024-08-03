@@ -1,7 +1,7 @@
 "use client";
 
-import { ToggleGroup, ToggleGroupItem } from "@radix-ui/react-toggle-group";
 import React, { useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 
 export type YesNoType = "yes" | "no";
 export const YesNoValues = (): string[] => ["yes", "no"];
@@ -25,24 +25,24 @@ export default function YesNo(props: YesNoProps) {
     };
 
     return (
-        <ToggleGroup
+        <RadioGroup
             id={props.id}
-            type="single"
+            name={props.name}
             value={value}
             onValueChange={(value) => onChange(value as YesNoType)}
         >
-            <ToggleGroupItem
+            <RadioGroupItem
                 value="yes"
-                className="p-2 rounded-l-lg border-white/10 border-2 boder-r-0  hover:bg-white/5 data-[state=on]:bg-white/15 uppercase"
+                className="p-2 rounded-l-lg border-white/10 border-2 boder-r-0  hover:bg-white/5 data-[state=checked]:bg-white/15 uppercase"
             >
                 Yes
-            </ToggleGroupItem>
-            <ToggleGroupItem
+            </RadioGroupItem>
+            <RadioGroupItem
                 value="no"
-                className="p-2 rounded-r-lg border-white/10 border-2 boder-r-0  hover:bg-white/5 data-[state=on]:bg-white/15 uppercase"
+                className="p-2 rounded-r-lg border-white/10 border-2 boder-r-0  hover:bg-white/5 data-[state=checked]:bg-white/15 uppercase"
             >
                 No
-            </ToggleGroupItem>
-        </ToggleGroup>
+            </RadioGroupItem>
+        </RadioGroup>
     );
 }
