@@ -31,6 +31,13 @@ export default function YesNo(props: YesNoProps) {
             value={value}
             onValueChange={(value) => onChange(value as YesNoType)}
         >
+            <input
+                name={props.name}
+                value={value}
+                readOnly
+                hidden
+                form={props.form}
+            />
             <RadioGroupItem
                 value="yes"
                 className="p-2 rounded-l-lg border-white/10 border-2 boder-r-0  hover:bg-white/5 data-[state=checked]:bg-white/15 uppercase"
