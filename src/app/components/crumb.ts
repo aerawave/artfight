@@ -1,14 +1,13 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, IconType } from "./icons";
 
 export type Crumb = {
-    icon?: IconProp;
+    icon?: IconType;
     label: React.ReactNode;
     href: string;
 };
 
 export const HomeCrumb: Crumb = {
-    icon: faHome,
+    icon: faHouse.far,
     label: "Home",
     href: "/",
 };

@@ -1,33 +1,33 @@
 "use server";
+
 import React from "react";
-import { Disclosure } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import {
-    faQuestionCircle,
-    faMagnifyingGlass,
-    faPlus,
-    faShoppingCart,
-} from "@fortawesome/free-solid-svg-icons";
 import Chip from "./chip";
 import NavLink, { NavLinkData } from "./navigation/nav-link";
-import UserLink from "./navigation/user-link";
 import Banner from "./navigation/banner";
+import UserLink from "./navigation/user-link";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { Breadcrumb } from "./breadcrumb";
 import { Crumb } from "./crumb";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Icon from "./icon";
+import {
+    faDiscord,
+    faMagnifyingGlass,
+    faPlus,
+    faQuestionCircle,
+    faShoppingCart,
+} from "./icons";
 
 const discord: NavLinkData = {
     href: "https://discord.gg/artfight",
     label: "Discord",
-    icon: faDiscord,
+    icon: faDiscord.fab,
 };
 
 const help: NavLinkData = {
     label: "Help",
-    icon: faQuestionCircle,
+    icon: faQuestionCircle.fas,
     subs: [
         { label: "INFO" },
         { href: "/info/about", label: "About" },
@@ -54,7 +54,7 @@ const shop: NavLinkData = {
             </Chip>
         </>
     ),
-    icon: faShoppingCart,
+    icon: faShoppingCart.fas,
     subs: [
         { href: "/donate", label: "Support Art Fight" },
         "divider",
@@ -84,7 +84,7 @@ const shop: NavLinkData = {
 
 const browse: NavLinkData = {
     label: "Browse",
-    icon: faMagnifyingGlass,
+    icon: faMagnifyingGlass.fas,
     subs: [
         { href: "/rate", label: "Rate Attacks" },
         "divider",
@@ -108,7 +108,7 @@ const browse: NavLinkData = {
 
 const submit: NavLinkData = {
     label: "Submit",
-    icon: faPlus,
+    icon: faPlus.fas,
     subs: [{ href: "/submit/character", label: "Character" }],
 };
 
@@ -126,44 +126,37 @@ export default async function Navigation(props: NavigationProps) {
 
     return (
         <>
-            <Disclosure as="nav" className="bg-gray-800 px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
-                    <div className="flex items-center">
-                        <div className="flex-shrink-0">
-                            <Link
-                                href="/"
-                                className="flex flex-row items-center"
-                            >
-                                <Image
-                                    alt="ArtFight"
-                                    src="/assets/img/logos/logo40.png"
-                                    className="h-8 w-8"
-                                    width="40"
-                                    height="40"
-                                />
-                                <span className="uppercase ml-2 text-1xl">
-                                    Art Fight
-                                </span>
-                            </Link>
-                        </div>
-                        <div className="hidden ml-8 md:flex flex-row">
-                            {links.map((link, i) => (
-                                <NavLink key={i} data={link} className="ml-8" />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="hidden md:block">
-                        <SignedIn>
-                            <UserLink />
-                        </SignedIn>
-                        <SignedOut>
-                            <Link href="/login" className="m-4">
-                                Register / Log In
-                            </Link>
-                        </SignedOut>
-                    </div>
+            <nav className="bg-gray-800 px-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center py-2">
+                <div className="flex flex-row gap-8">
+                    <Link
+                        href="/"
+                        className="flex lfex-row items-center"
+                        shallow
+                    >
+                        <Image
+                            alt="ArtFight"
+                            src="/assets/img/logos/logo40.png"
+                            className="h-8 w-8"
+                            width="40"
+                            height="40"
+                        />
+                        <span className="uppercase ml-2 text-1xl">
+                            Art Fight
+                        </span>
+                    </Link>
+                    {links.map((link, i) => (
+                        <NavLink key={i} data={link} />
+                    ))}
                 </div>
-            </Disclosure>
+                <div className="hidden md:flex flex-row">
+                    <SignedIn>
+                        <UserLink />
+                    </SignedIn>
+                    <SignedOut>
+                        <Link href="/login">Register / Log In</Link>
+                    </SignedOut>
+                </div>
+            </nav>
             <Banner />
             {props.crumbs && (
                 <div className="pt-8">
@@ -175,12 +168,7 @@ export default async function Navigation(props: NavigationProps) {
                                 href={crumb.href}
                             >
                                 {crumb.icon && (
-                                    <>
-                                        <FontAwesomeIcon
-                                            icon={crumb.icon}
-                                            className="mr-2"
-                                        />
-                                    </>
+                                    <Icon icon={crumb.icon} className="mr-2" />
                                 )}
                                 {crumb.label}
                             </Link>

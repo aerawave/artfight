@@ -2,17 +2,25 @@
 
 import React from "react";
 
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import Icon from "../icon";
+import { clsx } from "@/app/util";
 import Link from "next/link";
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuPortal,
+    DropdownMenuContent,
+    DropdownMenuSub,
+    DropdownMenuSubTrigger,
+    DropdownMenuSubContent,
+} from "@radix-ui/react-dropdown-menu";
+import { faCaretDown, IconType } from "../icons";
 
 export type NavLinkData =
     | {
           href?: string;
           label: React.ReactNode;
-          icon?: IconProp;
+          icon?: IconType;
           subs?: NavLinkData[];
       }
     | "divider";
@@ -33,32 +41,65 @@ export default function NavLink({
 
     const label = (
         <>
-            {link.icon && <FontAwesomeIcon icon={link.icon} className="mr-1" />}
+            {link.icon && <Icon icon={link.icon} className="mr-1" />}
             {link.label}
         </>
     );
 
-    if (link.subs && link.subs.length > 0)
+    if (link.subs && link.subs.length > 0) {
+        if (isSub) {
+            return (
+                <DropdownMenuSub>
+                    <DropdownMenuSubTrigger
+                        className={clsx(
+                            "cursor-pointer flex flex-row gap-1 items-center",
+                            className
+                        )}
+                    >
+                        {label}
+                        <Icon icon={faCaretDown.fas} />
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                        <DropdownMenuSubContent className="rounded-md bg-gray-900 py-2">
+                            {link.subs.map((sub, i) => (
+                                <NavLink
+                                    key={i}
+                                    data={sub}
+                                    className="block px-8"
+                                    isSub
+                                />
+                            ))}
+                        </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                </DropdownMenuSub>
+            );
+        }
         return (
-            <Menu>
-                <MenuButton
-                    className={`cursor-pointer flex flex-row items-center ${className}`}
+            <DropdownMenu modal={false}>
+                <DropdownMenuTrigger
+                    className={clsx(
+                        "cursor-pointer flex flex-row gap-1 items-center",
+                        className
+                    )}
                 >
                     {label}
-                    <FontAwesomeIcon className="ml-1" icon={faCaretDown} />
-                </MenuButton>
-                <MenuItems
-                    anchor="bottom"
-                    className="rounded-md bg-gray-900 py-2"
-                >
-                    {link.subs.map((sub, i) => (
-                        <MenuItem key={i}>
-                            <NavLink data={sub} className="block px-8" isSub />
-                        </MenuItem>
-                    ))}
-                </MenuItems>
-            </Menu>
+                    <Icon icon={faCaretDown.fas} />
+                </DropdownMenuTrigger>
+                <DropdownMenuPortal>
+                    <DropdownMenuContent className="rounded-md bg-gray-900 py-2 mt-3">
+                        {link.subs.map((sub, i) => (
+                            <NavLink
+                                key={i}
+                                data={sub}
+                                className="block px-8"
+                                isSub
+                            />
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenuPortal>
+            </DropdownMenu>
         );
+    }
 
     if (link.href === undefined)
         return (
@@ -72,11 +113,21 @@ export default function NavLink({
     return (
         <Link
             href={link.href}
-            className={`cursor-pointer py-0.5 ${className} ${
-                isSub ? "hover:bg-gray-400" : ""
-            }`}
+            className={clsx(
+                "cursor-pointer py-0.5",
+                className,
+                isSub && "hover:bg-gray-400"
+            )}
         >
             {label}
         </Link>
+        // <Link
+        //     href={link.href}
+        //     className={`cursor-pointer py-0.5 ${className} ${
+        //         isSub ? "hover:bg-gray-400" : ""
+        //     }`}
+        // >
+        //     {label}
+        // </Link>
     );
 }

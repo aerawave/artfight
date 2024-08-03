@@ -2,11 +2,11 @@
 
 import { changeAvatar } from "@/app/actions";
 import { Section } from "@/app/components/section";
-import { Button, Field, Input, Label } from "@headlessui/react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { ErrorList } from "./error-list";
+import { Label } from "@radix-ui/react-label";
 
 type ChangeAvatarProps = {
     imageUrl: string;
@@ -32,9 +32,15 @@ export default function ChangeAvatar({ imageUrl }: ChangeAvatarProps) {
             </div>
             <form className="flex flex-col items-center" action={action}>
                 <Image src={avatar} alt="avatar" width="96" height="96" />
-                <Field className="flex flex-col w-full">
-                    <Label className="text-sm text-white/50">Choose File</Label>
-                    <Input
+                <div className="flex flex-col w-full">
+                    <Label
+                        htmlFor="avatar_image"
+                        className="text-sm text-white/50"
+                    >
+                        Choose File
+                    </Label>
+                    <input
+                        id="avatar_image"
                         name="image"
                         type="file"
                         className="border-2 border-gray-500 rounded-lg p-1"
@@ -47,13 +53,13 @@ export default function ChangeAvatar({ imageUrl }: ChangeAvatarProps) {
                             <span> 100x100 pixels or smaller</span>
                         </span>
                     </p>
-                </Field>
-                <Button
+                </div>
+                <button
                     className="self-end rounded-lg bg-cyan-600 p-2"
                     type="submit"
                 >
                     Upload
-                </Button>
+                </button>
             </form>
         </Section>
     );

@@ -1,14 +1,18 @@
 import MarkdownBox from "@/app/components/markdown-box";
 import { Section } from "@/app/components/section";
-import Tooltipper from "@/app/components/tooltipper";
 import YesNo, { YesNoType } from "@/app/components/yes-no";
-import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Field, Input, Label } from "@headlessui/react";
 import React, { useState } from "react";
 import { NEW_CHARACTER_FORM } from "../new-character-form";
 import { CharacterCreditsErrors } from "@/app/actions/errors/submissions-errors";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
+import { Label } from "@radix-ui/react-label";
+import { faQuestionCircle } from "@/app/components/icons";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import Icon from "@/app/components/icon";
 
 export default function CharacterCredits(props: {
     errors?: CharacterCreditsErrors;
@@ -19,165 +23,181 @@ export default function CharacterCredits(props: {
     >();
 
     return (
-        <Section title="Credits" className="flex flex-col gap-4">
-            <ErrorList errors={props.errors?.general} />
-            <Field>
+        <Section title="Credits">
+            <div className="flex flex-col gap-4">
+                <ErrorList errors={props.errors?.general} />
                 <div className="flex flex-row justify-between items-center">
-                    <Label className="font-bold text-sm text-white/75">
+                    <Label
+                        htmlFor="is_designer"
+                        className="font-bold text-sm text-white/75"
+                    >
                         Did you design this character?
                         <span className="text-red-500">*</span>
                     </Label>
+
                     <YesNo
+                        id="is_designer"
                         name="is_designer"
                         value={is_designer}
                         onChange={setIsDesigner}
                         form={NEW_CHARACTER_FORM}
                     />
+                    <ErrorList errors={props.errors?.is_designer} />
                 </div>
-                <ErrorList errors={props.errors?.is_designer} />
-            </Field>
-            {is_designer === "no" ? (
-                <div className="flex flex-col gap-2 rounded-lg p-2 bg-white/10">
-                    <Field className="flex flex-col gap-2">
-                        <Label className="font-bold text-sm text-white/75">
-                            Designer Name
-                            <span className="text-red-500">*</span>
-                        </Label>
-                        <ErrorList errors={props.errors?.designer_name} />
-                        <Input
+                {is_designer === "no" ? (
+                    <div className="flex flex-col gap-2 rounded-lg p-2 bg-white/10">
+                        <div className="flex flex-col gap-2">
+                            <Label
+                                htmlFor="designer_name"
+                                className="font-bold text-sm text-white/75"
+                            >
+                                Designer Name
+                                <span className="text-red-500">*</span>
+                            </Label>
+                            <ErrorList errors={props.errors?.designer_name} />
+                            <input
+                                id="designer_name"
+                                name="designer_name"
+                                form={NEW_CHARACTER_FORM}
+                                required
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label
+                                htmlFor="designer_url"
+                                className="font-bold text-sm text-white/75"
+                            >
+                                Designer URL
+                                <span className="text-red-500">*</span>
+                            </Label>
+                            <ErrorList errors={props.errors?.designer_url} />
+                            <input
+                                id="designer_url"
+                                name="designer_url"
+                                form={NEW_CHARACTER_FORM}
+                                required
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <input
+                            hidden
+                            type="hidden"
                             name="designer_name"
+                            value=""
+                            readOnly
                             form={NEW_CHARACTER_FORM}
-                            required
                         />
-                    </Field>
-                    <Field className="flex flex-col gap-2">
-                        <Label className="font-bold text-sm text-white/75">
-                            Designer URL
-                            <span className="text-red-500">*</span>
-                        </Label>
-                        <ErrorList errors={props.errors?.designer_url} />
-                        <Input
+                        <input
+                            hidden
+                            type="hidden"
                             name="designer_url"
+                            value=""
+                            readOnly
                             form={NEW_CHARACTER_FORM}
-                            required
                         />
-                    </Field>
-                </div>
-            ) : (
-                <>
-                    <input
-                        hidden
-                        type="hidden"
-                        name="designer_name"
-                        value=""
-                        readOnly
-                        form={NEW_CHARACTER_FORM}
-                    />
-                    <input
-                        hidden
-                        type="hidden"
-                        name="designer_url"
-                        value=""
-                        readOnly
-                        form={NEW_CHARACTER_FORM}
-                    />
-                </>
-            )}
-            <Field>
+                    </>
+                )}
                 <div className="flex flex-row justify-between">
-                    <Label className="font-bold text-sm text-white/75">
+                    <Label htmlFor="does_link_species_sheet">
                         Link a species sheet?
                         <span className="text-red-500">*</span>
                     </Label>
+                    <ErrorList errors={props.errors?.does_link_species_sheet} />
                     <YesNo
+                        id="does_link_species_sheet"
                         name="does_link_species_sheet"
                         value={does_link_species_sheet}
                         onChange={setDoesLinkSpeciesSheet}
                         form={NEW_CHARACTER_FORM}
                     />
                 </div>
-                <ErrorList errors={props.errors?.does_link_species_sheet} />
-            </Field>
-            {does_link_species_sheet === "yes" ? (
-                <div className="flex flex-col gap-2 rounded-lg p-2 bg-white/10">
-                    <Field className="flex flex-col gap-2">
-                        <Label className="font-bold text-sm text-white/75">
-                            Species Name
-                            <span className="text-red-500">*</span>
-                        </Label>
-                        <ErrorList errors={props.errors?.species_name} />
-                        <Input
-                            name="species_name"
-                            form={NEW_CHARACTER_FORM}
-                            required
-                        />
-                    </Field>
-                    <Field className="flex flex-col gap-2">
-                        <Label className="font-bold text-sm text-white/75">
-                            URL for Species Sheet
-                            <span className="text-red-500">*</span>
-                        </Label>
-                        <ErrorList errors={props.errors?.species_sheet_url} />
-                        <Input
-                            name="species_sheet_url"
-                            form={NEW_CHARACTER_FORM}
-                            required
-                        />
-                    </Field>
-                </div>
-            ) : (
-                <>
-                    <input
-                        hidden
-                        type="hidden"
-                        name="species_name"
-                        value=""
-                        readOnly
-                        form={NEW_CHARACTER_FORM}
-                    />
-                    <input
-                        hidden
-                        type="hidden"
-                        name="species_sheet_url"
-                        value=""
-                        readOnly
-                        form={NEW_CHARACTER_FORM}
-                    />
-                </>
-            )}
-            <Field className="flex flex-col gap-2">
-                <MarkdownBox
-                    name="additional_credits"
-                    label={
-                        <>
-                            <span className="font-bold text-sm text-white/75 block">
-                                Additional Credits
-                                <Tooltipper
-                                    className="inline-block ml-2"
-                                    buttonClassName="rounded-full"
-                                    target={
-                                        <FontAwesomeIcon
-                                            className="px-1"
-                                            icon={faQuestionCircle}
-                                        />
-                                    }
-                                    popoverClassName="p-2 rounded-lg bg-black text-white border-white/20 border"
-                                    content={
-                                        <p>
-                                            You can add any additional sources
-                                            for credit here.
-                                        </p>
-                                    }
-                                />
-                            </span>
-                            <ErrorList
-                                errors={props.errors?.additional_credits}
+                {does_link_species_sheet === "yes" ? (
+                    <div className="flex flex-col gap-2 rounded-lg p-2 bg-white/10">
+                        <div className="flex flex-col gap-2">
+                            <Label
+                                htmlFor="species_name"
+                                className="font-bold text-sm text-white/75"
+                            >
+                                Species Name
+                                <span className="text-red-500">*</span>
+                            </Label>
+                            <ErrorList errors={props.errors?.species_name} />
+                            <input
+                                id="species_name"
+                                name="species_name"
+                                form={NEW_CHARACTER_FORM}
+                                required
                             />
-                        </>
-                    }
-                    form={NEW_CHARACTER_FORM}
-                />
-            </Field>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label
+                                htmlFor="species_sheet_url"
+                                className="font-bold text-sm text-white/75"
+                            >
+                                URL for Species Sheet
+                                <span className="text-red-500">*</span>
+                            </Label>
+                            <ErrorList
+                                errors={props.errors?.species_sheet_url}
+                            />
+                            <input
+                                id="species_sheet_url"
+                                name="species_sheet_url"
+                                form={NEW_CHARACTER_FORM}
+                                required
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <input
+                            hidden
+                            type="hidden"
+                            name="species_name"
+                            value=""
+                            readOnly
+                            form={NEW_CHARACTER_FORM}
+                        />
+                        <input
+                            hidden
+                            type="hidden"
+                            name="species_sheet_url"
+                            value=""
+                            readOnly
+                            form={NEW_CHARACTER_FORM}
+                        />
+                    </>
+                )}
+                <div className="flex flex-col gap-2">
+                    <MarkdownBox
+                        name="additional_credits"
+                        label={
+                            <>
+                                <span className="font-bold text-sm text-white/75 block">
+                                    Additional Credits
+                                    <Tooltip delayDuration={0}>
+                                        <TooltipTrigger>
+                                            <Icon icon={faQuestionCircle.fas} />
+                                        </TooltipTrigger>
+                                        <TooltipContent className="p-2 rounded-lg bg-black text-white border-white/20 border">
+                                            <p>
+                                                You can add any additional
+                                                sources for credit here.
+                                            </p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </span>
+                                <ErrorList
+                                    errors={props.errors?.additional_credits}
+                                />
+                            </>
+                        }
+                        form={NEW_CHARACTER_FORM}
+                    />
+                </div>
+            </div>
         </Section>
     );
 }

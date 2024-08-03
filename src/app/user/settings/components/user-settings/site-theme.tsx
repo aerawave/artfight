@@ -2,21 +2,19 @@
 
 import { changeSiteTheme } from "@/app/actions";
 import { Section } from "@/app/components/section";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    Button,
-    Field,
-    Input,
-    Label,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-} from "@headlessui/react";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { ErrorList } from "./error-list";
+import { Label } from "@radix-ui/react-label";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import Icon from "@/app/components/icon";
+import { faCheck, faChevronDown } from "@/app/components/icons";
+import { Checkbox, CheckboxIndicator } from "@radix-ui/react-checkbox";
 
 type SiteTheme = "dark" | "light";
 
@@ -42,74 +40,90 @@ export default function ChangeSiteTheme({
 
     return (
         <Section className={className} title={<h4>Site Theme</h4>}>
-            <div>
-                {state.success ? (
-                    <h5 className="text-green-400">Settings updated!</h5>
-                ) : (
-                    <ErrorList errors={state.errors?.general} />
-                )}
-            </div>
-            <form className="flex flex-col gap-4" action={action}>
-                <Field className="flex flex-row">
-                    <Label className="text-sm text-white/50">
-                        Show custom themes on user profiles by default
-                    </Label>
-                    <Input
-                        type="checkbox"
-                        className="ml-2"
-                        name="show_custom_themes"
-                        checked={customThemes}
-                        onChange={() => setCustomThemes(!customThemes)}
-                    />
-                </Field>
-                <Field className="flex flex-col">
-                    <Label className="text-sm text-white/50">Style</Label>
-                    <input
-                        hidden
-                        name="dark_mode"
-                        value={style}
-                        onChange={() => {}}
-                    />
-                    <Menu>
-                        <MenuButton className="input text-left hover:bg-white/20">
-                            <span className="flex flex-row justify-between">
-                                <span>
-                                    {
-                                        theme_entries.find(
-                                            (entry) => entry.key === style
-                                        )?.label
-                                    }
-                                </span>
-                                <FontAwesomeIcon
-                                    icon={faCaretDown}
-                                    className="mx-2 mt-1"
-                                />
-                            </span>
-                        </MenuButton>
-                        <MenuItems
-                            anchor="bottom start"
-                            className="flex flex-col rounded-lg bg-white/5"
+            <div className="flex flex-col gap-2">
+                <div>
+                    {state.success ? (
+                        <h5 className="text-green-400">Settings updated!</h5>
+                    ) : (
+                        <ErrorList errors={state.errors?.general} />
+                    )}
+                </div>
+                <form className="flex flex-col gap-4" action={action}>
+                    <div className="flex flex-row items-center">
+                        <Checkbox
+                            id="show_custom_themes"
+                            name="show_custom_themes"
+                            className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
+                            checked={customThemes}
+                            onCheckedChange={() =>
+                                setCustomThemes(!customThemes)
+                            }
                         >
-                            {theme_entries.map((entry) => (
-                                <MenuItem key={entry.key}>
-                                    <Button
+                            <CheckboxIndicator>
+                                <Icon
+                                    icon={faCheck.fas}
+                                    className="text-black"
+                                />
+                            </CheckboxIndicator>
+                        </Checkbox>
+                        <Label
+                            htmlFor="show_custom_themes"
+                            className="text-sm text-white/50 ml-2"
+                        >
+                            Show custom themes on user profiles by default
+                        </Label>
+                    </div>
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="dark_mode"
+                            className="text-sm text-white/50"
+                        >
+                            Style
+                        </Label>
+                        <input
+                            id="dark_mode"
+                            hidden
+                            name="dark_mode"
+                            value={style}
+                            readOnly
+                        />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="input text-left hover:bg-white/20 w-full">
+                                <span className="flex flex-row justify-between">
+                                    <span>
+                                        {
+                                            theme_entries.find(
+                                                (entry) => entry.key === style
+                                            )?.label
+                                        }
+                                    </span>
+                                    <Icon
+                                        icon={faChevronDown.fas}
+                                        className="mx-2 mt-1"
+                                    />
+                                </span>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="flex flex-col rounded-lg bg-white/5 items-start overflow-clip cursor-default">
+                                {theme_entries.map((entry) => (
+                                    <DropdownMenuItem
+                                        key={entry.key}
+                                        className="p-2 hover:bg-white/20 text-left w-full"
                                         onClick={() => setStyle(entry.key)}
-                                        className="p-2 hover:bg-white/20 text-left"
                                     >
                                         {entry.label}
-                                    </Button>
-                                </MenuItem>
-                            ))}
-                        </MenuItems>
-                    </Menu>
-                </Field>
-                <Button
-                    className="self-end rounded-lg bg-cyan-600 p-2"
-                    type="submit"
-                >
-                    Submit
-                </Button>
-            </form>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                    <button
+                        className="self-end rounded-lg bg-cyan-600 p-2"
+                        type="submit"
+                    >
+                        Submit
+                    </button>
+                </form>
+            </div>
         </Section>
     );
 }

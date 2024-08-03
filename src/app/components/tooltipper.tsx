@@ -1,6 +1,5 @@
 "use client";
 
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import React, { useState } from "react";
 
 type TooltipperProps = {
@@ -15,23 +14,24 @@ export default function Tooltipper(props: TooltipperProps) {
     const [hover, setHover] = useState(false);
 
     return (
-        <Popover className={props.className}>
-            <>
-                <PopoverButton
-                    className={`cursor-default ${props.buttonClassName}`}
-                    onMouseEnter={() => setHover(true)}
-                    onMouseLeave={() => setHover(false)}
-                >
-                    {props.target}
-                </PopoverButton>
-                <PopoverPanel
-                    static={hover}
-                    anchor="top"
-                    className={`w-40 text-center text-xs ${props.popoverClassName}`}
-                >
-                    {props.content}
-                </PopoverPanel>
-            </>
-        </Popover>
+        <></>
+        // <Popover className={props.className}>
+        //     <>
+        //         <PopoverButton
+        //             className={`cursor-default ${props.buttonClassName}`}
+        //             onMouseEnter={() => setHover(true)}
+        //             onMouseLeave={() => setHover(false)}
+        //         >
+        //             {props.target}
+        //         </PopoverButton>
+        //         <PopoverPanel
+        //             static={hover}
+        //             anchor="top"
+        //             className={`w-40 text-center text-xs ${props.popoverClassName}`}
+        //         >
+        //             {props.content}
+        //         </PopoverPanel>
+        //     </>
+        // </Popover>
     );
 }

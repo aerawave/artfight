@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +20,18 @@ export default function RootLayout({
 }>) {
     return (
         <ClerkProvider>
-            <html lang="en">
-                <body className={inter.className}>{children}</body>
-            </html>
+            <TooltipProvider>
+                <html lang="en">
+                    <head>
+                        {/* FIXME: Temporary solution */}
+                        <link
+                            rel="stylesheet"
+                            href="/font-awesome/css/all.min.css"
+                        />
+                    </head>
+                    <body className={inter.className}>{children}</body>
+                </html>
+            </TooltipProvider>
         </ClerkProvider>
     );
 }

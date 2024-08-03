@@ -1,14 +1,13 @@
 "use client";
 
 import { Section } from "@/app/components/section";
-import { faTimesCircle as faRemove } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Field, Input } from "@headlessui/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { NEW_CHARACTER_FORM } from "../new-character-form";
 import { GeneralErrors } from "@/app/actions/errors/general";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
+import Icon from "@/app/components/icon";
+import { faXMark } from "@/app/components/icons";
 
 export default function CharacterTags(props: { errors?: GeneralErrors }) {
     const [tags, setTags] = useState<string[]>([]);
@@ -92,18 +91,21 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
 
             <div className="flex flex-row gap-2 my-4">
                 {tags.map((tag, i) => (
-                    <Button
+                    <button
                         key={i}
                         className="rounded-full bg-cyan-400/50 text-white py-1 px-2 hover:bg-red-500/50"
                         onClick={() => removeTag(i)}
                     >
                         {prettyTag(tag)}
-                        <FontAwesomeIcon icon={faRemove} className="ml-1" />
-                    </Button>
+                        <Icon
+                            icon={faXMark.fas}
+                            className="ml-2 rounded-full"
+                        />
+                    </button>
                 ))}
             </div>
 
-            <Field className="flex flex-row gap-2">
+            <div className="flex flex-row gap-2">
                 <input
                     type="hidden"
                     name="tags"
@@ -111,31 +113,31 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
                     readOnly
                     form={NEW_CHARACTER_FORM}
                 />
-                <Input
+                <input
                     placeholder="Add a new tag..."
                     value={current_tag}
                     onChange={(e) => onChange(e.currentTarget.value)}
                     className="p-2 w-4/5"
                 />
-                <Button
+                <button
                     onClick={() => addTag(current_tag)}
                     className="rounded-lg bg-cyan-600 p-2 w-1/5"
                 >
                     Add Tag
-                </Button>
-            </Field>
+                </button>
+            </div>
 
             {suggestions.length > 0 && (
                 <div className="flex flex-row gap-2 mt-4">
                     <span>Suggested Tags: </span>
                     {suggestions.map((tag) => (
-                        <Button
+                        <button
                             key={tag}
                             onClick={() => addCleanTag(tag)}
                             className="rounded-xl bg-lime-800 text-white p-1"
                         >
                             {prettyTag(tag)}
-                        </Button>
+                        </button>
                     ))}
                 </div>
             )}

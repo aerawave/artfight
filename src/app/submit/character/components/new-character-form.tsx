@@ -6,7 +6,6 @@ import CharacterCredits from "./new-character-form/character-credits";
 import CharacterFilters from "./new-character-form/character-filters";
 import CharacterTags from "./new-character-form/character-tags";
 import CharacterMainImage from "./new-character-form/character-main-image";
-import { Button } from "@headlessui/react";
 import { useFormState } from "react-dom";
 import { submitCharacter } from "@/app/actions";
 import { redirect } from "next/navigation";
@@ -54,12 +53,12 @@ export default function NewCharacterForm() {
                 ref={form}
                 className="flex flex-col"
             >
-                <Button
+                <button
                     className="p-4 bg-cyan-500 rounded-lg m-4"
                     onClick={() => form.current?.requestSubmit()}
                 >
                     Submit
-                </Button>
+                </button>
             </form>
         </div>
     );

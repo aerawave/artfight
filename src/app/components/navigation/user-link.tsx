@@ -3,13 +3,12 @@
 import React from "react";
 
 import NavLink, { NavLinkData } from "./nav-link";
-import { faBell as faBellRegular } from "@fortawesome/free-regular-svg-icons";
-import { faBell as faBellSolid } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SignOutButton } from "@clerk/nextjs";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import Image from "next/image";
+import Icon from "../icon";
+import { faBell } from "../icons";
 
 export default async function UserLink() {
     const { userId } = auth();
@@ -61,9 +60,7 @@ export default async function UserLink() {
         <div className="flex flex-row items-center">
             <NavLink data={nav_link} className="mr-4" />
             <Link href="/">
-                <FontAwesomeIcon
-                    icon={notifications > 0 ? faBellSolid : faBellRegular}
-                />
+                <Icon icon={notifications > 0 ? faBell.fas : faBell.far} />
             </Link>
         </div>
     );
