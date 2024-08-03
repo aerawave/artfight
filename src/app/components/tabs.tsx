@@ -1,12 +1,18 @@
 "use client";
 
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { IconType } from "./icons";
+import {
+    Tabs as TabsBase,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@radix-ui/react-tabs";
+import { clsx } from "../util";
 
 export type TabData = {
-    icon?: IconProp;
+    icon?: IconType;
     key: string;
     label: React.ReactNode;
     content?: React.ReactNode;
@@ -31,22 +37,20 @@ export type TabsProps = {
 };
 
 export default function Tabs(props: TabsProps) {
-    const [active_tab_index, setActiveTabIndex] = useState(
-        Math.max(
-            0,
-            props.tabs.findIndex((tab) => tab.key === props.activeTab)
-        )
-    );
+    const [active_tab] = useState(props.activeTab ?? props.tabs[0].key);
     return (
-        <TabGroup
-            className={props.groupClass ?? "tab-group"}
-            selectedIndex={active_tab_index}
-            onChange={setActiveTabIndex}
+        <TabsBase
+            className={clsx("tab-group", props.groupClass)}
+            defaultValue={active_tab}
         >
-            <TabList className={props.listClass ?? "tab-list"}>
-                {props.tabs.map((tab, i) => (
-                    <Tab key={tab.key} className={props.tabClassName ?? "tab"}>
-                        {tab.href && active_tab_index !== i ? (
+            <TabsList className={clsx("tab-list", props.listClass)}>
+                {props.tabs.map((tab) => (
+                    <TabsTrigger
+                        key={tab.key}
+                        className={clsx("tab", props.tabClassName)}
+                        value={tab.key}
+                    >
+                        {tab.href && active_tab !== tab.key ? (
                             <Link
                                 href={tab.href}
                                 shallow
@@ -57,19 +61,18 @@ export default function Tabs(props: TabsProps) {
                         ) : (
                             <div className="tab-content">{tab.label}</div>
                         )}
-                    </Tab>
+                    </TabsTrigger>
                 ))}
-            </TabList>
-            <TabPanels className={props.panelListClass ?? "tab-panel-list"}>
-                {props.tabs.map((tab) => (
-                    <TabPanel
-                        key={tab.key}
-                        className={props.panelClass ?? "tab-panel"}
-                    >
-                        {tab.content}
-                    </TabPanel>
-                ))}
-            </TabPanels>
-        </TabGroup>
+            </TabsList>
+            {props.tabs.map((tab) => (
+                <TabsContent
+                    key={tab.key}
+                    value={tab.key}
+                    className={clsx("tab-panel", props.panelClass)}
+                >
+                    {tab.content}
+                </TabsContent>
+            ))}
+        </TabsBase>
     );
 }

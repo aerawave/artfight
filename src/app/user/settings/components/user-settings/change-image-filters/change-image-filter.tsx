@@ -1,22 +1,18 @@
 "use client";
 
 import { ImageFilter } from "@/app/actions/user";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import {
-    faTimes,
-    faEyeSlash,
-    faCheck,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Radio, RadioGroup } from "@headlessui/react";
+import Icon from "@/app/components/icon";
+import { faCheck, faEyeSlash, faXMark, IconType } from "@/app/components/icons";
+import { ToggleGroup, ToggleGroupItem } from "@radix-ui/react-toggle-group";
 import Link from "next/link";
 import React, { useState } from "react";
 
 export type ImageFilterLevel = "hide" | "censor" | "show";
 
 type ChangeImageFilterProps = {
+    id?: string;
     filter: ImageFilter;
-    icon: IconProp;
+    icon: IconType;
     label: string;
     guide: string;
     value?: ImageFilterLevel;
@@ -24,6 +20,7 @@ type ChangeImageFilterProps = {
 };
 
 export default function ChangeImageFilter({
+    id,
     filter,
     icon,
     label,
@@ -44,7 +41,7 @@ export default function ChangeImageFilter({
         <div>
             <div className="flex flex-row justify-between">
                 <h4>
-                    <FontAwesomeIcon icon={icon} className="mr-1" />
+                    <Icon icon={icon} className="mr-1" />
                     <span>{label}</span>
                 </h4>
                 <span>
@@ -53,28 +50,36 @@ export default function ChangeImageFilter({
                     </Link>
                 </span>
             </div>
-            <RadioGroup
-                name={filter}
+            <input hidden name={filter} value={selected} readOnly />
+            <ToggleGroup
+                id={id}
+                type="single"
                 value={selected}
-                onChange={onChange}
+                onValueChange={(value) => onChange(value as ImageFilterLevel)}
                 className="button-group grid justify-items-stretch grid-cols-3 m-2"
             >
-                <Radio value="hide" className="data-[checked]:bg-red-600/75">
-                    <FontAwesomeIcon icon={faTimes} className="mr-2" />
-                    <span>Hide</span>
-                </Radio>
-                <Radio
-                    value="censor"
-                    className="data-[checked]:bg-orange-500/75"
+                <ToggleGroupItem
+                    value="hide"
+                    className="data-[state=on]:bg-red-600/75"
                 >
-                    <FontAwesomeIcon icon={faEyeSlash} className="mr-2" />
+                    <Icon icon={faXMark.fas} className="mr-2" />
+                    <span>Hide</span>
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                    value="censor"
+                    className="data-[state=on]:bg-orange-500/75"
+                >
+                    <Icon icon={faEyeSlash.fas} className="mr-2" />
                     <span>Censor</span>
-                </Radio>
-                <Radio value="show" className="data-[checked]:bg-lime-800/75">
-                    <FontAwesomeIcon icon={faCheck} className="mr-2" />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                    value="show"
+                    className="data-[state=on]:bg-lime-800/75"
+                >
+                    <Icon icon={faCheck.fas} className="mr-2" />
                     <span>Show</span>
-                </Radio>
-            </RadioGroup>
+                </ToggleGroupItem>
+            </ToggleGroup>
         </div>
     );
 }

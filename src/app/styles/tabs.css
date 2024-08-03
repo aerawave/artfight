@@ -9,14 +9,14 @@
     @apply block rounded-t-md border-2 border-b-0 border-transparent p-1 text-cyan-300/50;
 }
 
-.tab-list > .tab[data-selected] > .tab-content {
+.tab-list > .tab[data-state="active"] > .tab-content {
     @apply border-white/50 text-white;
 }
 
-.tab-list > .tab:not([data-selected]):hover > .tab-content {
+.tab-list > .tab:not([data-state="active"]):hover > .tab-content {
     @apply border-white/25 text-cyan-300/75;
 }
 
-.tab-group > .tab-panel-list {
+.tab-group > .tab-panel {
     @apply mt-3 mx-2;
 }

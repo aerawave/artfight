@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 import Image from "next/image";
@@ -22,7 +24,8 @@ const SeafoamStardust: BannerTeamData[] = [
     },
 ];
 
-export default async function Banner(props: BannerProps) {
+export default function Banner(props: BannerProps) {
+    return null;
     const banners = (props.banners ?? SeafoamStardust).flatMap((v) =>
         new Array(v.banners).fill(0).map((_, i) => `${v.team}_${i + 1}`)
     );

@@ -4,10 +4,8 @@ import React from "react";
 import { getCharacters } from "@/app/actions/data/characters/character-list";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@headlessui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark as faBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
-import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import Icon from "@/app/components/icon";
+import { faBookmark, faPencil } from "@/app/components/icons";
 
 type ActiveCharactersProps = {
     ownerUsername: string;
@@ -74,18 +72,18 @@ export default async function ActiveCharacters(props: ActiveCharactersProps) {
                                 >
                                     {character.name}
                                 </Link>
-                                <Button
+                                <button
                                     className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
                                     title="Bookmark this character"
                                 >
-                                    <FontAwesomeIcon icon={faBookmarkRegular} />
-                                </Button>
-                                <Button
+                                    <Icon icon={faBookmark.far} />
+                                </button>
+                                <button
                                     className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
                                     title="Edit this character"
                                 >
-                                    <FontAwesomeIcon icon={faPencil} />
-                                </Button>
+                                    <Icon icon={faPencil.fas} />
+                                </button>
                             </div>
                         </div>
                     );

@@ -41,15 +41,15 @@ input[disabled],
     @apply bg-white/30 border-white/10;
 }
 
-.button-group > span {
+.button-group > button {
     @apply px-2 py-1 cursor-pointer bg-white/10;
 }
 
-.button-group > span:not([data-checked]) {
+.button-group > button:not([data-state="on"]) {
     @apply hover:bg-white/20;
 }
 
-.button-group > span:first-child {
+.button-group > button:first-child {
     @apply rounded-l-lg;
 }
 
