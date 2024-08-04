@@ -9,6 +9,8 @@ import { ErrorList } from "./error-list";
 import { changeUsername } from "@/app/actions";
 import Link from "next/link";
 import { Label } from "@radix-ui/react-label";
+import SubmitButton from "@/app/components/submit-button";
+import { clsx } from "@/app/util";
 
 type ChangeUsernameProps = {
     className?: string;
@@ -36,7 +38,7 @@ export default function ChangeUsername({
 
     return (
         <Section className={className} title={<h4>Change Username</h4>}>
-            <div className="flex flex-col gap-2">
+            <div className="flex-col-2">
                 <div>
                     {state.success ? (
                         <h5 className="text-green-400">Username updated!</h5>
@@ -44,10 +46,10 @@ export default function ChangeUsername({
                         <ErrorList errors={state.errors?.username} />
                     )}
                 </div>
-                <div className="p-4 bg-cyan-400/40 rounded-md mb-4">
-                    <div className="py-2">
+                <div className="deformat alert-cyan felx-col-2">
+                    <div>
                         <strong>Usernames:</strong>
-                        <ul className="list-disc ml-8">
+                        <ul>
                             <li>can be maximum of 20 characters long</li>
                             <li>
                                 may only contain letters (latin alphabet),
@@ -97,26 +99,19 @@ export default function ChangeUsername({
                     </p>
                 </div>
                 <form
-                    className="flex flex-col gap-4"
+                    className="flex-col-4"
                     action={async (data) => {
                         setCheck("unchecked");
                         action(data);
                     }}
                 >
-                    <div className="flex flex-row">
-                        <Label className="text-sm text-white/50 mr-2">
-                            Current Username:
-                        </Label>
+                    <div className="flex-row-2-center">
+                        <Label>Current Username:</Label>
                         <span className="text-sm">{usernameInitial}</span>
                     </div>
-                    <div className="flex flex-col">
-                        <Label
-                            htmlFor="username"
-                            className="text-sm text-white/50"
-                        >
-                            New Username
-                        </Label>
-                        <div className="flex flex-row">
+                    <div className="flex-col-2">
+                        <Label htmlFor="username">New Username</Label>
+                        <div className="flex-row-2">
                             <input
                                 id="username"
                                 name="username"
@@ -127,7 +122,7 @@ export default function ChangeUsername({
                                 className="flex-grow"
                             />
                             <button
-                                className="rounded-lg ml-2 bg-cyan-600 p-2"
+                                className="button-blue"
                                 onClick={async () => {
                                     const [available, message] =
                                         await checkAvailability(username);
@@ -144,20 +139,16 @@ export default function ChangeUsername({
                     </div>
                     <div className="flex flex-row justify-between">
                         <span
-                            className={`inline-block ${
+                            className={clsx(
+                                "inline-block",
                                 check === "unavailable"
                                     ? "text-red-500"
                                     : "text-green-500"
-                            }`}
+                            )}
                         >
                             {check !== "unchecked" && <>{check_message}</>}
                         </span>
-                        <button
-                            className="rounded-lg bg-cyan-600 p-2"
-                            type="submit"
-                        >
-                            Submit
-                        </button>
+                        <SubmitButton />
                     </div>
                 </form>
             </div>

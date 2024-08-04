@@ -33,7 +33,7 @@ export default function DeleteCharacterButton(props: {
     return (
         <Dialog onOpenChange={() => setDeleteConfirm(false)}>
             <DialogTrigger asChild>
-                <button className="rounded-lg bg-red-500 text-gray-200 py-2 px-4 flex flex-row justify-center items-center gap-2">
+                <button className="button-red text-gray-200">
                     <Icon icon={faTrash.fas} />
                     <span>Delete character</span>
                 </button>

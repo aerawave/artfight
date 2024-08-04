@@ -11,7 +11,6 @@ type CheckboxFixProps = {
     id?: string;
     name?: string;
     form?: string;
-    className?: string;
     defaultChecked?: boolean;
     children?: React.ReactNode;
 };
@@ -32,6 +31,7 @@ export default function CheckboxFix(props: CheckboxFixProps) {
             />
             <Checkbox
                 {...props}
+                className="checkbox"
                 checked={checked}
                 onCheckedChange={() => setChecked(!checked)}
             />

@@ -74,7 +74,7 @@ export default async function ViewCharacterPage(props: {
                     href={`/edit/character/${
                         character.id
                     }?sender=${encodeURIComponent(local_crumbs[2].href)}`}
-                    className="p-2 text-white bg-blue-500 rounded-lg flex flex-row gap-2 items-center hover:bg-blue-400"
+                    className="button-blue"
                 >
                     <Icon icon={faPencil.fas} />
                     <span>Edit</span>

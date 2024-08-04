@@ -7,7 +7,7 @@ export type Crumb = {
 };
 
 export const HomeCrumb: Crumb = {
-    icon: faHouse.far,
+    icon: faHouse.fas,
     label: "Home",
     href: "/",
 };

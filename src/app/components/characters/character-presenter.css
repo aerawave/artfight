@@ -1,0 +1,27 @@
+.character-presenter {
+    @apply flex flex-col w-60;
+}
+
+.image-holder {
+    @apply rounded-md p-1 border-2 border-dotted border-indigo-400 flex justify-center items-center h-60 w-60;
+}
+
+.image-clipper {
+    @apply h-56 w-56 flex justify-center items-center overflow-clip;
+}
+
+.image-holder img {
+    @apply content-center min-h-60 min-w-60;
+}
+
+.links {
+    @apply flex flex-row gap-1 my-2;
+}
+
+.main-link {
+    @apply h-8 bg-gray-800 flex-grow hover:underline flex flex-row justify-start items-center rounded-md italic text-indigo-400 overflow-clip truncate text-left pl-2;
+}
+
+.side-link {
+    @apply h-8 w-8 bg-gray-800 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md;
+}

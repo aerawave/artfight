@@ -1,6 +1,7 @@
 "use server";
 
 import React from "react";
+import { clsx } from "../util";
 
 type BreadcrumbProps = {
     className?: string;
@@ -25,8 +26,6 @@ export async function Breadcrumb(props: BreadcrumbProps) {
     }
 
     return (
-        <div className={`flex flex-row gap-2 text-sm ${props.className}`}>
-            {children}
-        </div>
+        <div className={clsx("breadcrumbs", props.className)}>{children}</div>
     );
 }

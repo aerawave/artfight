@@ -57,11 +57,13 @@ export default async function UserLink() {
         ],
     };
     return (
-        <div className="flex flex-row items-center">
-            <NavLink data={nav_link} className="mr-4" />
-            <Link href="/">
-                <Icon icon={notifications > 0 ? faBell.fas : faBell.far} />
-            </Link>
-        </div>
+        <>
+            <NavLink data={nav_link} />
+            <li>
+                <Link href="/">
+                    <Icon icon={notifications > 0 ? faBell.fas : faBell.far} />
+                </Link>
+            </li>
+        </>
     );
 }

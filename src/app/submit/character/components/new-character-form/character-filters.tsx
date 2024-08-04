@@ -45,21 +45,15 @@ export default function CharacterFilters(props: {
 
     return (
         <Section title="Character Filters">
-            <div className="flex flex-col gap-4">
-                <div className="rounded-md bg-cyan-600 p-3 text-xl text-white">
-                    <p>
-                        Check the filters that apply to this character&apos;
-                        description and other content on the profile.
-                    </p>
-                </div>
+            <div className="flex-col-4">
+                <p className="alert-cyan">
+                    Check the filters that apply to this character&apos;
+                    description and other content on the profile.
+                </p>
                 <ErrorList errors={props.errors?.general} />
-                <div className="flex flex-row justify-between items-center">
-                    <Label
-                        htmlFor="needs_filters"
-                        className="font-bold text-sm text-white/75"
-                    >
+                <div className="yes-no">
+                    <Label htmlFor="needs_filters" className="required">
                         Does this character need a content filter?
-                        <span className="text-red-500">*</span>
                     </Label>
 
                     <YesNo
@@ -91,7 +85,7 @@ export default function CharacterFilters(props: {
                 </div>
                 {needs_filters === "yes" ? (
                     <>
-                        <hr className="border-white/20 my-4" />
+                        <hr className="hr-gray" />
 
                         <p>
                             <strong>Please check all that apply.</strong> Hover
@@ -106,15 +100,11 @@ export default function CharacterFilters(props: {
                         {Object.keys(filters).map((key) => {
                             const id = `character_${key}`;
                             return (
-                                <div
-                                    key={key}
-                                    className="flex flex-row gap-2 items-center"
-                                >
+                                <div key={key} className="flex-row-2-center">
                                     <CheckboxFix
                                         id={id}
                                         name={id}
                                         form={props.form}
-                                        className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
                                         defaultChecked={
                                             needed_filters[key as ImageFilter]
                                         }
@@ -126,10 +116,7 @@ export default function CharacterFilters(props: {
                                             />
                                         </CheckboxIndicator>
                                     </CheckboxFix>
-                                    <Label
-                                        htmlFor={id}
-                                        className="font-bold text-sm text-white/75"
-                                    >
+                                    <Label htmlFor={id}>
                                         <span>
                                             {filters[key as ImageFilter][0]}
                                         </span>
@@ -139,8 +126,8 @@ export default function CharacterFilters(props: {
                                                     icon={faQuestionCircle.fas}
                                                 />
                                             </TooltipTrigger>
-                                            <TooltipContent className="w-40 text-center text-xs p-2 rounded-lg bg-black text-white border-white/20 border">
-                                                <p>
+                                            <TooltipContent asChild>
+                                                <p className="tooltip-content">
                                                     {
                                                         filters[
                                                             key as ImageFilter

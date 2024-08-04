@@ -6,6 +6,7 @@ import { changePassword } from "@/app/actions";
 import { ErrorList } from "./error-list";
 import { Section } from "@/app/components/section";
 import { Label } from "@radix-ui/react-label";
+import SubmitButton from "@/app/components/submit-button";
 
 type ChangePasswordProps = {
     className?: string;
@@ -37,16 +38,11 @@ export default function ChangePassword({
                     {state.success ? (
                         <h5 className="text-green-400">Password updated!</h5>
                     ) : (
-                        state.errors?.verification &&
-                        state.errors.verification.map((err, i) => (
-                            <div key={i} className="text-red-500">
-                                * {err}
-                            </div>
-                        ))
+                        <ErrorList errors={state.errors?.verification} />
                     )}
                 </div>
                 <form
-                    className="flex flex-col gap-4"
+                    className="flex-col-4"
                     action={(data) => {
                         const [new_password, password_confirmation] = [
                             data.get("password"),
@@ -62,13 +58,8 @@ export default function ChangePassword({
                         action(data);
                     }}
                 >
-                    <div className="flex flex-col">
-                        <Label
-                            htmlFor="old_password"
-                            className="text-sm text-white/50"
-                        >
-                            Old Password
-                        </Label>
+                    <div className="flex-col-2">
+                        <Label htmlFor="old_password">Old Password</Label>
                         <input
                             id="old_password"
                             name="old_password"
@@ -80,13 +71,8 @@ export default function ChangePassword({
                         />
                         <ErrorList errors={state.errors?.old_password} />
                     </div>
-                    <div className="flex flex-col">
-                        <Label
-                            htmlFor="password"
-                            className="text-sm text-white/50"
-                        >
-                            New Password
-                        </Label>
+                    <div className="flex-col-2">
+                        <Label htmlFor="password">New Password</Label>
                         <input
                             id="password"
                             name="password"
@@ -98,11 +84,8 @@ export default function ChangePassword({
                         />
                         <ErrorList errors={state.errors?.new_password} />
                     </div>
-                    <div className="flex flex-col">
-                        <Label
-                            htmlFor="password_confirmation"
-                            className="text-sm text-white/50"
-                        >
+                    <div className="flex-col-2">
+                        <Label htmlFor="password_confirmation">
                             Confirm New Password
                         </Label>
                         <input
@@ -116,12 +99,9 @@ export default function ChangePassword({
                         />
                     </div>
                     <ErrorList errors={errors} />
-                    <button
-                        className="self-end rounded-lg bg-cyan-600 p-2"
-                        type="submit"
-                    >
-                        Submit
-                    </button>
+                    <div className="self-end">
+                        <SubmitButton />
+                    </div>
                 </form>
             </div>
         </Section>

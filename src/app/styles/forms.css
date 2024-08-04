@@ -1,0 +1,143 @@
+@tailwind utilities;
+
+@layer utilities {
+    .button {
+        @apply rounded-lg text-white flex flex-row justify-center items-center gap-1 py-2 px-4;
+    }
+}
+
+label {
+    @apply font-bold text-sm text-white/75;
+}
+
+.error-list {
+    @apply mt-1 text-sm;
+}
+.error {
+    @apply text-red-500;
+}
+.error::before {
+    content: "* ";
+}
+.required::after {
+    content: "*";
+    @apply text-red-500;
+}
+
+.flex-row-2-center {
+    @apply items-center;
+}
+
+.link-input {
+    @apply grid grid-cols-1 md:grid-cols-2 md:gap-0 gap-2 bg-white/5 p-2 rounded-lg;
+}
+
+.link-input > div {
+    @apply flex flex-col gap-2;
+}
+
+.link-input > div:first-child > input {
+    @apply md:rounded-r-none;
+}
+
+.link-input > div:last-child > input {
+    @apply md:rounded-l-none;
+}
+
+.yes-no {
+    @apply flex flex-row justify-between items-center;
+}
+
+.button-blue {
+    @apply button bg-cyan-600 hover:bg-cyan-400;
+}
+
+.button-red {
+    @apply button bg-red-500 hover:bg-red-400;
+}
+
+.button-group {
+    @apply flex flex-row;
+}
+
+.button-group button {
+    @apply p-2 border-white/10 border-2 uppercase;
+}
+.button-group button:not([data-state="checked"]) {
+    @apply hover:bg-white/5;
+}
+.button-group button:not([class]) {
+    @apply data-[state=checked]:bg-white/15;
+}
+
+.button-group button:nth-of-type(1) {
+    @apply rounded-l-lg border-r-0;
+}
+
+.button-group button:nth-last-of-type(1) {
+    @apply rounded-r-lg border-l-0;
+}
+
+.markdown-container {
+    @apply border border-white/5 p-4 rounded-md;
+}
+
+.form-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}
+
+.dropdown-button {
+    @apply flex flex-row justify-between;
+}
+
+.dropdown-button i {
+    @apply mx-2 mt-1;
+}
+
+.dropdown-menu {
+    @apply flex flex-col bg-white/5 items-start overflow-clip cursor-default;
+}
+
+.dropdown-menu .dropdown-item {
+    @apply block p-2 text-left w-full;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    @apply hover:bg-white/20;
+}
+
+.button-filters-hide {
+    @apply data-[state=checked]:bg-red-600/75 flex flex-row gap-2 justify-center items-center flex-grow;
+}
+
+.button-filters-censor {
+    @apply data-[state=checked]:bg-orange-500/75 flex flex-row gap-2 justify-center items-center flex-grow;
+}
+
+.button-filters-show {
+    @apply data-[state=checked]:bg-lime-800/75 flex flex-row gap-2 justify-center items-center flex-grow;
+}
+
+.section-red {
+    @apply border border-red-500;
+}
+
+.section-red .title {
+    @apply bg-red-500;
+}
+
+.section-olive {
+    @apply border border-lime-800;
+}
+
+.section-olive .title {
+    @apply bg-lime-800;
+}
+
+.section-cyan {
+    @apply border border-cyan-600;
+}
+
+.section-cyan .title {
+    @apply bg-cyan-600 text-white/80;
+}

@@ -20,7 +20,7 @@ export default async function UserSettings({ user }: UserSettingsProps) {
         "dark_mode",
     ]);
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="form-grid">
             <ChangePassword />
             <ChangeAvatar imageUrl={user.imageUrl} />
             {user.primaryEmailAddress?.emailAddress ? (

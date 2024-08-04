@@ -28,8 +28,6 @@ export default async function UserSettingsPage() {
         },
     ];
 
-    //await clerkClient.users.updateUser(userId, { password: "TestTest1412" });
-
     const local_crumbs: Crumb[] = [
         {
             label: "Settings",

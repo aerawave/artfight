@@ -14,7 +14,9 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import Icon from "@/app/components/icon";
 import { faCheck, faChevronDown } from "@/app/components/icons";
-import { Checkbox, CheckboxIndicator } from "@radix-ui/react-checkbox";
+import { CheckboxIndicator } from "@radix-ui/react-checkbox";
+import CheckboxFix from "@/app/components/checkbox-fix";
+import SubmitButton from "@/app/components/submit-button";
 
 type SiteTheme = "dark" | "light";
 
@@ -34,13 +36,12 @@ export default function ChangeSiteTheme({
     customThemesInitial,
     styleInitial,
 }: ChangeSiteThemeProps) {
-    const [customThemes, setCustomThemes] = useState(customThemesInitial);
     const [style, setStyle] = useState(styleInitial);
     const [state, action] = useFormState(changeSiteTheme, {});
 
     return (
         <Section className={className} title={<h4>Site Theme</h4>}>
-            <div className="flex flex-col gap-2">
+            <div className="flex-col-2">
                 <div>
                     {state.success ? (
                         <h5 className="text-green-400">Settings updated!</h5>
@@ -48,16 +49,12 @@ export default function ChangeSiteTheme({
                         <ErrorList errors={state.errors?.general} />
                     )}
                 </div>
-                <form className="flex flex-col gap-4" action={action}>
-                    <div className="flex flex-row items-center">
-                        <Checkbox
+                <form className="flex-col-4" action={action}>
+                    <div className="flex-row-2-center">
+                        <CheckboxFix
                             id="show_custom_themes"
                             name="show_custom_themes"
-                            className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
-                            checked={customThemes}
-                            onCheckedChange={() =>
-                                setCustomThemes(!customThemes)
-                            }
+                            defaultChecked={customThemesInitial}
                         >
                             <CheckboxIndicator>
                                 <Icon
@@ -65,21 +62,13 @@ export default function ChangeSiteTheme({
                                     className="text-black"
                                 />
                             </CheckboxIndicator>
-                        </Checkbox>
-                        <Label
-                            htmlFor="show_custom_themes"
-                            className="text-sm text-white/50 ml-2"
-                        >
+                        </CheckboxFix>
+                        <Label htmlFor="show_custom_themes">
                             Show custom themes on user profiles by default
                         </Label>
                     </div>
-                    <div className="flex flex-col">
-                        <Label
-                            htmlFor="dark_mode"
-                            className="text-sm text-white/50"
-                        >
-                            Style
-                        </Label>
+                    <div className="flex-col-2">
+                        <Label htmlFor="dark_mode">Style</Label>
                         <input
                             id="dark_mode"
                             hidden
@@ -89,7 +78,7 @@ export default function ChangeSiteTheme({
                         />
                         <DropdownMenu>
                             <DropdownMenuTrigger className="input text-left hover:bg-white/20 w-full">
-                                <span className="flex flex-row justify-between">
+                                <span className="dropdown-button">
                                     <span>
                                         {
                                             theme_entries.find(
@@ -97,31 +86,25 @@ export default function ChangeSiteTheme({
                                             )?.label
                                         }
                                     </span>
-                                    <Icon
-                                        icon={faChevronDown.fas}
-                                        className="mx-2 mt-1"
-                                    />
+                                    <Icon icon={faChevronDown.fas} />
                                 </span>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="flex flex-col rounded-lg bg-white/5 items-start overflow-clip cursor-default">
+                            <DropdownMenuContent className="dropdown-menu">
                                 {theme_entries.map((entry) => (
                                     <DropdownMenuItem
                                         key={entry.key}
-                                        className="p-2 hover:bg-white/20 text-left w-full"
+                                        className="dropdown-item"
                                         onClick={() => setStyle(entry.key)}
                                     >
-                                        {entry.label}
+                                        <label>{entry.label}</label>
                                     </DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <button
-                        className="self-end rounded-lg bg-cyan-600 p-2"
-                        type="submit"
-                    >
-                        Submit
-                    </button>
+                    <div className="self-end">
+                        <SubmitButton />
+                    </div>
                 </form>
             </div>
         </Section>

@@ -58,8 +58,8 @@ export default function CharacterMainImage(props: {
 
     return (
         <Section title="Main Image">
-            <div className="flex flex-col gap-4">
-                <div className="rounded-md bg-orange-600 p-3 text-lg markdown text-white">
+            <div className="flex-col-4">
+                <div className="alert-orange">
                     <p>
                         Please upload only images that you have permission to
                         use, and credit the original artist appropriately if you
@@ -77,13 +77,9 @@ export default function CharacterMainImage(props: {
                 <ErrorList errors={props.errors?.general} />
                 {!props.defaults?.imageId ? (
                     <>
-                        <div className="flex flex-col gap-2">
-                            <Label
-                                htmlFor="main_image"
-                                className="font-bold text-sm text-white/75"
-                            >
+                        <div className="flex-col-2">
+                            <Label htmlFor="main_image" className="required">
                                 Main Image
-                                <span className="text-red-500">*</span>
                             </Label>
                             <input
                                 id="main_image"
@@ -98,18 +94,15 @@ export default function CharacterMainImage(props: {
                                 5MB.
                             </p>
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <Label
-                                htmlFor="thumbnail"
-                                className="font-bold text-sm text-white/75"
-                            >
+                        <div className="flex-col-2">
+                            <Label htmlFor="thumbnail">
                                 Thumbnail Image
                                 <Tooltip delayDuration={0}>
                                     <TooltipTrigger>
                                         <Icon icon={faQuestionCircle.fas} />
                                     </TooltipTrigger>
-                                    <TooltipContent className="p-2 rounded-lg bg-black text-white border-white/20 border">
-                                        <p>
+                                    <TooltipContent asChild>
+                                        <p className="tooltip-content">
                                             If a thumbnail image is not
                                             provided, it will be cropped
                                             automatically from the main image.
@@ -134,22 +127,14 @@ export default function CharacterMainImage(props: {
                         </div>
                     </>
                 ) : (
-                    <div className="rounded-md bg-red-500 p-3 markdown text-white">
-                        <div className="flex flex-row gap-2 items-center">
-                            <Icon icon={faTriangleExclamation.fas} />
-                            <span>
-                                Main image cannot be modified at this time.
-                            </span>
-                        </div>
+                    <div className="alert-red flex-row-2-center">
+                        <Icon icon={faTriangleExclamation.fas} />
+                        <span>Main image cannot be modified at this time.</span>
                     </div>
                 )}
-                <div className="flex flex-row justify-between items-center">
-                    <Label
-                        htmlFor="is_artist"
-                        className="font-bold text-sm text-white/75"
-                    >
+                <div className="yes-no">
+                    <Label htmlFor="is_artist" className="required">
                         Did you create this image?
-                        <span className="text-red-500">*</span>
                     </Label>
                     <YesNo
                         id="is_artist"
@@ -161,14 +146,13 @@ export default function CharacterMainImage(props: {
                 </div>
                 <ErrorList errors={props.errors?.is_artist} />
                 {is_artist === "no" ? (
-                    <div className="flex flex-col gap-2 rounded-lg p-2 bg-white/10">
-                        <div className="flex flex-col gap-2">
+                    <div className="link-input">
+                        <div>
                             <Label
                                 htmlFor="main_image_artist_name"
-                                className="font-bold text-sm text-white/75"
+                                className="required"
                             >
                                 Artist Name
-                                <span className="text-red-500">*</span>
                             </Label>
                             <ErrorList
                                 errors={props.errors?.main_image_artist_name}
@@ -180,13 +164,12 @@ export default function CharacterMainImage(props: {
                                 defaultValue={props.defaults?.artistName}
                             />
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <div>
                             <Label
                                 htmlFor="main_image_artist_url"
-                                className="font-bold text-sm text-white/75"
+                                className="required"
                             >
                                 Artist URL
-                                <span className="text-red-500">*</span>
                             </Label>
                             <ErrorList
                                 errors={props.errors?.main_image_artist_url}
@@ -219,10 +202,9 @@ export default function CharacterMainImage(props: {
                         />
                     </>
                 )}
-                <div className="flex flex-row justify-between items-center">
-                    <Label className="font-bold text-sm text-white/75">
+                <div className="yes-no">
+                    <Label className="required">
                         Does this image need a content filter?
-                        <span className="text-red-500">*</span>
                     </Label>
                     <YesNo
                         name="main_image_needs_filters"
@@ -252,7 +234,7 @@ export default function CharacterMainImage(props: {
                 </div>
                 {needs_filters === "yes" ? (
                     <>
-                        <hr className="border-white/20 my-4" />
+                        <hr className="hr-gray" />
 
                         <p>
                             <strong>Please check all that apply.</strong> Hover
@@ -267,31 +249,21 @@ export default function CharacterMainImage(props: {
                         {Object.keys(filters).map((key) => {
                             const id = `main_image_${key}`;
                             return (
-                                <div
-                                    key={key}
-                                    className="flex flex-row gap-2 items-center"
-                                >
+                                <div key={key} className="flex-row-2-center">
                                     <CheckboxFix
                                         id={id}
                                         name={id}
                                         form={props.form}
-                                        className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
                                         defaultChecked={
                                             needed_filters[key as ImageFilter]
                                         }
                                     >
                                         <CheckboxIndicator>
-                                            <Icon
-                                                icon={faCheck.fas}
-                                                className="text-black"
-                                            />
+                                            <Icon icon={faCheck.fas} />
                                         </CheckboxIndicator>
                                     </CheckboxFix>
                                     <div>
-                                        <Label
-                                            htmlFor={id}
-                                            className="font-bold text-sm text-white/75"
-                                        >
+                                        <Label htmlFor={id}>
                                             {filters[key as ImageFilter][0]}
                                         </Label>
                                         <Tooltip delayDuration={0}>
@@ -300,8 +272,8 @@ export default function CharacterMainImage(props: {
                                                     icon={faQuestionCircle.fas}
                                                 />
                                             </TooltipTrigger>
-                                            <TooltipContent className="p-2 rounded-lg bg-black text-white border-white/20 border">
-                                                <p>
+                                            <TooltipContent asChild>
+                                                <p className="tooltip-content">
                                                     {
                                                         filters[
                                                             key as ImageFilter

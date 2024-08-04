@@ -1,5 +1,6 @@
 "use server";
 
+import React from "react";
 import Image from "next/image";
 import { getUserByUsername } from "@/app/actions/user";
 import db from "@/data/db/database";
@@ -8,10 +9,10 @@ import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import React from "react";
 import { Section } from "@/app/components/section";
 import Markdown from "react-markdown";
-import Chip from "@/app/components/chip";
+
+import "./profile-tab.css";
 
 async function getCharacter(username: string, character_id: number) {
     const user = await getUserByUsername(username);
@@ -68,11 +69,11 @@ export default async function CharacterProfileTab(props: {
     const main_image_url = `/assets/${result.mainImageFile.name}`;
 
     return (
-        <div className="flex flex-col">
-            <div className="flex flex-row">
+        <div className="flex-col-4">
+            <div className="flex-row-2">
                 <div className="flex-grow">
-                    <div className="flex flex-col items-center">
-                        <div className="h-[600px]">
+                    <div className="main-image-box">
+                        <div>
                             <Image
                                 src={main_image_url}
                                 width="6000"
@@ -99,48 +100,42 @@ export default async function CharacterProfileTab(props: {
                 </div>
                 <div className="w-1/3">
                     <Section title="Images">
-                        <div className="grid grid-cols-2 gap-4 max-h-[32.5rem] overflow-y-auto">
+                        <div className="more-images">
                             <Image
                                 src={main_image_url}
                                 width="6000"
                                 height="6000"
                                 alt="ph"
-                                className="w-60 h-60"
                             />
                             <Image
                                 src={main_image_url}
                                 width="6000"
                                 height="6000"
                                 alt="ph"
-                                className="w-60 h-60"
                             />
                             <Image
                                 src={main_image_url}
                                 width="6000"
                                 height="6000"
                                 alt="ph"
-                                className="w-60 h-60"
                             />
                             <Image
                                 src={main_image_url}
                                 width="6000"
                                 height="6000"
                                 alt="ph"
-                                className="w-60 h-60"
                             />
                             <Image
                                 src={main_image_url}
                                 width="6000"
                                 height="6000"
                                 alt="ph"
-                                className="w-60 h-60"
                             />
                             <Image
                                 src={main_image_url}
                                 width="6000"
                                 height="6000"
                                 alt="ph"
-                                className="w-60 h-60"
                             />
                         </div>
                     </Section>
@@ -159,8 +154,7 @@ export default async function CharacterProfileTab(props: {
             <div className="flex flex-row">
                 <Section
                     title="Permissions"
-                    className="flex-grow border border-red-500"
-                    titleClass="bg-red-500"
+                    className="flex-grow section-red"
                     noContentPadding
                 >
                     <div className="flex flex-col">
@@ -195,14 +189,16 @@ export default async function CharacterProfileTab(props: {
                         </>
                     </div>
                 </Section>
-                <div className="w-1/5 flex flex-col gap-4">
-                    <Section title="Character Info" noContentPadding>
-                        <div className="flex flex-col">
-                            <div className="flex flex-row border-y border-black">
-                                <div className="w-2/5 align-middle p-2 bg-white/20 text-right">
-                                    Owner:
-                                </div>
-                                <div className="flex-grow p-2">
+                <div className="w-1/5 flex-col-4">
+                    <Section
+                        title="Character Info"
+                        className="section-olive"
+                        noContentPadding
+                    >
+                        <div className="character-info">
+                            <div className="row">
+                                <div>Owner:</div>
+                                <div>
                                     <Link
                                         href={`/users/${user.username}`}
                                         className="highlight"
@@ -211,11 +207,9 @@ export default async function CharacterProfileTab(props: {
                                     </Link>
                                 </div>
                             </div>
-                            <div className="flex flex-row border-y border-black">
-                                <div className="w-2/5 align-middle p-2 bg-white/20 text-right">
-                                    Designer:
-                                </div>
-                                <div className="flex-grow p-2">
+                            <div className="row">
+                                <div>Designer:</div>
+                                <div>
                                     <Link
                                         href={`/users/${user.username}`}
                                         className="highlight"
@@ -226,21 +220,14 @@ export default async function CharacterProfileTab(props: {
                             </div>
                         </div>
                     </Section>
-                    <Section
-                        title="Tags"
-                        className="border border-cyan-600"
-                        titleClass="bg-cyan-600 text-white/80"
-                    >
-                        <div className="flex flex-row flex-wrap gap-2">
+                    <Section title="Tags" className="section-cyan">
+                        <div className="tags-list">
                             {(result.character.tags ?? "")
                                 .split(" ")
                                 .map((tag) => (
-                                    <Chip
-                                        key={tag}
-                                        className="bg-cyan-500/75 text-white font-bold py-1 px-3"
-                                    >
+                                    <div key={tag} className="chip-cyan-half">
                                         {tag}
-                                    </Chip>
+                                    </div>
                                 ))}
                         </div>
                     </Section>
