@@ -42,8 +42,8 @@ export default function CharacterCredits(props: {
                         onChange={setIsDesigner}
                         form={NEW_CHARACTER_FORM}
                     />
-                    <ErrorList errors={props.errors?.is_designer} />
                 </div>
+                <ErrorList errors={props.errors?.is_designer} />
                 {is_designer === "no" ? (
                     <div className="flex flex-col gap-2 rounded-lg p-2 bg-white/10">
                         <div className="flex flex-col gap-2">
@@ -104,7 +104,6 @@ export default function CharacterCredits(props: {
                         Link a species sheet?
                         <span className="text-red-500">*</span>
                     </Label>
-                    <ErrorList errors={props.errors?.does_link_species_sheet} />
                     <YesNo
                         id="does_link_species_sheet"
                         name="does_link_species_sheet"
@@ -113,6 +112,7 @@ export default function CharacterCredits(props: {
                         form={NEW_CHARACTER_FORM}
                     />
                 </div>
+                <ErrorList errors={props.errors?.does_link_species_sheet} />
                 {does_link_species_sheet === "yes" ? (
                     <div className="flex flex-col gap-2 rounded-lg p-2 bg-white/10">
                         <div className="flex flex-col gap-2">
@@ -178,7 +178,7 @@ export default function CharacterCredits(props: {
                                 <span className="font-bold text-sm text-white/75 block">
                                     Additional Credits
                                     <Tooltip delayDuration={0}>
-                                        <TooltipTrigger>
+                                        <TooltipTrigger className="mx-1">
                                             <Icon icon={faQuestionCircle.fas} />
                                         </TooltipTrigger>
                                         <TooltipContent className="p-2 rounded-lg bg-black text-white border-white/20 border">

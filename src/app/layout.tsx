@@ -3,6 +3,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "@/font-awesome/css/all.min.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
@@ -22,13 +23,6 @@ export default function RootLayout({
         <ClerkProvider>
             <TooltipProvider>
                 <html lang="en">
-                    <head>
-                        {/* FIXME: Temporary solution */}
-                        <link
-                            rel="stylesheet"
-                            href="/font-awesome/css/all.min.css"
-                        />
-                    </head>
                     <body className={inter.className}>{children}</body>
                 </html>
             </TooltipProvider>

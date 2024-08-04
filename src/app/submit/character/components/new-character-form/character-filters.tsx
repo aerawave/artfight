@@ -54,8 +54,8 @@ export default function CharacterFilters(props: {
                         onChange={setNeedsFilters}
                         form={NEW_CHARACTER_FORM}
                     />
-                    <ErrorList errors={props.errors?.needs_filters} />
                 </div>
+                <ErrorList errors={props.errors?.needs_filters} />
                 <div>
                     <p>
                         <Icon

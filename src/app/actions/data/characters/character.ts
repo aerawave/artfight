@@ -1,5 +1,5 @@
-import db from "@/db/database";
-import { Characters } from "@/db/schema";
+import db from "@/data/db/database";
+import { Characters } from "@/data/db/schema";
 import { and, eq } from "drizzle-orm";
 
 type Character = typeof Characters.$inferSelect;

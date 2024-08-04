@@ -1,8 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { Characters, Files, Images } from "@/db/schema";
-import db from "@/db/database";
+import { Characters, Files, Images } from "@/data/db/schema";
+import db from "@/data/db/database";
 import { auth } from "@clerk/nextjs/server";
 import { ClerkAPIResponseError } from "@clerk/shared/error";
 import { getUser } from "./user";
@@ -13,10 +13,8 @@ import {
     CharacterMainImageErrors,
 } from "./errors/submissions-errors";
 import { GeneralErrors } from "./errors/general";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
+import { uploadFileContent } from "./data/files/upload";
 import { eq } from "drizzle-orm";
-import * as fs from "fs";
 
 type SubmitCharacterState = {
     success?: boolean;
@@ -36,7 +34,7 @@ const from_yes_no = (value: string) => value === "yes";
 
 const yes_no = () =>
     z
-        .string({ message: " Required" })
+        .string({ message: "Required" })
         .refine(is_yes_no, { message: "Required" })
         .transform(from_yes_no);
 const schemas = {
@@ -530,8 +528,8 @@ async function uploadImages(
 ): Promise<number> {
     thumbnail = thumbnail && thumbnail.size > 0 ? thumbnail : image;
 
-    const image_file_id = await uploadFile(owner_id, image);
-    const thumbnail_file_id = await uploadFile(owner_id, thumbnail);
+    const { imageId: image_file_id, thumbnailId: thumbnail_file_id } =
+        await uploadImageFiles(owner_id, image, thumbnail);
 
     const { id } = (
         await db
@@ -554,57 +552,36 @@ async function uploadImages(
     return id;
 }
 
-async function uploadFile(owner_id: number, file: File): Promise<number> {
-    const ext = path.extname(file.name);
-    const uuid = await getNewFileUUID(ext);
-    const file_name = `${uuid}${ext}`;
+async function uploadImageFiles(
+    owner_id: number,
+    image: File,
+    thumbnail: File
+) {
+    let image_file_id: number | null = null;
+    let thumbnail_file_id: number | null = null;
 
-    const { id } = (
-        await db
-            .insert(Files)
-            .values({
-                ownerId: owner_id,
-                name: file_name,
-                type: file.type,
-            })
-            .returning({ id: Files.id })
-    )[0];
+    const image_file_upload = uploadFileContent(owner_id, image);
+    const thumbnail_file_upload = uploadFileContent(owner_id, thumbnail);
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    const file_path = `${process.env.FILE_PATH_BEGIN}/${file_name}`;
-
-    await new Promise((resolve, reject) => {
-        try {
-            fs.writeFile(file_path, buffer, resolve);
-        } catch (err) {
-            reject(err);
-        }
-    });
-
-    return id;
-}
-
-async function getNewFileUUID(ext: string, max_attempts: number = 10) {
-    let uuid = "";
-    let found = false;
-    for (let i = 0; !found && i < max_attempts; i++) {
-        uuid = uuidv4();
-        found =
-            (
-                await db
-                    .select({ id: Files.id, name: Files.name })
-                    .from(Files)
-                    .where((file) => eq(file.name, `${uuid}${ext}`))
-                    .limit(1)
-            ).length === 0;
+    try {
+        image_file_id = (await image_file_upload).fileId;
+    } catch (error) {
+        // If main image fails upload, delete thumbnail image file.
+        thumbnail_file_id = (await thumbnail_file_upload).fileId;
+        await db.delete(Files).where(eq(Files.id, thumbnail_file_id));
+        throw error;
     }
 
-    if (!found) {
-        throw {
-            error: "No UUID was able to be obtained.",
-        };
+    try {
+        thumbnail_file_id = (await thumbnail_file_upload).fileId;
+    } catch (error) {
+        // If thumbnail image fails upload, delete main image file.
+        await db.delete(Files).where(eq(Files.id, image_file_id));
+        throw error;
     }
 
-    return uuid;
+    return {
+        imageId: image_file_id,
+        thumbnailId: thumbnail_file_id,
+    };
 }

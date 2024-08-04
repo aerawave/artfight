@@ -1,5 +1,5 @@
-import db from "@/db/database";
-import { UserProperties, Users } from "@/db/schema";
+import db from "@/data/db/database";
+import { UserProperties, Users } from "@/data/db/schema";
 import { clerkClient, User } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 

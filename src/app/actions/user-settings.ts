@@ -1,5 +1,5 @@
-import db from "@/db/database";
-import { Users } from "@/db/schema";
+import db from "@/data/db/database";
+import { Users } from "@/data/db/schema";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { ClerkAPIResponseError } from "@clerk/shared/error";
 import { eq } from "drizzle-orm";

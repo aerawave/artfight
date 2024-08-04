@@ -1,5 +1,5 @@
-import db from "@/db/database";
-import { Users } from "@/db/schema";
+import db from "@/data/db/database";
+import { Users } from "@/data/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function verifyUser(user_id: string) {

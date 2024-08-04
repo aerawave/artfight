@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { getUserByUsername } from "@/app/actions/user";
-import db from "@/db/database";
-import { Characters, Files, Images } from "@/db/schema";
+import db from "@/data/db/database";
+import { Characters, Files, Images } from "@/data/db/schema";
 import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import Link from "next/link";
