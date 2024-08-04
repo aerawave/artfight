@@ -15,6 +15,7 @@ import {
     faLeaf,
     faTeeth,
 } from "@/app/components/icons";
+import SubmitButton from "@/app/components/submit-button";
 
 type ChangeImageFiltersProps = {
     className?: string;
@@ -26,7 +27,7 @@ export default function ChangeImageFilters({
     const [state, action] = useFormState(changeFilters, {});
     return (
         <Section className={className} title={<h4>Site Image Filters</h4>}>
-            <div className="flex flex-col gap-2">
+            <div className="flex-col-2">
                 <div>
                     {state.success ? (
                         <h5 className="text-green-400">Filters updated!</h5>
@@ -34,7 +35,7 @@ export default function ChangeImageFilters({
                         <ErrorList errors={state.errors?.general} />
                     )}
                 </div>
-                <p className="p-4 bg-cyan-400/40 rounded-md mb-4">
+                <p className="alert-cyan">
                     <span>
                         Note that it is the submitting artist&apos;s
                         responsibility to put the appropiate filters on their
@@ -74,7 +75,7 @@ export default function ChangeImageFilters({
                         Filtered characters/attacks/images will be visible.
                     </span>
                 </p>
-                <form action={action} className="flex flex-col">
+                <form action={action} className="flex-col-2">
                     <ChangeImageFilter
                         icon={faDroplet.fas}
                         label="Gore (moderate)"
@@ -123,12 +124,9 @@ export default function ChangeImageFilters({
                         filter="filter_sensitive_content"
                         guide="other_filters"
                     />
-                    <button
-                        className="self-end rounded-lg bg-cyan-600 p-2"
-                        type="submit"
-                    >
-                        Submit
-                    </button>
+                    <div className="self-end">
+                        <SubmitButton />
+                    </div>
                 </form>
             </div>
         </Section>

@@ -1,10 +1,8 @@
 "use server";
 
-import { z } from "zod";
-import { Characters, Files, Images } from "@/db/schema";
-import db from "@/db/database";
+import { Characters, Files, Images } from "@/data/db/schema";
+import db from "@/data/db/database";
 import { auth } from "@clerk/nextjs/server";
-import { ClerkAPIResponseError } from "@clerk/shared/error";
 import { getUser } from "./user";
 import {
     CharacterBasicInformationErrors,
@@ -13,10 +11,9 @@ import {
     CharacterMainImageErrors,
 } from "./errors/submissions-errors";
 import { GeneralErrors } from "./errors/general";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
+import { uploadFileContent } from "./data/files/upload";
 import { eq } from "drizzle-orm";
-import * as fs from "fs";
+import { CharacterSchemas } from "./schemas/character-schemas";
 
 type SubmitCharacterState = {
     success?: boolean;
@@ -29,105 +26,22 @@ type SubmitCharacterState = {
     };
 };
 
-const yes_no_values = ["yes", "no"];
-
-const is_yes_no = (value: string) => yes_no_values.includes(value);
-const from_yes_no = (value: string) => value === "yes";
-
-const yes_no = () =>
-    z
-        .string({ message: " Required" })
-        .refine(is_yes_no, { message: "Required" })
-        .transform(from_yes_no);
-const schemas = {
-    basic_information: z.object({
-        name: z
-            .string()
-            .trim()
-            .min(1, { message: "Name must be at least 1 character long." }),
-        description: z.string(),
-        permissions: z.string(),
-        disable_global_user_permissions: z.coerce.boolean(),
-        external_link_name: z.string(),
-        external_link_url: z.string(),
-        disable_comments: z.coerce.boolean(),
-    }),
-    credits: {
-        initial: z.object({
-            is_designer: yes_no(),
-            does_link_species_sheet: yes_no(),
-            additional_credits: z.string(),
-        }),
-        designer: z.object({
-            designer_name: z.string().trim().min(1, { message: "Required" }),
-            designer_url: z.string().url({ message: "Required" }),
-        }),
-        species_sheet: z.object({
-            species_name: z.string().trim().min(1, {
-                message:
-                    "You must provide the specie's name, or opt out of linking a species sheet.",
-            }),
-            species_sheet_url: z.string().url({
-                message:
-                    "You must provide the species sheet URL, or opt out of linking a species sheet.",
-            }),
-        }),
-    },
-    filters: {
-        initial: z.object({
-            needs_filters: yes_no(),
-        }),
-        further: z.object({
-            character_filter_moderate_gore: z.coerce.boolean(),
-            character_filter_extreme_gore: z.coerce.boolean(),
-            character_filter_body_horror: z.coerce.boolean(),
-            character_filter_moderate_nudity: z.coerce.boolean(),
-            character_filter_extreme_nudity: z.coerce.boolean(),
-            character_filter_suggestive_themes: z.coerce.boolean(),
-            character_filter_eyestrain: z.coerce.boolean(),
-            character_filter_sensitive_content: z.coerce.boolean(),
-        }),
-    },
-    main_image: {
-        initial: z.object({
-            is_artist: yes_no(),
-            main_image_needs_filters: yes_no(),
-        }),
-        artist: z.object({
-            main_image_artist_name: z.string().min(1, { message: "Required" }),
-            main_image_artist_url: z.string().url({ message: "Required" }),
-        }),
-        filters: z.object({
-            main_image_filter_moderate_gore: z.coerce.boolean(),
-            main_image_filter_extreme_gore: z.coerce.boolean(),
-            main_image_filter_body_horror: z.coerce.boolean(),
-            main_image_filter_moderate_nudity: z.coerce.boolean(),
-            main_image_filter_extreme_nudity: z.coerce.boolean(),
-            main_image_filter_suggestive_themes: z.coerce.boolean(),
-            main_image_filter_eyestrain: z.coerce.boolean(),
-            main_image_filter_sensitive_content: z.coerce.boolean(),
-        }),
-    },
-    tags: z.object({
-        tags: z.string(),
-    }),
-};
-
 export async function submitCharacter(
     state: SubmitCharacterState,
     data: FormData
 ): Promise<SubmitCharacterState> {
-    const validate_basic_information = schemas.basic_information.safeParse({
-        name: data.get("name"),
-        description: data.get("description"),
-        permissions: data.get("permissions"),
-        disable_global_user_permissions: data.get(
-            "disable_global_user_permissions"
-        ),
-        external_link_name: data.get("external_link_name"),
-        external_link_url: data.get("external_link_url"),
-        disable_comments: data.get("disable_comments"),
-    });
+    const validate_basic_information =
+        CharacterSchemas.basic_information.safeParse({
+            name: data.get("name"),
+            description: data.get("description"),
+            permissions: data.get("permissions"),
+            disable_global_user_permissions: data.get(
+                "disable_global_user_permissions"
+            ),
+            external_link_name: data.get("external_link_name"),
+            external_link_url: data.get("external_link_url"),
+            disable_comments: data.get("disable_comments"),
+        });
 
     if (!validate_basic_information.success) {
         return {
@@ -138,11 +52,13 @@ export async function submitCharacter(
         };
     }
 
-    const validate_credits_initial = schemas.credits.initial.safeParse({
-        is_designer: data.get("is_designer"),
-        does_link_species_sheet: data.get("does_link_species_sheet"),
-        additional_credits: data.get("additional_credits"),
-    });
+    const validate_credits_initial = CharacterSchemas.credits.initial.safeParse(
+        {
+            is_designer: data.get("is_designer"),
+            does_link_species_sheet: data.get("does_link_species_sheet"),
+            additional_credits: data.get("additional_credits"),
+        }
+    );
 
     validate_credits_initial.data?.is_designer;
 
@@ -159,10 +75,11 @@ export async function submitCharacter(
     let [designer_name, designer_url] = ["", ""];
 
     if (!is_designer) {
-        const validate_credits_designer = schemas.credits.designer.safeParse({
-            designer_name: data.get("designer_name"),
-            designer_url: data.get("designer_url"),
-        });
+        const validate_credits_designer =
+            CharacterSchemas.credits.designer.safeParse({
+                designer_name: data.get("designer_name"),
+                designer_url: data.get("designer_url"),
+            });
 
         if (!validate_credits_designer.success) {
             return {
@@ -182,7 +99,7 @@ export async function submitCharacter(
 
     if (does_link_species_sheet) {
         const validate_credits_species_sheet =
-            schemas.credits.species_sheet.safeParse({
+            CharacterSchemas.credits.species_sheet.safeParse({
                 species_name: data.get("species_name"),
                 species_sheet_url: data.get("species_sheet_url"),
             });
@@ -202,9 +119,11 @@ export async function submitCharacter(
             validate_credits_species_sheet.data.species_sheet_url;
     }
 
-    const validate_filters_initial = schemas.filters.initial.safeParse({
-        needs_filters: data.get("needs_filters"),
-    });
+    const validate_filters_initial = CharacterSchemas.filters.initial.safeParse(
+        {
+            needs_filters: data.get("needs_filters"),
+        }
+    );
 
     if (!validate_filters_initial.success) {
         return {
@@ -228,30 +147,33 @@ export async function submitCharacter(
     ] = new Array<boolean>(8).fill(false);
 
     if (needs_filters) {
-        const validate_filters_further = schemas.filters.further.safeParse({
-            character_filter_moderate_gore: data.get(
-                "character_filter_moderate_gore"
-            ),
-            character_filter_extreme_gore: data.get(
-                "character_filter_extreme_gore"
-            ),
-            character_filter_body_horror: data.get(
-                "character_filter_body_horror"
-            ),
-            character_filter_moderate_nudity: data.get(
-                "character_filter_moderate_nudity"
-            ),
-            character_filter_extreme_nudity: data.get(
-                "character_filter_extreme_nudity"
-            ),
-            character_filter_suggestive_themes: data.get(
-                "character_filter_suggestive_themes"
-            ),
-            character_filter_eyestrain: data.get("character_filter_eyestrain"),
-            character_filter_sensitive_content: data.get(
-                "character_filter_sensitive_content"
-            ),
-        });
+        const validate_filters_further =
+            CharacterSchemas.filters.filters.safeParse({
+                character_filter_moderate_gore: data.get(
+                    "character_filter_moderate_gore"
+                ),
+                character_filter_extreme_gore: data.get(
+                    "character_filter_extreme_gore"
+                ),
+                character_filter_body_horror: data.get(
+                    "character_filter_body_horror"
+                ),
+                character_filter_moderate_nudity: data.get(
+                    "character_filter_moderate_nudity"
+                ),
+                character_filter_extreme_nudity: data.get(
+                    "character_filter_extreme_nudity"
+                ),
+                character_filter_suggestive_themes: data.get(
+                    "character_filter_suggestive_themes"
+                ),
+                character_filter_eyestrain: data.get(
+                    "character_filter_eyestrain"
+                ),
+                character_filter_sensitive_content: data.get(
+                    "character_filter_sensitive_content"
+                ),
+            });
 
         if (!validate_filters_further.success) {
             return {
@@ -281,10 +203,11 @@ export async function submitCharacter(
             validate_filters_further.data.character_filter_sensitive_content;
     }
 
-    const validate_main_image_initial = schemas.main_image.initial.safeParse({
-        is_artist: data.get("is_artist"),
-        main_image_needs_filters: data.get("main_image_needs_filters"),
-    });
+    const validate_main_image_initial =
+        CharacterSchemas.main_image.initial.safeParse({
+            is_artist: data.get("is_artist"),
+            main_image_needs_filters: data.get("main_image_needs_filters"),
+        });
 
     if (!validate_main_image_initial.success) {
         return {
@@ -301,10 +224,11 @@ export async function submitCharacter(
     let [main_image_artist_name, main_image_artist_url] = ["", ""];
 
     if (!is_artist) {
-        const validate_main_image_artist = schemas.main_image.artist.safeParse({
-            main_image_artist_name: data.get("main_image_artist_name"),
-            main_image_artist_url: data.get("main_image_artist_url"),
-        });
+        const validate_main_image_artist =
+            CharacterSchemas.main_image.artist.safeParse({
+                main_image_artist_name: data.get("main_image_artist_name"),
+                main_image_artist_url: data.get("main_image_artist_url"),
+            });
 
         if (!validate_main_image_artist.success) {
             return {
@@ -334,7 +258,7 @@ export async function submitCharacter(
 
     if (main_image_needs_filters) {
         const validate_main_image_filters =
-            schemas.main_image.filters.safeParse({
+            CharacterSchemas.main_image.filters.safeParse({
                 main_image_filter_moderate_gore: data.get(
                     "main_image_filter_moderate_gore"
                 ),
@@ -391,7 +315,7 @@ export async function submitCharacter(
                 .main_image_filter_sensitive_content;
     }
 
-    const validate_tags = schemas.tags.safeParse({
+    const validate_tags = CharacterSchemas.tags.safeParse({
         tags: data.get("tags"),
     });
 
@@ -439,6 +363,9 @@ export async function submitCharacter(
             userId,
             data.get("main_image")?.valueOf() as File,
             data.get("thumbnail")?.valueOf() as File | null,
+            is_artist
+                ? "uploader"
+                : { name: main_image_artist_name, url: main_image_artist_url },
             main_image_filter_moderate_gore,
             main_image_filter_extreme_gore,
             main_image_filter_body_horror,
@@ -448,13 +375,13 @@ export async function submitCharacter(
             main_image_filter_eyestrain,
             main_image_filter_sensitive_content
         );
-    } catch (err_) {
+    } catch (error) {
         return {
             errors: {
                 main_image: {
                     general: [
                         `${Math.floor(Math.random() * 100)}`,
-                        JSON.stringify(`${err_}`),
+                        JSON.stringify(`${error}`),
                     ],
                 },
             },
@@ -492,9 +419,6 @@ export async function submitCharacter(
             containsSensitiveContent: character_filter_sensitive_content,
             // "Main Image"
             imageId: image_id,
-            isArtist: is_artist,
-            artistName: main_image_artist_name,
-            artistUrl: main_image_artist_url,
             // "Tags"
             tags,
         });
@@ -502,14 +426,10 @@ export async function submitCharacter(
         return {
             success: true,
         };
-    } catch (err_) {
-        const err = err_ as ClerkAPIResponseError;
-
+    } catch (error) {
         return {
             errors: {
-                general: err.errors
-                    .map((err) => err.longMessage)
-                    .filter((message) => message) as string[],
+                general: [`${error}`],
             },
         };
     }
@@ -519,6 +439,7 @@ async function uploadImages(
     owner_id: number,
     image: File,
     thumbnail: File | null,
+    artist: "uploader" | { name: string; url: string },
     contains_moderate_gore: boolean,
     contains_extreme_gore: boolean,
     contains_body_horror: boolean,
@@ -530,8 +451,12 @@ async function uploadImages(
 ): Promise<number> {
     thumbnail = thumbnail && thumbnail.size > 0 ? thumbnail : image;
 
-    const image_file_id = await uploadFile(owner_id, image);
-    const thumbnail_file_id = await uploadFile(owner_id, thumbnail);
+    const { imageId: image_file_id, thumbnailId: thumbnail_file_id } =
+        await uploadImageFiles(owner_id, image, thumbnail);
+
+    const is_artist = artist === "uploader";
+    const artist_name = is_artist ? "" : artist.name;
+    const artist_url = is_artist ? "" : artist.url;
 
     const { id } = (
         await db
@@ -539,6 +464,9 @@ async function uploadImages(
             .values({
                 imageFileId: image_file_id,
                 thumbnailFileId: thumbnail_file_id,
+                isArtist: is_artist,
+                artistName: artist_name,
+                artistUrl: artist_url,
                 containsModerateGore: contains_moderate_gore,
                 containsExtremeGore: contains_extreme_gore,
                 containsBodyHorror: contains_body_horror,
@@ -554,57 +482,36 @@ async function uploadImages(
     return id;
 }
 
-async function uploadFile(owner_id: number, file: File): Promise<number> {
-    const ext = path.extname(file.name);
-    const uuid = await getNewFileUUID(ext);
-    const file_name = `${uuid}${ext}`;
+async function uploadImageFiles(
+    owner_id: number,
+    image: File,
+    thumbnail: File
+) {
+    let image_file_id: number | null = null;
+    let thumbnail_file_id: number | null = null;
 
-    const { id } = (
-        await db
-            .insert(Files)
-            .values({
-                ownerId: owner_id,
-                name: file_name,
-                type: file.type,
-            })
-            .returning({ id: Files.id })
-    )[0];
+    const image_file_upload = uploadFileContent(owner_id, image);
+    const thumbnail_file_upload = uploadFileContent(owner_id, thumbnail);
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    const file_path = `${process.env.FILE_PATH_BEGIN}/${file_name}`;
-
-    await new Promise((resolve, reject) => {
-        try {
-            fs.writeFile(file_path, buffer, resolve);
-        } catch (err) {
-            reject(err);
-        }
-    });
-
-    return id;
-}
-
-async function getNewFileUUID(ext: string, max_attempts: number = 10) {
-    let uuid = "";
-    let found = false;
-    for (let i = 0; !found && i < max_attempts; i++) {
-        uuid = uuidv4();
-        found =
-            (
-                await db
-                    .select({ id: Files.id, name: Files.name })
-                    .from(Files)
-                    .where((file) => eq(file.name, `${uuid}${ext}`))
-                    .limit(1)
-            ).length === 0;
+    try {
+        image_file_id = (await image_file_upload).fileId;
+    } catch (error) {
+        // If main image fails upload, delete thumbnail image file.
+        thumbnail_file_id = (await thumbnail_file_upload).fileId;
+        await db.delete(Files).where(eq(Files.id, thumbnail_file_id));
+        throw error;
     }
 
-    if (!found) {
-        throw {
-            error: "No UUID was able to be obtained.",
-        };
+    try {
+        thumbnail_file_id = (await thumbnail_file_upload).fileId;
+    } catch (error) {
+        // If thumbnail image fails upload, delete main image file.
+        await db.delete(Files).where(eq(Files.id, image_file_id));
+        throw error;
     }
 
-    return uuid;
+    return {
+        imageId: image_file_id,
+        thumbnailId: thumbnail_file_id,
+    };
 }

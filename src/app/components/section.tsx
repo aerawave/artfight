@@ -24,7 +24,7 @@ export function Section(props: SectionProps) {
                 <div
                     className={clsx(
                         "w-full p-3 rounded-t-md",
-                        props.titleClass ?? "bg-white/20"
+                        "title bg-white/20"
                     )}
                 >
                     {props.title}

@@ -3,14 +3,17 @@
 import { Section } from "@/app/components/section";
 import Link from "next/link";
 import React, { useState } from "react";
-import { NEW_CHARACTER_FORM } from "../new-character-form";
 import { GeneralErrors } from "@/app/actions/errors/general";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 import Icon from "@/app/components/icon";
-import { faXMark } from "@/app/components/icons";
+import { faPlus, faXMark } from "@/app/components/icons";
 
-export default function CharacterTags(props: { errors?: GeneralErrors }) {
-    const [tags, setTags] = useState<string[]>([]);
+export default function CharacterTags(props: {
+    defaults?: { tags: string[] | undefined };
+    errors?: GeneralErrors;
+    form?: string;
+}) {
+    const [tags, setTags] = useState<string[]>(props.defaults?.tags ?? []);
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [current_tag, setCurrentTag] = useState("");
 
@@ -62,8 +65,7 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
 
     return (
         <Section title="Tags">
-            <div className="rounded-md bg-cyan-600 p-3 text-lg markdown text-white">
-                {/* remove "markdown" class later.. need a better way of unformatting things like the ul/li elements. */}
+            <div className="alert-cyan deformat">
                 <p>
                     Tags are used to find certain types of characters in the{" "}
                     <Link className="highlight" href="/browse/tag">
@@ -78,7 +80,7 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
                     <li>
                         Tags may be removed at staff discretion if they are
                         found to go against the{" "}
-                        <Link className="highlight" href="/info/guide-filters">
+                        <Link href="/info/guide-filters">
                             Filter Guidelines
                         </Link>
                         .
@@ -89,11 +91,11 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
             <hr className="my-4" />
             <ErrorList errors={props.errors?.general} />
 
-            <div className="flex flex-row gap-2 my-4">
+            <div className="flex-row-2 my-4">
                 {tags.map((tag, i) => (
                     <button
                         key={i}
-                        className="rounded-full bg-cyan-400/50 text-white py-1 px-2 hover:bg-red-500/50"
+                        className="chip-tag"
                         onClick={() => removeTag(i)}
                     >
                         {prettyTag(tag)}
@@ -111,7 +113,7 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
                     name="tags"
                     value={tags.join(" ")}
                     readOnly
-                    form={NEW_CHARACTER_FORM}
+                    form={props.form}
                 />
                 <input
                     placeholder="Add a new tag..."
@@ -121,7 +123,7 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
                 />
                 <button
                     onClick={() => addTag(current_tag)}
-                    className="rounded-lg bg-cyan-600 p-2 w-1/5"
+                    className="button-blue flex-grow"
                 >
                     Add Tag
                 </button>
@@ -134,9 +136,13 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
                         <button
                             key={tag}
                             onClick={() => addCleanTag(tag)}
-                            className="rounded-xl bg-lime-800 text-white p-1"
+                            className="chip-suggested-tag"
                         >
                             {prettyTag(tag)}
+                            <Icon
+                                icon={faPlus.fas}
+                                className="ml-2 rounded-full"
+                            />
                         </button>
                     ))}
                 </div>

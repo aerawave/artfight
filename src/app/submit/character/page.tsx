@@ -8,6 +8,10 @@ import NewCharacterForm from "./components/new-character-form";
 export default async function SubmitCharacterPage() {
     const local_crumbs: Crumb[] = [
         {
+            label: "Manage Characters",
+            href: "/manage/characters",
+        },
+        {
             label: "Submit Character",
             href: "/submit/character",
         },
@@ -16,7 +20,7 @@ export default async function SubmitCharacterPage() {
     return (
         <>
             <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 m-4">
                 <h1 className="text-4xl">Submit Character</h1>
                 <div className="rounded-md bg-cyan-600 p-3 text-xl text-white m-2">
                     <p>

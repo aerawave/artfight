@@ -10,6 +10,7 @@ import { useFormState } from "react-dom";
 import { submitCharacter } from "@/app/actions";
 import { redirect } from "next/navigation";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
+import SubmitButton from "@/app/components/submit-button";
 
 export const NEW_CHARACTER_FORM = "new-character-form";
 
@@ -35,17 +36,30 @@ export default function NewCharacterForm() {
                         There were errors in your submission.
                         <p>{JSON.stringify(state.errors)}</p>
                     </h5>
-                    <ErrorList errors={state.errors?.general} />
+                    <ErrorList errors={state.errors.general} />
                 </div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <CharacterBasicInformation
                     errors={state.errors?.basic_information}
+                    form={NEW_CHARACTER_FORM}
                 />
-                <CharacterCredits errors={state.errors?.credits} />
-                <CharacterFilters errors={state.errors?.filters} />
-                <CharacterMainImage errors={state.errors?.main_image} />
-                <CharacterTags errors={state.errors?.tags} />
+                <CharacterCredits
+                    errors={state.errors?.credits}
+                    form={NEW_CHARACTER_FORM}
+                />
+                <CharacterFilters
+                    errors={state.errors?.filters}
+                    form={NEW_CHARACTER_FORM}
+                />
+                <CharacterMainImage
+                    errors={state.errors?.main_image}
+                    form={NEW_CHARACTER_FORM}
+                />
+                <CharacterTags
+                    errors={state.errors?.tags}
+                    form={NEW_CHARACTER_FORM}
+                />
             </div>
             <form
                 id={NEW_CHARACTER_FORM}
@@ -53,12 +67,7 @@ export default function NewCharacterForm() {
                 ref={form}
                 className="flex flex-col"
             >
-                <button
-                    className="p-4 bg-cyan-500 rounded-lg m-4"
-                    onClick={() => form.current?.requestSubmit()}
-                >
-                    Submit
-                </button>
+                <SubmitButton />
             </form>
         </div>
     );

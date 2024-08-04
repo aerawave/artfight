@@ -1,11 +1,11 @@
-import db from "@/db/database";
-import { Characters, Files, Images } from "@/db/schema";
+import db from "@/data/db/database";
+import { Characters, Files, Images } from "@/data/db/schema";
 //import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
 export async function getCharacters(userId: number) {
-    // filter based on status:
+    // TODO: filter based on status
     // const { userId: clerkId } = auth();
 
     const aliases = {
@@ -44,7 +44,8 @@ export async function getCharacters(userId: number) {
         .leftJoin(
             aliases.thumbnailFile,
             eq(aliases.mainImage.thumbnailFileId, aliases.thumbnailFile.id)
-        );
+        )
+        .orderBy(aliases.character.id);
 }
 
 export function getCharactersSql(userId: number) {

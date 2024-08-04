@@ -30,6 +30,26 @@ body {
     .text-balance {
         text-wrap: balance;
     }
+    .alert {
+        @apply rounded-md p-3 text-lg text-white;
+    }
+    .highlight {
+        @apply border-dotted border-b-2 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
+    }
+    .chip {
+        @apply inline-block rounded-full px-1.5 py-1 text-xs text-white;
+    }
+}
+
+.flex-row-2,
+.flex-row-2-center {
+    @apply flex flex-row gap-2;
+}
+.flex-col-2 {
+    @apply flex flex-col gap-2;
+}
+.flex-col-4 {
+    @apply flex flex-col gap-4;
 }
 
 input,
@@ -41,24 +61,80 @@ input[disabled],
     @apply bg-white/30 border-white/10;
 }
 
-.button-group > button {
-    @apply px-2 py-1 cursor-pointer bg-white/10;
+.chip-indigo-emerald {
+    @apply chip bg-gradient-to-r from-indigo-500 to-emerald-300 ml-1;
 }
 
-.button-group > button:not([data-state="on"]) {
-    @apply hover:bg-white/20;
+.chip-light-blue {
+    @apply chip bg-blue-400;
 }
 
-.button-group > button:first-child {
-    @apply rounded-l-lg;
+.chip-blue {
+    @apply chip bg-blue-500;
 }
 
-.button-group > span:last-child {
-    @apply rounded-r-lg;
+.chip-cyan-half {
+    @apply chip bg-cyan-400/50;
 }
-a.highlight {
-    @apply border-dotted border-b-2 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
+
+.chip-red-half {
+    @apply chip bg-red-500/50;
+}
+
+.chip-red {
+    @apply chip bg-red-500;
+}
+
+.chip-tag {
+    @apply chip-cyan-half;
+}
+
+.chip-tag:hover {
+    @apply chip-red-half;
+}
+
+.chip-olive {
+    @apply chip bg-lime-800;
+}
+
+.chip-suggested-tag {
+    @apply chip-olive;
+}
+
+.chip-suggested-tag:hover {
+    @apply chip bg-lime-700;
+}
+
+.checkbox {
+    @apply bg-white h-6 w-6 rounded-md text-black cursor-pointer data-[state=checked]:bg-blue-200;
+}
+
+.tooltip-content {
+    @apply w-40 text-center text-xs p-2 rounded-lg bg-black text-white border-white/20 border;
+}
+
+.alert-cyan {
+    @apply alert rounded-md bg-cyan-600 p-3 text-lg text-white;
+}
+
+.alert-orange {
+    @apply alert bg-orange-600;
+}
+
+.alert-red {
+    @apply alert bg-red-500;
+}
+
+.hr-gray {
+    @apply border-white/20 my-4;
+}
+
+.disclaimer {
+    @apply italic text-white/30;
 }
 
 @import "./styles/tabs.css";
-@import "./styles/markdown.css";
+@import "./styles/deformat.css";
+@import "./styles/spinner.css";
+@import "./styles/navigation.css";
+@import "./styles/forms.css";

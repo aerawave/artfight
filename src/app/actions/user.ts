@@ -1,6 +1,6 @@
-import db from "@/db/database";
-import { UserProperties, Users } from "@/db/schema";
-import { clerkClient, User } from "@clerk/nextjs/server";
+import db from "@/data/db/database";
+import { UserProperties, Users } from "@/data/db/schema";
+import { auth, clerkClient, User } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 
 export type ImageFilter =
@@ -51,19 +51,39 @@ export async function getUserByUsername(username: string) {
 }
 
 export async function getUser(userId: number | string) {
-    return typeof userId === "string"
-        ? (
-              await db
-                  .select()
-                  .from(Users)
-                  .where((user) => eq(user.clerkId, userId as string))
-          )[0]
-        : (
-              await db
-                  .select()
-                  .from(Users)
-                  .where((user) => eq(user.id, userId as number))
-          )[0];
+    const record =
+        typeof userId === "string"
+            ? (
+                  await db
+                      .select()
+                      .from(Users)
+                      .where((user) => eq(user.clerkId, userId as string))
+              )[0]
+            : (
+                  await db
+                      .select()
+                      .from(Users)
+                      .where((user) => eq(user.id, userId as number))
+              )[0];
+
+    const clerk = clerkClient();
+
+    const clerk_user = await clerk.users.getUser(record.clerkId);
+
+    return {
+        username: clerk_user.username,
+        ...record,
+    };
+}
+
+export async function authenticateUser() {
+    const { userId: clerk_id } = auth();
+
+    if (!clerk_id) {
+        throw new Error("Requestor is not authenticated.");
+    }
+
+    return await getUser(clerk_id);
 }
 
 export async function getUserProperties(

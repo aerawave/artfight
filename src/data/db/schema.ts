@@ -39,8 +39,16 @@ export const Files = pgTable("files", {
 
 export const Images = pgTable("images", {
     id: serial("id").primaryKey(),
-    imageFileId: integer("image_file_id").references(() => Files.id),
-    thumbnailFileId: integer("thumbnail_file_id").references(() => Files.id),
+    imageFileId: integer("image_file_id")
+        .notNull()
+        .references(() => Files.id),
+    thumbnailFileId: integer("thumbnail_file_id")
+        .notNull()
+        .references(() => Files.id),
+    isArtist: boolean("is_artist"),
+    artistName: text("artist_name"),
+    artistUrl: text("artist_url"),
+
     containsModerateGore: boolean("contains_moderate_gore").notNull(),
     containsExtremeGore: boolean("contains_extreme_gore").notNull(),
     containsBodyHorror: boolean("contains_body_horror").notNull(),
@@ -49,6 +57,8 @@ export const Images = pgTable("images", {
     containsSuggestiveThemes: boolean("contains_suggestive_themes").notNull(),
     containsEyestrain: boolean("contains_eyestrain").notNull(),
     containsSensitiveContent: boolean("contains_sensitive_content").notNull(),
+
+    createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const Characters = pgTable("characters", {
@@ -88,9 +98,6 @@ export const Characters = pgTable("characters", {
     imageId: integer("image_id")
         .notNull()
         .references(() => Images.id),
-    isArtist: boolean("is_artist"),
-    artistName: text("artist_name"),
-    artistUrl: text("artist_url"),
     // "Tags"
     tags: text("tags"),
 });

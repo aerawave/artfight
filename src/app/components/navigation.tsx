@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Chip from "./chip";
 import NavLink, { NavLinkData } from "./navigation/nav-link";
 import Banner from "./navigation/banner";
 import UserLink from "./navigation/user-link";
@@ -49,9 +48,7 @@ const shop: NavLinkData = {
     label: (
         <>
             <span>Shop</span>
-            <Chip className="bg-gradient-to-r from-indigo-500 to-emerald-300 ml-1">
-                new!
-            </Chip>
+            <div className="chip-indigo-emerald">new!</div>
         </>
     ),
     icon: faShoppingCart.fas,
@@ -62,21 +59,21 @@ const shop: NavLinkData = {
         {
             href: "https://www.makeship.com/products/art-fight-wormston-plush",
             label: (
-                <>
+                <div className="flex-row-2">
                     <span>Wormston Plush</span>
-                    <Chip className="ml-2 bg-blue-500">new!</Chip>
-                    <Chip className="ml-2 bg-red-500">limited!!</Chip>
-                </>
+                    <div className="chip-blue">new!</div>
+                    <div className="chip-red">limited!!</div>
+                </div>
             ),
         },
         {
             href: "https://www.makeship.com/products/art-fight-werewolves-vs-vampires-enamel-pins",
             label: (
-                <>
+                <div className="flex-row-2">
                     <span>Vampires vs Werewolves Pins</span>
-                    <Chip className="ml-2 bg-blue-500">new!</Chip>
-                    <Chip className="ml-2 bg-red-500">limited!!</Chip>
-                </>
+                    <div className="chip-blue">new!</div>
+                    <div className="chip-red">limited!!</div>
+                </div>
             ),
         },
     ],
@@ -97,10 +94,10 @@ const browse: NavLinkData = {
         {
             href: "/browse/tags",
             label: (
-                <>
+                <div className="flex-row-2">
                     <span>Tag Search</span>
-                    <Chip className="ml-1 bg-blue-400">new</Chip>
-                </>
+                    <div className="chip-light-blue"></div>
+                </div>
             ),
         },
     ],
@@ -126,41 +123,40 @@ export default async function Navigation(props: NavigationProps) {
 
     return (
         <>
-            <nav className="bg-gray-800 px-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center py-2">
-                <div className="flex flex-row gap-8">
-                    <Link
-                        href="/"
-                        className="flex lfex-row items-center"
-                        shallow
-                    >
-                        <Image
-                            alt="ArtFight"
-                            src="/assets/img/logos/logo40.png"
-                            className="h-8 w-8"
-                            width="40"
-                            height="40"
-                        />
-                        <span className="uppercase ml-2 text-1xl">
-                            Art Fight
-                        </span>
-                    </Link>
-                    {links.map((link, i) => (
-                        <NavLink key={i} data={link} />
-                    ))}
-                </div>
-                <div className="hidden md:flex flex-row">
+            <div className="navigation-bar">
+                <nav>
+                    <ul className="link-list">
+                        <li>
+                            <Link href="/" className="logo-link" shallow>
+                                <Image
+                                    alt="ArtFight"
+                                    src="/assets/img/logos/logo40.png"
+                                    width="40"
+                                    height="40"
+                                />
+                                <span>Art Fight</span>
+                            </Link>
+                        </li>
+                        <NavLink data={discord} />
+                        <NavLink data={help} />
+                        <NavLink data={shop} />
+                    </ul>
+                </nav>
+                <ul className="link-list-end">
                     <SignedIn>
                         <UserLink />
                     </SignedIn>
                     <SignedOut>
-                        <Link href="/login">Register / Log In</Link>
+                        <li>
+                            <Link href="/login">Register / Log In</Link>
+                        </li>
                     </SignedOut>
-                </div>
-            </nav>
+                </ul>
+            </div>
             <Banner />
             {props.crumbs && (
                 <div className="pt-8">
-                    <Breadcrumb className="rounded-md bg-gray-600 p-4 m-4 mt-0">
+                    <Breadcrumb>
                         {props.crumbs.map((crumb, i) => (
                             <Link
                                 key={i}

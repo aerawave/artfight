@@ -4,7 +4,6 @@ import YesNo, { YesNoType } from "@/app/components/yes-no";
 import Link from "next/link";
 import React, { useState } from "react";
 import { filters } from "./filters";
-import { NEW_CHARACTER_FORM } from "../new-character-form";
 import { CharacterFiltersErrors } from "@/app/actions/errors/submissions-errors";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 import { Label } from "@radix-ui/react-label";
@@ -14,37 +13,47 @@ import {
     faQuestionCircle,
     faTriangleExclamation,
 } from "@/app/components/icons";
-import { Checkbox, CheckboxIndicator } from "@radix-ui/react-checkbox";
+import { CheckboxIndicator } from "@radix-ui/react-checkbox";
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@radix-ui/react-tooltip";
+import CheckboxFix from "@/app/components/checkbox-fix";
 
 export default function CharacterFilters(props: {
+    defaults?: {
+        neededFilters?: Record<ImageFilter, boolean | undefined>;
+    };
     errors?: CharacterFiltersErrors;
+    form?: string;
 }) {
+    const needed_filters = (props.defaults?.neededFilters ?? {}) as Record<
+        ImageFilter,
+        boolean | undefined
+    >;
+
+    const needs_filter = props.defaults
+        ? Object.keys(props.defaults?.neededFilters ?? {}).some(
+              (key) => needed_filters[key as ImageFilter] === true
+          )
+        : undefined;
+
     const [needs_filters, setNeedsFilters] = useState<YesNoType | undefined>(
-        undefined
+        needs_filter !== undefined ? (needs_filter ? "yes" : "no") : undefined
     );
 
     return (
         <Section title="Character Filters">
-            <div className="flex flex-col gap-4">
-                <div className="rounded-md bg-cyan-600 p-3 text-xl text-white">
-                    <p>
-                        Check the filters that apply to this character&apos;
-                        description and other content on the profile.
-                    </p>
-                </div>
+            <div className="flex-col-4">
+                <p className="alert-cyan">
+                    Check the filters that apply to this character&apos;
+                    description and other content on the profile.
+                </p>
                 <ErrorList errors={props.errors?.general} />
-                <div className="flex flex-row justify-between items-center">
-                    <Label
-                        htmlFor="needs_filters"
-                        className="font-bold text-sm text-white/75"
-                    >
+                <div className="yes-no">
+                    <Label htmlFor="needs_filters" className="required">
                         Does this character need a content filter?
-                        <span className="text-red-500">*</span>
                     </Label>
 
                     <YesNo
@@ -52,10 +61,10 @@ export default function CharacterFilters(props: {
                         name="needs_filters"
                         value={needs_filters}
                         onChange={setNeedsFilters}
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
                     />
-                    <ErrorList errors={props.errors?.needs_filters} />
                 </div>
+                <ErrorList errors={props.errors?.needs_filters} />
                 <div>
                     <p>
                         <Icon
@@ -76,7 +85,7 @@ export default function CharacterFilters(props: {
                 </div>
                 {needs_filters === "yes" ? (
                     <>
-                        <hr className="border-white/20 my-4" />
+                        <hr className="hr-gray" />
 
                         <p>
                             <strong>Please check all that apply.</strong> Hover
@@ -91,15 +100,14 @@ export default function CharacterFilters(props: {
                         {Object.keys(filters).map((key) => {
                             const id = `character_${key}`;
                             return (
-                                <div
-                                    key={key}
-                                    className="flex flex-row gap-2 items-center"
-                                >
-                                    <Checkbox
+                                <div key={key} className="flex-row-2-center">
+                                    <CheckboxFix
                                         id={id}
                                         name={id}
-                                        form={NEW_CHARACTER_FORM}
-                                        className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
+                                        form={props.form}
+                                        defaultChecked={
+                                            needed_filters[key as ImageFilter]
+                                        }
                                     >
                                         <CheckboxIndicator>
                                             <Icon
@@ -107,11 +115,8 @@ export default function CharacterFilters(props: {
                                                 className="text-black"
                                             />
                                         </CheckboxIndicator>
-                                    </Checkbox>
-                                    <Label
-                                        htmlFor={id}
-                                        className="font-bold text-sm text-white/75"
-                                    >
+                                    </CheckboxFix>
+                                    <Label htmlFor={id}>
                                         <span>
                                             {filters[key as ImageFilter][0]}
                                         </span>
@@ -121,8 +126,8 @@ export default function CharacterFilters(props: {
                                                     icon={faQuestionCircle.fas}
                                                 />
                                             </TooltipTrigger>
-                                            <TooltipContent className="w-40 text-center text-xs p-2 rounded-lg bg-black text-white border-white/20 border">
-                                                <p>
+                                            <TooltipContent asChild>
+                                                <p className="tooltip-content">
                                                     {
                                                         filters[
                                                             key as ImageFilter
@@ -145,7 +150,7 @@ export default function CharacterFilters(props: {
                                 name={`character_${key}`}
                                 hidden
                                 readOnly
-                                form={NEW_CHARACTER_FORM}
+                                form={props.form}
                             />
                         ))}
                     </>

@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { ErrorList } from "./error-list";
 import { Label } from "@radix-ui/react-label";
+import SubmitButton from "@/app/components/submit-button";
 
 type ChangeAvatarProps = {
     imageUrl: string;
@@ -30,21 +31,11 @@ export default function ChangeAvatar({ imageUrl }: ChangeAvatarProps) {
                     <ErrorList errors={state.errors?.image} />
                 )}
             </div>
-            <form className="flex flex-col items-center" action={action}>
+            <form className="flex-col-4 items-center" action={action}>
                 <Image src={avatar} alt="avatar" width="96" height="96" />
-                <div className="flex flex-col w-full">
-                    <Label
-                        htmlFor="avatar_image"
-                        className="text-sm text-white/50"
-                    >
-                        Choose File
-                    </Label>
-                    <input
-                        id="avatar_image"
-                        name="image"
-                        type="file"
-                        className="border-2 border-gray-500 rounded-lg p-1"
-                    />
+                <div className="flex-col-2 w-full">
+                    <Label htmlFor="avatar_image">Choose File</Label>
+                    <input id="avatar_image" name="image" type="file" />
                     <p className="text-sm">
                         <span>.gif, .jpg, or .png files only.</span>
                         <br />
@@ -54,12 +45,9 @@ export default function ChangeAvatar({ imageUrl }: ChangeAvatarProps) {
                         </span>
                     </p>
                 </div>
-                <button
-                    className="self-end rounded-lg bg-cyan-600 p-2"
-                    type="submit"
-                >
-                    Upload
-                </button>
+                <div className="self-end">
+                    <SubmitButton label="Upload" />
+                </div>
             </form>
         </Section>
     );

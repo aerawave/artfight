@@ -1,0 +1,50 @@
+.navigation-bar {
+    @apply bg-gray-800 px-4 sm:px-6 lg:px-8 py-2 flex flex-row justify-between;
+}
+
+.link-list,
+.link-list-end {
+    @apply flex flex-row gap-8 items-center;
+}
+
+.link-list-end {
+    @apply justify-end;
+}
+
+.link-list > li > a,
+.link-list > li > button,
+.link-list-end > li > a,
+.link-list-end > li > button {
+    @apply cursor-pointer flex flex-row gap-1 items-center;
+}
+
+.logo-link {
+    @apply flex flex-row gap-4 text-xl uppercase;
+}
+.logo-link > img {
+    @apply h-8 w-8;
+}
+
+.breadcrumbs {
+    @apply flex flex-row gap-2 text-sm rounded-md bg-gray-600 p-4 m-4 mt-0;
+}
+
+.navigation-dropdown {
+    @apply rounded-md bg-gray-900 py-2 mt-4;
+}
+
+.navigation-dropdown > li:not(.label) {
+    @apply hover:bg-gray-400;
+}
+
+.navigation-dropdown > li:not(.unpadded) {
+    @apply block px-8;
+}
+
+.navigation-dropdown > li.unpadded > hr {
+    @apply my-2 border-gray-700;
+}
+
+.navigation-dropdown > li.label {
+    @apply text-gray-400 cursor-default my-2 uppercase;
+}

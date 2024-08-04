@@ -1,8 +1,8 @@
-import db from "@/db/database";
-import { Files } from "@/db/schema";
+import db from "@/data/db/database";
+import { Files } from "@/data/db/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import * as fs from "fs";
+import { redis } from "@/data/redis/redis";
 
 export async function GET(
     request: NextRequest,
@@ -11,7 +11,12 @@ export async function GET(
     const name: string = params.name;
 
     const results = await db
-        .select({ id: Files.id, name: Files.name, type: Files.type })
+        .select({
+            id: Files.id,
+            ownerId: Files.ownerId,
+            name: Files.name,
+            type: Files.type,
+        })
         .from(Files)
         .where((file) => eq(file.name, name));
 
@@ -21,19 +26,17 @@ export async function GET(
         });
     }
 
-    const { name: file_name, type: file_type } = results[0];
+    const { id: file_id, ownerId: owner_id, type: file_type } = results[0];
 
-    const file_path = `${process.env.FILE_PATH_BEGIN}/${file_name}`;
+    const file_path = `fs/${owner_id}/${file_id}`;
 
-    const buffer = await new Promise<Buffer>((resolve, reject) => {
-        fs.readFile(file_path, (err, buffer) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(buffer);
-            }
+    const buffer = await redis.getBuffer(file_path);
+
+    if (!buffer) {
+        return NextResponse.json({
+            errors: [`No image found with the name '${name}'.`],
         });
-    });
+    }
 
     return new NextResponse(buffer, {
         headers: {

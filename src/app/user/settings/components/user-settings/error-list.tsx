@@ -13,9 +13,11 @@ export function ErrorList(props: ErrorListProps) {
         return <></>;
     }
     return (
-        <ul className="text-red-500 mt-1 text-sm">
+        <ul className="error-list">
             {errors.map((err, i) => (
-                <li key={i}>* {err}</li>
+                <li key={i} className="error">
+                    {err}
+                </li>
             ))}
         </ul>
     );
