@@ -8,6 +8,10 @@ import NewCharacterForm from "./components/new-character-form";
 export default async function SubmitCharacterPage() {
     const local_crumbs: Crumb[] = [
         {
+            label: "Manage Characters",
+            href: "/manage/characters",
+        },
+        {
             label: "Submit Character",
             href: "/submit/character",
         },

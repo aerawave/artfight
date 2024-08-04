@@ -1,6 +1,7 @@
 "use client";
 
 import { submitCharacterEdit } from "@/app/actions/edit/character";
+import SubmitButton from "@/app/components/submit-button";
 import CharacterBasicInformation from "@/app/submit/character/components/new-character-form/character-basic-information";
 import CharacterCredits from "@/app/submit/character/components/new-character-form/character-credits";
 import CharacterFilters from "@/app/submit/character/components/new-character-form/character-filters";
@@ -170,12 +171,7 @@ export default function EditCharacterForm(props: {
                     value={props.character.id}
                     readOnly
                 />
-                <button
-                    className="p-4 bg-cyan-500 rounded-lg m-4 text-white"
-                    onClick={() => form.current?.requestSubmit()}
-                >
-                    Save
-                </button>
+                <SubmitButton label="Save" />
             </form>
         </div>
     );

@@ -10,6 +10,7 @@ import { useFormState } from "react-dom";
 import { submitCharacter } from "@/app/actions";
 import { redirect } from "next/navigation";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
+import SubmitButton from "@/app/components/submit-button";
 
 export const NEW_CHARACTER_FORM = "new-character-form";
 
@@ -55,7 +56,10 @@ export default function NewCharacterForm() {
                     errors={state.errors?.main_image}
                     form={NEW_CHARACTER_FORM}
                 />
-                <CharacterTags errors={state.errors?.tags} />
+                <CharacterTags
+                    errors={state.errors?.tags}
+                    form={NEW_CHARACTER_FORM}
+                />
             </div>
             <form
                 id={NEW_CHARACTER_FORM}
@@ -63,12 +67,7 @@ export default function NewCharacterForm() {
                 ref={form}
                 className="flex flex-col"
             >
-                <button
-                    className="p-4 bg-cyan-500 rounded-lg m-4 text-white"
-                    onClick={() => form.current?.requestSubmit()}
-                >
-                    Submit
-                </button>
+                <SubmitButton />
             </form>
         </div>
     );

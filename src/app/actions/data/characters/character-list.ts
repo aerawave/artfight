@@ -44,7 +44,8 @@ export async function getCharacters(userId: number) {
         .leftJoin(
             aliases.thumbnailFile,
             eq(aliases.mainImage.thumbnailFileId, aliases.thumbnailFile.id)
-        );
+        )
+        .orderBy(aliases.character.id);
 }
 
 export function getCharactersSql(userId: number) {
