@@ -39,8 +39,12 @@ export const Files = pgTable("files", {
 
 export const Images = pgTable("images", {
     id: serial("id").primaryKey(),
-    imageFileId: integer("image_file_id").references(() => Files.id),
-    thumbnailFileId: integer("thumbnail_file_id").references(() => Files.id),
+    imageFileId: integer("image_file_id")
+        .notNull()
+        .references(() => Files.id),
+    thumbnailFileId: integer("thumbnail_file_id")
+        .notNull()
+        .references(() => Files.id),
     isArtist: boolean("is_artist"),
     artistName: text("artist_name"),
     artistUrl: text("artist_url"),

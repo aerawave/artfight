@@ -21,7 +21,8 @@ export type IconTypeBase =
     | "fa-leaf"
     | "fa-heart"
     | "fa-asterisk"
-    | "fa-chevron-down";
+    | "fa-chevron-down"
+    | "fa-trash";
 export type IconType = `${IconSource} ${IconTypeBase}`;
 
 const IconSet = function <TBase extends IconTypeBase, TSrc extends IconSource>(
@@ -60,3 +61,4 @@ export const faLeaf = IconSet("fa-leaf", ["fas"]);
 export const faHeart = IconSet("fa-heart", ["fas", "far"]);
 export const faAsterisk = IconSet("fa-asterisk", ["fas"]);
 export const faChevronDown = IconSet("fa-chevron-down", ["fas"]);
+export const faTrash = IconSet("fa-trash", ["fas"]);

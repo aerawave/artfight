@@ -1,6 +1,6 @@
 import db from "@/data/db/database";
 import { UserProperties, Users } from "@/data/db/schema";
-import { clerkClient, User } from "@clerk/nextjs/server";
+import { auth, clerkClient, User } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 
 export type ImageFilter =
@@ -74,6 +74,16 @@ export async function getUser(userId: number | string) {
         username: clerk_user.username,
         ...record,
     };
+}
+
+export async function authenticateUser() {
+    const { userId: clerk_id } = auth();
+
+    if (!clerk_id) {
+        throw new Error("Requestor is not authenticated.");
+    }
+
+    return await getUser(clerk_id);
 }
 
 export async function getUserProperties(

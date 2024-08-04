@@ -3,13 +3,16 @@
 import { getCharacter } from "@/app/actions/data/characters/get";
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
 import Navigation from "@/app/components/navigation";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 import EditCharacterForm from "./components/edit-character-form";
 import { getUser } from "@/app/actions/user";
 import db from "@/data/db/database";
 import { Images } from "@/data/db/schema";
 import { eq } from "drizzle-orm";
+import DeleteCharacterButton from "./components/delete-character-button";
+import { requestDeleteCharacter } from "@/app/actions/data/characters/delete";
+import { tryRedirect } from "@/app/util";
 
 export default async function EditCharacterPage(props: {
     params: {
@@ -61,11 +64,37 @@ export default async function EditCharacterPage(props: {
         notFound();
     }
 
+    const deleteCharacter = async () => {
+        "use server";
+        await requestDeleteCharacter(character.id);
+
+        const sender = props.searchParams?.sender;
+        const destination = "/manage/characters";
+        if (sender === `/users/${owner.username}/characters/${character.id}`) {
+            redirect(destination);
+        } else {
+            tryRedirect({
+                url: sender,
+                backup: "/manage/characters",
+            });
+        }
+    };
+
     return (
         <>
             <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="flex flex-col gap-4 m-4">
-                <h1 className="text-4xl">Edit Character: {character.name}</h1>
+                <div className="flex flex-row justify-between items-center">
+                    <h1 className="text-4xl">
+                        Edit Character: {character.name}
+                    </h1>
+                    <div className="flex flex-row gap-1">
+                        <DeleteCharacterButton
+                            characterName={character.name}
+                            onConfirm={deleteCharacter}
+                        />
+                    </div>
+                </div>
                 <div className="rounded-md bg-cyan-600 p-3 text-xl text-white m-2">
                     <p>
                         All fields with an asterisk need to be filled in. BBCode
@@ -76,7 +105,6 @@ export default async function EditCharacterPage(props: {
                     owner={owner.username}
                     character={character}
                     mainImage={main_image}
-                    sender={props.searchParams?.sender}
                 />
             </div>
         </>

@@ -8,9 +8,9 @@ import CharacterFilters from "@/app/submit/character/components/new-character-fo
 import CharacterMainImage from "@/app/submit/character/components/new-character-form/character-main-image";
 import CharacterTags from "@/app/submit/character/components/new-character-form/character-tags";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
+import { tryRedirect } from "@/app/util";
 import { Characters, Images } from "@/data/db/schema";
 import { InferSelectModel } from "drizzle-orm";
-import { redirect } from "next/navigation";
 import React, { useRef } from "react";
 import { useFormState } from "react-dom";
 
@@ -30,11 +30,10 @@ export default function EditCharacterForm(props: {
     };
 
     if (state.success) {
-        redirect(
-            props.sender?.startsWith("/")
-                ? props.sender
-                : `/users/${props.owner}/characters/${props.character.id}`
-        );
+        tryRedirect({
+            url: props.sender,
+            backup: `/users/${props.owner}/characters/${props.character.id}`,
+        });
     }
 
     const form = useRef<HTMLFormElement>(null);
