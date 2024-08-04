@@ -72,17 +72,22 @@ export default async function ActiveCharacters(props: ActiveCharactersProps) {
                                 >
                                     {character.name}
                                 </Link>
+                                <a
+                                    className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
+                                    title="Edit this character"
+                                    href={`/edit/character/${
+                                        character.id
+                                    }?sender=${encodeURIComponent(
+                                        "/manage/characters"
+                                    )}`}
+                                >
+                                    <Icon icon={faPencil.fas} />
+                                </a>
                                 <button
                                     className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
                                     title="Bookmark this character"
                                 >
                                     <Icon icon={faBookmark.far} />
-                                </button>
-                                <button
-                                    className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
-                                    title="Edit this character"
-                                >
-                                    <Icon icon={faPencil.fas} />
                                 </button>
                             </div>
                         </div>

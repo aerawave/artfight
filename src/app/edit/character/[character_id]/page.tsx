@@ -12,7 +12,15 @@ import { Images } from "@/data/db/schema";
 import { eq } from "drizzle-orm";
 
 export default async function EditCharacterPage(props: {
-    params: { character_id: string };
+    params: {
+        character_id: string;
+        params?: {
+            sender?: string;
+        };
+    };
+    searchParams?: {
+        sender?: string;
+    };
 }) {
     const local_crumbs: Crumb[] = [
         {
@@ -68,6 +76,7 @@ export default async function EditCharacterPage(props: {
                     owner={owner.username}
                     character={character}
                     mainImage={main_image}
+                    sender={props.searchParams?.sender}
                 />
             </div>
         </>

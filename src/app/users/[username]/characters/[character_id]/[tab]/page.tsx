@@ -71,7 +71,9 @@ export default async function ViewCharacterPage(props: {
             <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="flex flex-row justify-end mx-4 gap-4">
                 <a
-                    href={`/edit/character/${character.id}`}
+                    href={`/edit/character/${
+                        character.id
+                    }?sender=${encodeURIComponent(local_crumbs[2].href)}`}
                     className="p-2 text-white bg-blue-500 rounded-lg flex flex-row gap-2 items-center hover:bg-blue-400"
                 >
                     <Icon icon={faPencil.fas} />

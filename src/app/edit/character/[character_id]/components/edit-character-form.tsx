@@ -19,6 +19,7 @@ export default function EditCharacterForm(props: {
     owner: string;
     character: InferSelectModel<typeof Characters>;
     mainImage: InferSelectModel<typeof Images>;
+    sender?: string;
 }) {
     const [state, action] = useFormState(submitCharacterEdit, {});
 
@@ -28,7 +29,11 @@ export default function EditCharacterForm(props: {
     };
 
     if (state.success) {
-        redirect(`/users/${props.owner}/characters/${props.character.id}`);
+        redirect(
+            props.sender?.startsWith("/")
+                ? props.sender
+                : `/users/${props.owner}/characters/${props.character.id}`
+        );
     }
 
     const form = useRef<HTMLFormElement>(null);
