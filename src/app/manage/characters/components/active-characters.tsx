@@ -2,10 +2,7 @@
 
 import React from "react";
 import { getCharacters } from "@/app/actions/data/characters/character-list";
-import Image from "next/image";
-import Link from "next/link";
-import Icon from "@/app/components/icon";
-import { faBookmark, faPencil } from "@/app/components/icons";
+import CharacterPresenter from "@/app/components/characters/character-presenter";
 
 type ActiveCharactersProps = {
     ownerUsername: string;
@@ -45,54 +42,15 @@ export default async function ActiveCharacters(props: ActiveCharactersProps) {
             </h1>
 
             <div className="flex flex-row flex-wrap gap-16 m-8">
-                {props.data.map((character) => {
-                    const character_url = `/users/${props.ownerUsername}/characters/${character.id}`;
-                    return (
-                        <div key={character.id} className="flex flex-col w-60">
-                            <Link
-                                href={character_url}
-                                title={`${character.name} by ${props.ownerUsername}`}
-                            >
-                                <Image
-                                    className="rounded-md p-1 border-2 border-dotted border-indigo-400"
-                                    src={
-                                        character.thumbnailFile
-                                            ? `/assets/${character.thumbnailFile.name}`
-                                            : "undefined"
-                                    }
-                                    width="240"
-                                    height="240"
-                                    alt={`${character.name} thumbnail`}
-                                />
-                            </Link>
-                            <div className="flex flex-row">
-                                <Link
-                                    className="h-8 bg-gray-800 m-2 ml-0 flex-grow hover:underline flex flex-row justify-center items-center rounded-md italic text-indigo-400"
-                                    href={character_url}
-                                >
-                                    {character.name}
-                                </Link>
-                                <a
-                                    className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
-                                    title="Edit this character"
-                                    href={`/edit/character/${
-                                        character.id
-                                    }?sender=${encodeURIComponent(
-                                        "/manage/characters"
-                                    )}`}
-                                >
-                                    <Icon icon={faPencil.fas} />
-                                </a>
-                                <button
-                                    className="h-8 w-8 bg-gray-800 m-2 mr-0 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md"
-                                    title="Bookmark this character"
-                                >
-                                    <Icon icon={faBookmark.far} />
-                                </button>
-                            </div>
-                        </div>
-                    );
-                })}
+                {props.data.map((character) => (
+                    <CharacterPresenter
+                        key={character.id}
+                        characterId={character.id}
+                        characterName={character.name}
+                        characterOwner={props.ownerUsername}
+                        thumbnailName={character.thumbnailFile?.name}
+                    />
+                ))}
             </div>
         </div>
     );
