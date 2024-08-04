@@ -35,16 +35,26 @@ export default function NewCharacterForm() {
                         There were errors in your submission.
                         <p>{JSON.stringify(state.errors)}</p>
                     </h5>
-                    <ErrorList errors={state.errors?.general} />
+                    <ErrorList errors={state.errors.general} />
                 </div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <CharacterBasicInformation
                     errors={state.errors?.basic_information}
+                    form={NEW_CHARACTER_FORM}
                 />
-                <CharacterCredits errors={state.errors?.credits} />
-                <CharacterFilters errors={state.errors?.filters} />
-                <CharacterMainImage errors={state.errors?.main_image} />
+                <CharacterCredits
+                    errors={state.errors?.credits}
+                    form={NEW_CHARACTER_FORM}
+                />
+                <CharacterFilters
+                    errors={state.errors?.filters}
+                    form={NEW_CHARACTER_FORM}
+                />
+                <CharacterMainImage
+                    errors={state.errors?.main_image}
+                    form={NEW_CHARACTER_FORM}
+                />
                 <CharacterTags errors={state.errors?.tags} />
             </div>
             <form
@@ -54,7 +64,7 @@ export default function NewCharacterForm() {
                 className="flex flex-col"
             >
                 <button
-                    className="p-4 bg-cyan-500 rounded-lg m-4"
+                    className="p-4 bg-cyan-500 rounded-lg m-4 text-white"
                     onClick={() => form.current?.requestSubmit()}
                 >
                     Submit

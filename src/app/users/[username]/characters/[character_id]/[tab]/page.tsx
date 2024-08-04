@@ -1,7 +1,7 @@
 "use server";
 
 import { getCharacter } from "@/app/actions/data/characters/character";
-import { getUserByUsername } from "@/app/actions/user";
+import { getUser } from "@/app/actions/user";
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
 import Navigation from "@/app/components/navigation";
 import Tabs, { TabData } from "@/app/components/tabs";
@@ -9,6 +9,8 @@ import { notFound } from "next/navigation";
 import React from "react";
 import CharacterProfileTab from "./components/profile-tab";
 import CharacterAttacksTab from "./components/attacks-tab";
+import Icon from "@/app/components/icon";
+import { faPencil } from "@/app/components/icons";
 
 export default async function ViewCharacterPage(props: {
     params: { username: string; character_id: string | number; tab: string };
@@ -21,14 +23,14 @@ export default async function ViewCharacterPage(props: {
         notFound();
     }
 
-    const owner = await getUserByUsername(username);
-
-    if (!owner) {
+    const character = await getCharacter(character_id);
+    if (!character) {
         notFound();
     }
 
-    const character = await getCharacter(owner.id, character_id);
-    if (!character) {
+    const owner = await getUser(character.ownerId);
+
+    if (!owner) {
         notFound();
     }
 
@@ -67,6 +69,15 @@ export default async function ViewCharacterPage(props: {
     return (
         <div>
             <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
+            <div className="flex flex-row justify-end mx-4 gap-4">
+                <a
+                    href={`/edit/character/${character.id}`}
+                    className="p-2 text-white bg-blue-500 rounded-lg flex flex-row gap-2 items-center hover:bg-blue-400"
+                >
+                    <Icon icon={faPencil.fas} />
+                    <span>Edit</span>
+                </a>
+            </div>
             <Tabs tabs={tabs} activeTab={tab} />
         </div>
     );

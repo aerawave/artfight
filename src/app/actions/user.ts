@@ -51,19 +51,29 @@ export async function getUserByUsername(username: string) {
 }
 
 export async function getUser(userId: number | string) {
-    return typeof userId === "string"
-        ? (
-              await db
-                  .select()
-                  .from(Users)
-                  .where((user) => eq(user.clerkId, userId as string))
-          )[0]
-        : (
-              await db
-                  .select()
-                  .from(Users)
-                  .where((user) => eq(user.id, userId as number))
-          )[0];
+    const record =
+        typeof userId === "string"
+            ? (
+                  await db
+                      .select()
+                      .from(Users)
+                      .where((user) => eq(user.clerkId, userId as string))
+              )[0]
+            : (
+                  await db
+                      .select()
+                      .from(Users)
+                      .where((user) => eq(user.id, userId as number))
+              )[0];
+
+    const clerk = clerkClient();
+
+    const clerk_user = await clerk.users.getUser(record.clerkId);
+
+    return {
+        username: clerk_user.username,
+        ...record,
+    };
 }
 
 export async function getUserProperties(

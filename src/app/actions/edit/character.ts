@@ -1,21 +1,20 @@
 "use server";
 
-import { Characters, Files, Images } from "@/data/db/schema";
-import db from "@/data/db/database";
 import { auth } from "@clerk/nextjs/server";
-import { getUser } from "./user";
+import { GeneralErrors } from "../errors/general";
 import {
     CharacterBasicInformationErrors,
     CharacterCreditsErrors,
     CharacterFiltersErrors,
     CharacterMainImageErrors,
-} from "./errors/submissions-errors";
-import { GeneralErrors } from "./errors/general";
-import { uploadFileContent } from "./data/files/upload";
-import { eq } from "drizzle-orm";
-import { CharacterSchemas } from "./schemas/character-schemas";
+} from "../errors/submissions-errors";
+import { CharacterSchemas } from "../schemas/character-schemas";
+import { getUser } from "../user";
+import db from "@/data/db/database";
+import { Characters, Images } from "@/data/db/schema";
+import { and, eq, InferSelectModel } from "drizzle-orm";
 
-type SubmitCharacterState = {
+type SubmitCharacterEditState = {
     success?: boolean;
     errors?: GeneralErrors & {
         basic_information?: CharacterBasicInformationErrors;
@@ -26,10 +25,83 @@ type SubmitCharacterState = {
     };
 };
 
-export async function submitCharacter(
-    state: SubmitCharacterState,
+export async function submitCharacterEdit(
+    state: SubmitCharacterEditState,
     data: FormData
-): Promise<SubmitCharacterState> {
+): Promise<SubmitCharacterEditState> {
+    const validate_character_id = CharacterSchemas.character_id.safeParse({
+        character_id: data.get("character_id"),
+    });
+
+    if (!validate_character_id.success) {
+        return {
+            errors: {
+                general:
+                    validate_character_id.error.flatten().fieldErrors
+                        .character_id,
+            },
+        };
+    }
+
+    const { character_id } = validate_character_id.data;
+
+    const { userId: clerkId } = auth();
+
+    if (!clerkId) {
+        return {
+            errors: {
+                general: ["You are not authenticated."],
+            },
+        };
+    }
+
+    const { id: userId } = await getUser(clerkId);
+
+    if (!userId) {
+        return {
+            errors: {
+                general: ["You are not authenticated."],
+            },
+        };
+    }
+
+    const record = (
+        (await db
+            .select({
+                id: Characters.id,
+                ownerId: Characters.ownerId,
+                imageId: Characters.imageId,
+            })
+            .from(Characters)
+            .where(
+                and(
+                    eq(Characters.id, character_id),
+                    eq(Characters.ownerId, userId)
+                )
+            )
+            .limit(1)) as (InferSelectModel<typeof Characters> | undefined)[]
+    )[0];
+
+    if (!record) {
+        return {
+            errors: {
+                general: ["You don't own that character!"],
+            },
+        };
+    }
+
+    // const dt: Record<string, FormDataEntryValue | null> = {};
+    // const iter = data.keys();
+    // let entry: ReturnType<typeof iter.next>;
+
+    // while (!(entry = iter.next()).done) {
+    //     dt[entry.value] = data.get(entry.value);
+    // }
+
+    // return {
+    //     errors: { general: [JSON.stringify(dt)] },
+    // };
+
     const validate_basic_information =
         CharacterSchemas.basic_information.safeParse({
             name: data.get("name"),
@@ -174,7 +246,6 @@ export async function submitCharacter(
                     "character_filter_sensitive_content"
                 ),
             });
-
         if (!validate_filters_further.success) {
             return {
                 errors: {
@@ -339,89 +410,67 @@ export async function submitCharacter(
         external_link_url,
         disable_comments,
     } = validate_basic_information.data;
+
     // "Credits"
     const additional_credits = validate_credits_initial.data.additional_credits;
     // "Tags"
     const tags = validate_tags.data.tags;
 
-    const { userId: clerkId } = auth();
-
-    if (!clerkId) {
-        return {
-            errors: {
-                general: ["You are not authenticated."],
-            },
-        };
-    }
-    const { id: userId } = await getUser(clerkId);
-
-    let image_id: number = -1;
+    // TODO: handle images
 
     try {
-        // FIXME: Should only upload once. If the files are uploaded and the submission errors out later, the files will be re-uploaded in future attempts.
-        image_id = await uploadImages(
-            userId,
-            data.get("main_image")?.valueOf() as File,
-            data.get("thumbnail")?.valueOf() as File | null,
-            is_artist
-                ? "uploader"
-                : { name: main_image_artist_name, url: main_image_artist_url },
-            main_image_filter_moderate_gore,
-            main_image_filter_extreme_gore,
-            main_image_filter_body_horror,
-            main_image_filter_moderate_nudity,
-            main_image_filter_extreme_nudity,
-            main_image_filter_suggestive_themes,
-            main_image_filter_eyestrain,
-            main_image_filter_sensitive_content
-        );
-    } catch (error) {
-        return {
-            errors: {
-                main_image: {
-                    general: [
-                        `${Math.floor(Math.random() * 100)}`,
-                        JSON.stringify(`${error}`),
-                    ],
-                },
-            },
-        };
-    }
+        await db
+            .update(Characters)
+            .set({
+                // "Basic Information"
+                name,
+                description,
+                permissions,
+                disableGlobalUserPermissions: disable_global_user_permissions,
+                externalLinkName: external_link_name,
+                externalLinkUrl: external_link_url,
+                disableComments: disable_comments,
+                // "Credits"
+                // "Credits"
+                isDesigner: is_designer,
+                designerName: designer_name,
+                designerUrl: designer_url,
+                doesLinkSpeciesSheet: does_link_species_sheet,
+                speciesName: species_name,
+                speciesSheetUrl: species_sheet_url,
+                additionalCredits: additional_credits,
+                // "Character Filters"
+                containsModerateGore: character_filter_moderate_gore,
+                containsExtremeGore: character_filter_extreme_gore,
+                containsBodyHorror: character_filter_body_horror,
+                containsModerateNudity: character_filter_moderate_nudity,
+                containsExtremeNudity: character_filter_extreme_nudity,
+                containsSuggestiveThemes: character_filter_suggestive_themes,
+                containsEyestrain: character_filter_eyestrain,
+                containsSensitiveContent: character_filter_sensitive_content,
+                // "Main Image"
+                // TODO...
+                // "Tags"
+                tags,
+            })
+            .where(eq(Characters.id, character_id));
 
-    try {
-        await db.insert(Characters).values({
-            ownerId: userId,
-            name,
-            status: "active",
-            // "Basic Information"
-            description,
-            permissions,
-            disableGlobalUserPermissions: disable_global_user_permissions,
-            externalLinkName: external_link_name,
-            externalLinkUrl: external_link_url,
-            disableComments: disable_comments,
-            // "Credits"
-            isDesigner: is_designer,
-            designerName: designer_name,
-            designerUrl: designer_url,
-            doesLinkSpeciesSheet: does_link_species_sheet,
-            speciesName: species_name,
-            speciesSheetUrl: species_sheet_url,
-            additionalCredits: additional_credits,
-            // "Character Filters"
-            containsModerateGore: character_filter_moderate_gore,
-            containsExtremeGore: character_filter_extreme_gore,
-            containsBodyHorror: character_filter_body_horror,
-            containsModerateNudity: character_filter_moderate_nudity,
-            containsExtremeNudity: character_filter_extreme_nudity,
-            containsSuggestiveThemes: character_filter_suggestive_themes,
-            containsEyestrain: character_filter_eyestrain,
-            containsSensitiveContent: character_filter_sensitive_content,
-            // "Main Image"
-            imageId: image_id,
-            // "Tags"
-            tags,
-        });
+        await db
+            .update(Images)
+            .set({
+                isArtist: is_artist,
+                artistName: is_artist ? "" : main_image_artist_name,
+                artistUrl: is_artist ? "" : main_image_artist_url,
+                containsModerateGore: main_image_filter_moderate_gore,
+                containsExtremeGore: main_image_filter_extreme_gore,
+                containsBodyHorror: main_image_filter_body_horror,
+                containsModerateNudity: main_image_filter_moderate_nudity,
+                containsExtremeNudity: main_image_filter_extreme_nudity,
+                containsSuggestiveThemes: main_image_filter_suggestive_themes,
+                containsEyestrain: main_image_filter_eyestrain,
+                containsSensitiveContent: main_image_filter_sensitive_content,
+            })
+            .where(eq(Images.id, record.imageId));
 
         return {
             success: true,
@@ -433,85 +482,4 @@ export async function submitCharacter(
             },
         };
     }
-}
-
-async function uploadImages(
-    owner_id: number,
-    image: File,
-    thumbnail: File | null,
-    artist: "uploader" | { name: string; url: string },
-    contains_moderate_gore: boolean,
-    contains_extreme_gore: boolean,
-    contains_body_horror: boolean,
-    contains_moderate_nudity: boolean,
-    contains_extreme_nudity: boolean,
-    contains_suggestive_themes: boolean,
-    contains_eyestrain: boolean,
-    contains_sensitive_content: boolean
-): Promise<number> {
-    thumbnail = thumbnail && thumbnail.size > 0 ? thumbnail : image;
-
-    const { imageId: image_file_id, thumbnailId: thumbnail_file_id } =
-        await uploadImageFiles(owner_id, image, thumbnail);
-
-    const is_artist = artist === "uploader";
-    const artist_name = is_artist ? "" : artist.name;
-    const artist_url = is_artist ? "" : artist.url;
-
-    const { id } = (
-        await db
-            .insert(Images)
-            .values({
-                imageFileId: image_file_id,
-                thumbnailFileId: thumbnail_file_id,
-                isArtist: is_artist,
-                artistName: artist_name,
-                artistUrl: artist_url,
-                containsModerateGore: contains_moderate_gore,
-                containsExtremeGore: contains_extreme_gore,
-                containsBodyHorror: contains_body_horror,
-                containsModerateNudity: contains_moderate_nudity,
-                containsExtremeNudity: contains_extreme_nudity,
-                containsSuggestiveThemes: contains_suggestive_themes,
-                containsEyestrain: contains_eyestrain,
-                containsSensitiveContent: contains_sensitive_content,
-            })
-            .returning({ id: Images.id })
-    )[0];
-
-    return id;
-}
-
-async function uploadImageFiles(
-    owner_id: number,
-    image: File,
-    thumbnail: File
-) {
-    let image_file_id: number | null = null;
-    let thumbnail_file_id: number | null = null;
-
-    const image_file_upload = uploadFileContent(owner_id, image);
-    const thumbnail_file_upload = uploadFileContent(owner_id, thumbnail);
-
-    try {
-        image_file_id = (await image_file_upload).fileId;
-    } catch (error) {
-        // If main image fails upload, delete thumbnail image file.
-        thumbnail_file_id = (await thumbnail_file_upload).fileId;
-        await db.delete(Files).where(eq(Files.id, thumbnail_file_id));
-        throw error;
-    }
-
-    try {
-        thumbnail_file_id = (await thumbnail_file_upload).fileId;
-    } catch (error) {
-        // If thumbnail image fails upload, delete main image file.
-        await db.delete(Files).where(eq(Files.id, image_file_id));
-        throw error;
-    }
-
-    return {
-        imageId: image_file_id,
-        thumbnailId: thumbnail_file_id,
-    };
 }

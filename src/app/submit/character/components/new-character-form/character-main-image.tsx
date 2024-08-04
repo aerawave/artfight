@@ -6,7 +6,6 @@ import YesNo, { YesNoType } from "@/app/components/yes-no";
 import Link from "next/link";
 import { filters } from "./filters";
 import { ImageFilter } from "@/app/actions/user";
-import { NEW_CHARACTER_FORM } from "../new-character-form";
 import { CharacterMainImageErrors } from "@/app/actions/errors/submissions-errors";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 import { Label } from "@radix-ui/react-label";
@@ -21,14 +20,40 @@ import {
     faQuestionCircle,
     faTriangleExclamation,
 } from "@/app/components/icons";
-import { Checkbox, CheckboxIndicator } from "@radix-ui/react-checkbox";
+import { CheckboxIndicator } from "@radix-ui/react-checkbox";
+import CheckboxFix from "@/app/components/checkbox-fix";
 
 export default function CharacterMainImage(props: {
+    defaults?: {
+        imageId: number | undefined;
+        isArtist: boolean | undefined;
+        artistName: string | undefined;
+        artistUrl: string | undefined;
+        neededFilters: Record<ImageFilter, boolean | undefined> | undefined;
+    };
     errors?: CharacterMainImageErrors;
+    form?: string;
 }) {
-    const [is_artist, setIsArtist] = useState<YesNoType | undefined>(undefined);
+    const needed_filters = (props.defaults?.neededFilters ?? {}) as Record<
+        ImageFilter,
+        boolean | undefined
+    >;
+    const needs_filter = props.defaults
+        ? Object.keys(props.defaults?.neededFilters ?? {}).some(
+              (key) => needed_filters[key as ImageFilter] === true
+          )
+        : undefined;
+
+    const [is_artist, setIsArtist] = useState<YesNoType | undefined>(
+        props.defaults?.isArtist !== undefined
+            ? props.defaults.isArtist
+                ? "yes"
+                : "no"
+            : undefined
+    );
+
     const [needs_filters, setNeedsFilters] = useState<YesNoType | undefined>(
-        undefined
+        needs_filter !== undefined ? (needs_filter ? "yes" : "no") : undefined
     );
 
     return (
@@ -50,60 +75,74 @@ export default function CharacterMainImage(props: {
                     </p>
                 </div>
                 <ErrorList errors={props.errors?.general} />
-                <div className="flex flex-col gap-2">
-                    <Label
-                        htmlFor="main_image"
-                        className="font-bold text-sm text-white/75"
-                    >
-                        Main Image
-                        <span className="text-red-500">*</span>
-                    </Label>
-                    <input
-                        id="main_image"
-                        name="main_image"
-                        type="file"
-                        required
-                        form={NEW_CHARACTER_FORM}
-                    />
-                    <p>
-                        The uploaded image must be in .png, .jpg, or .gif format
-                        and have a file size no larger than 5MB.
-                    </p>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <Label
-                        htmlFor="thumbnail"
-                        className="font-bold text-sm text-white/75"
-                    >
-                        Thumbnail Image
-                        <Tooltip delayDuration={0}>
-                            <TooltipTrigger>
-                                <Icon icon={faQuestionCircle.fas} />
-                            </TooltipTrigger>
-                            <TooltipContent className="p-2 rounded-lg bg-black text-white border-white/20 border">
-                                <p>
-                                    If a thumbnail image is not provided, it
-                                    will be cropped automatically from the main
-                                    image. The thumbnail should represent the
-                                    main image and not be a completely different
-                                    image altogether.
-                                </p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </Label>
-                    <input
-                        id="thumbnail"
-                        name="thumbnail"
-                        type="file"
-                        form={NEW_CHARACTER_FORM}
-                    />
-                    <p>
-                        The thumbnail (if any) must be 200x200 in size. The
-                        uploaded image must be in .png, .jpg, or .gif format.
-                    </p>
-                </div>
-
+                {!props.defaults?.imageId ? (
+                    <>
+                        <div className="flex flex-col gap-2">
+                            <Label
+                                htmlFor="main_image"
+                                className="font-bold text-sm text-white/75"
+                            >
+                                Main Image
+                                <span className="text-red-500">*</span>
+                            </Label>
+                            <input
+                                id="main_image"
+                                name="main_image"
+                                type="file"
+                                required
+                                form={props.form}
+                            />
+                            <p>
+                                The uploaded image must be in .png, .jpg, or
+                                .gif format and have a file size no larger than
+                                5MB.
+                            </p>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label
+                                htmlFor="thumbnail"
+                                className="font-bold text-sm text-white/75"
+                            >
+                                Thumbnail Image
+                                <Tooltip delayDuration={0}>
+                                    <TooltipTrigger>
+                                        <Icon icon={faQuestionCircle.fas} />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="p-2 rounded-lg bg-black text-white border-white/20 border">
+                                        <p>
+                                            If a thumbnail image is not
+                                            provided, it will be cropped
+                                            automatically from the main image.
+                                            The thumbnail should represent the
+                                            main image and not be a completely
+                                            different image altogether.
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </Label>
+                            <input
+                                id="thumbnail"
+                                name="thumbnail"
+                                type="file"
+                                form={props.form}
+                            />
+                            <p>
+                                The thumbnail (if any) must be 200x200 in size.
+                                The uploaded image must be in .png, .jpg, or
+                                .gif format.
+                            </p>
+                        </div>
+                    </>
+                ) : (
+                    <div className="rounded-md bg-red-500 p-3 markdown text-white">
+                        <div className="flex flex-row gap-2 items-center">
+                            <Icon icon={faTriangleExclamation.fas} />
+                            <span>
+                                Main image cannot be modified at this time.
+                            </span>
+                        </div>
+                    </div>
+                )}
                 <div className="flex flex-row justify-between items-center">
                     <Label
                         htmlFor="is_artist"
@@ -117,11 +156,10 @@ export default function CharacterMainImage(props: {
                         name="is_artist"
                         value={is_artist}
                         onChange={setIsArtist}
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
                     />
                 </div>
                 <ErrorList errors={props.errors?.is_artist} />
-
                 {is_artist === "no" ? (
                     <div className="flex flex-col gap-2 rounded-lg p-2 bg-white/10">
                         <div className="flex flex-col gap-2">
@@ -138,7 +176,8 @@ export default function CharacterMainImage(props: {
                             <input
                                 id="main_image_artist_name"
                                 name="main_image_artist_name"
-                                form={NEW_CHARACTER_FORM}
+                                form={props.form}
+                                defaultValue={props.defaults?.artistName}
                             />
                         </div>
                         <div className="flex flex-col gap-2">
@@ -155,7 +194,8 @@ export default function CharacterMainImage(props: {
                             <input
                                 id="main_image_artist_url"
                                 name="main_image_artist_url"
-                                form={NEW_CHARACTER_FORM}
+                                form={props.form}
+                                defaultValue={props.defaults?.artistUrl}
                             />
                         </div>
                     </div>
@@ -167,7 +207,7 @@ export default function CharacterMainImage(props: {
                             name="main_image_artist_name"
                             value=""
                             readOnly
-                            form={NEW_CHARACTER_FORM}
+                            form={props.form}
                         />
                         <input
                             hidden
@@ -175,11 +215,10 @@ export default function CharacterMainImage(props: {
                             name="main_image_artist_url"
                             value=""
                             readOnly
-                            form={NEW_CHARACTER_FORM}
+                            form={props.form}
                         />
                     </>
                 )}
-
                 <div className="flex flex-row justify-between items-center">
                     <Label className="font-bold text-sm text-white/75">
                         Does this image need a content filter?
@@ -189,7 +228,7 @@ export default function CharacterMainImage(props: {
                         name="main_image_needs_filters"
                         value={needs_filters}
                         onChange={setNeedsFilters}
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
                     />
                 </div>
                 <ErrorList errors={props.errors?.main_image_needs_filters} />
@@ -232,11 +271,14 @@ export default function CharacterMainImage(props: {
                                     key={key}
                                     className="flex flex-row gap-2 items-center"
                                 >
-                                    <Checkbox
+                                    <CheckboxFix
                                         id={id}
                                         name={id}
-                                        form={NEW_CHARACTER_FORM}
+                                        form={props.form}
                                         className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
+                                        defaultChecked={
+                                            needed_filters[key as ImageFilter]
+                                        }
                                     >
                                         <CheckboxIndicator>
                                             <Icon
@@ -244,7 +286,7 @@ export default function CharacterMainImage(props: {
                                                 className="text-black"
                                             />
                                         </CheckboxIndicator>
-                                    </Checkbox>
+                                    </CheckboxFix>
                                     <div>
                                         <Label
                                             htmlFor={id}
@@ -282,7 +324,10 @@ export default function CharacterMainImage(props: {
                                 name={`main_image_${key}`}
                                 hidden
                                 readOnly
-                                form={NEW_CHARACTER_FORM}
+                                form={props.form}
+                                defaultChecked={
+                                    needed_filters[key as ImageFilter]
+                                }
                             />
                         ))}
                     </>

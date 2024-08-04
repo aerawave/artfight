@@ -1,11 +1,10 @@
 import db from "@/data/db/database";
 import { Characters } from "@/data/db/schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 type Character = typeof Characters.$inferSelect;
 
 export async function getCharacter(
-    ownerId: number,
     characterId: number
 ): Promise<Character | undefined> {
     const record = (
@@ -16,9 +15,7 @@ export async function getCharacter(
                 character: Characters,
             })
             .from(Characters)
-            .where((record) =>
-                and(eq(record.ownerId, ownerId), eq(record.id, characterId))
-            )
+            .where((record) => eq(record.id, characterId))
             .limit(1)
     )[0];
 

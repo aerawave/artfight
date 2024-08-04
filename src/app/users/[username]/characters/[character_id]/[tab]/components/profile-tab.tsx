@@ -167,7 +167,7 @@ export default async function CharacterProfileTab(props: {
                         <h5 className="p-2 bg-white/20 text-white">
                             Character Permissions
                         </h5>
-                        <p className="p-2">
+                        <div className="p-2">
                             {result.character.permissions ? (
                                 <Markdown
                                     className="markdown"
@@ -180,7 +180,7 @@ export default async function CharacterProfileTab(props: {
                             ) : (
                                 "No permissions specified."
                             )}
-                        </p>
+                        </div>
                         <>
                             <h5 className="p-2 bg-white/20 text-white">
                                 <Link
@@ -232,7 +232,7 @@ export default async function CharacterProfileTab(props: {
                         titleClass="bg-cyan-600 text-white/80"
                     >
                         <div className="flex flex-row flex-wrap gap-2">
-                            {"lorem ipsum dolor sit amet consectetur adipisicing"
+                            {(result.character.tags ?? "")
                                 .split(" ")
                                 .map((tag) => (
                                     <Chip

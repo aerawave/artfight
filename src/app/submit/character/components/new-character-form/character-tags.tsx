@@ -3,14 +3,17 @@
 import { Section } from "@/app/components/section";
 import Link from "next/link";
 import React, { useState } from "react";
-import { NEW_CHARACTER_FORM } from "../new-character-form";
 import { GeneralErrors } from "@/app/actions/errors/general";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 import Icon from "@/app/components/icon";
 import { faXMark } from "@/app/components/icons";
 
-export default function CharacterTags(props: { errors?: GeneralErrors }) {
-    const [tags, setTags] = useState<string[]>([]);
+export default function CharacterTags(props: {
+    defaults?: { tags: string[] | undefined };
+    errors?: GeneralErrors;
+    form?: string;
+}) {
+    const [tags, setTags] = useState<string[]>(props.defaults?.tags ?? []);
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [current_tag, setCurrentTag] = useState("");
 
@@ -111,7 +114,7 @@ export default function CharacterTags(props: { errors?: GeneralErrors }) {
                     name="tags"
                     value={tags.join(" ")}
                     readOnly
-                    form={NEW_CHARACTER_FORM}
+                    form={props.form}
                 />
                 <input
                     placeholder="Add a new tag..."

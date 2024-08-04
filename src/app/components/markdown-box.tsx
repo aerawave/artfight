@@ -13,7 +13,7 @@ type TextBoxProps = {
     label: React.ReactNode;
     name: string;
     disabled?: boolean;
-    value?: string;
+    defaultValue?: string;
     onChange?: (value: string) => void;
     defaultMode?: EditorMode;
     readOnly?: boolean;
@@ -28,12 +28,12 @@ export default function MarkdownBox(props: TextBoxProps) {
     }
 
     const [mode, setMode] = useState<EditorMode>(default_mode);
-    const [value, setValue] = useState(props.value);
+    const [value, setValue] = useState(props.defaultValue);
 
     return (
         <div className="flex flex-col">
             <div className="flex flex-row justify-between py-4">
-                {props.label}
+                <div>{props.label}</div>
                 {!props.readOnly && (
                     <>
                         <ToggleGroup

@@ -4,7 +4,6 @@ import YesNo, { YesNoType } from "@/app/components/yes-no";
 import Link from "next/link";
 import React, { useState } from "react";
 import { filters } from "./filters";
-import { NEW_CHARACTER_FORM } from "../new-character-form";
 import { CharacterFiltersErrors } from "@/app/actions/errors/submissions-errors";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 import { Label } from "@radix-ui/react-label";
@@ -14,18 +13,34 @@ import {
     faQuestionCircle,
     faTriangleExclamation,
 } from "@/app/components/icons";
-import { Checkbox, CheckboxIndicator } from "@radix-ui/react-checkbox";
+import { CheckboxIndicator } from "@radix-ui/react-checkbox";
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@radix-ui/react-tooltip";
+import CheckboxFix from "@/app/components/checkbox-fix";
 
 export default function CharacterFilters(props: {
+    defaults?: {
+        neededFilters?: Record<ImageFilter, boolean | undefined>;
+    };
     errors?: CharacterFiltersErrors;
+    form?: string;
 }) {
+    const needed_filters = (props.defaults?.neededFilters ?? {}) as Record<
+        ImageFilter,
+        boolean | undefined
+    >;
+
+    const needs_filter = props.defaults
+        ? Object.keys(props.defaults?.neededFilters ?? {}).some(
+              (key) => needed_filters[key as ImageFilter] === true
+          )
+        : undefined;
+
     const [needs_filters, setNeedsFilters] = useState<YesNoType | undefined>(
-        undefined
+        needs_filter !== undefined ? (needs_filter ? "yes" : "no") : undefined
     );
 
     return (
@@ -52,7 +67,7 @@ export default function CharacterFilters(props: {
                         name="needs_filters"
                         value={needs_filters}
                         onChange={setNeedsFilters}
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
                     />
                 </div>
                 <ErrorList errors={props.errors?.needs_filters} />
@@ -95,11 +110,14 @@ export default function CharacterFilters(props: {
                                     key={key}
                                     className="flex flex-row gap-2 items-center"
                                 >
-                                    <Checkbox
+                                    <CheckboxFix
                                         id={id}
                                         name={id}
-                                        form={NEW_CHARACTER_FORM}
+                                        form={props.form}
                                         className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
+                                        defaultChecked={
+                                            needed_filters[key as ImageFilter]
+                                        }
                                     >
                                         <CheckboxIndicator>
                                             <Icon
@@ -107,7 +125,7 @@ export default function CharacterFilters(props: {
                                                 className="text-black"
                                             />
                                         </CheckboxIndicator>
-                                    </Checkbox>
+                                    </CheckboxFix>
                                     <Label
                                         htmlFor={id}
                                         className="font-bold text-sm text-white/75"
@@ -145,7 +163,7 @@ export default function CharacterFilters(props: {
                                 name={`character_${key}`}
                                 hidden
                                 readOnly
-                                form={NEW_CHARACTER_FORM}
+                                form={props.form}
                             />
                         ))}
                     </>

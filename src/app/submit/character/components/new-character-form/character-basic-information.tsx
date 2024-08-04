@@ -3,7 +3,6 @@
 import MarkdownBox from "@/app/components/markdown-box";
 import { Section } from "@/app/components/section";
 import React from "react";
-import { NEW_CHARACTER_FORM } from "../new-character-form";
 import { CharacterBasicInformationErrors } from "@/app/actions/errors/submissions-errors";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 import { Label } from "@radix-ui/react-label";
@@ -12,12 +11,23 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import { Checkbox, CheckboxIndicator } from "@radix-ui/react-checkbox";
 import Icon from "@/app/components/icon";
 import { faCheck, faQuestionCircle } from "@/app/components/icons";
+import { CheckboxIndicator } from "@radix-ui/react-checkbox";
+import CheckboxFix from "@/app/components/checkbox-fix";
 
 export default function CharacterBasicInformation(props: {
+    defaults?: {
+        name: string | undefined;
+        description: string | undefined;
+        permissions: string | undefined;
+        disableGlobalUserPermissions: boolean | undefined;
+        externalLinkName: string | undefined;
+        externalLinkUrl: string | undefined;
+        disableComments: boolean | undefined;
+    };
     errors?: CharacterBasicInformationErrors;
+    form?: string;
 }) {
     return (
         <Section title="Basic Information">
@@ -35,7 +45,8 @@ export default function CharacterBasicInformation(props: {
                         id="name"
                         name="name"
                         required
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
+                        defaultValue={props.defaults?.name}
                     />
                 </div>
                 {/* TODO: add slug field */}
@@ -43,12 +54,13 @@ export default function CharacterBasicInformation(props: {
                     <ErrorList errors={props.errors?.description} />
                     <MarkdownBox
                         name="description"
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
                         label={
                             <span className="font-bold text-sm text-white/75 block">
                                 Description
                             </span>
                         }
+                        defaultValue={props.defaults?.description}
                     />
                 </div>
                 <div>
@@ -75,20 +87,24 @@ export default function CharacterBasicInformation(props: {
                             </>
                         }
                         name="permissions"
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
+                        defaultValue={props.defaults?.permissions}
                     />
                 </div>
                 <div className="flex flex-row gap-2 items-center">
-                    <Checkbox
+                    <CheckboxFix
                         id="disable_global_user_permissions"
                         name="disable_global_user_permissions"
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
                         className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
+                        defaultChecked={
+                            props.defaults?.disableGlobalUserPermissions
+                        }
                     >
                         <CheckboxIndicator>
                             <Icon icon={faCheck.fas} className="text-black" />
                         </CheckboxIndicator>
-                    </Checkbox>
+                    </CheckboxFix>
                     <Label
                         htmlFor="disable_global_user_permissions"
                         className="font-bold text-sm text-white/75"
@@ -126,7 +142,8 @@ export default function CharacterBasicInformation(props: {
                             id="external_link_name"
                             name="external_link_name"
                             className="md:rounded-r-none"
-                            form={NEW_CHARACTER_FORM}
+                            form={props.form}
+                            defaultValue={props.defaults?.externalLinkName}
                         />
                     </div>
                     <div className="flex flex-col gap-2">
@@ -141,21 +158,23 @@ export default function CharacterBasicInformation(props: {
                             id="external_link_url"
                             name="external_link_url"
                             className="md:rounded-l-none"
-                            form={NEW_CHARACTER_FORM}
+                            form={props.form}
+                            defaultValue={props.defaults?.externalLinkUrl}
                         />
                     </div>
                 </div>
                 <div className="flex flex-row gap-2 items-center">
-                    <Checkbox
+                    <CheckboxFix
                         id="disable_comments"
                         name="disable_comments"
-                        form={NEW_CHARACTER_FORM}
+                        form={props.form}
                         className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px_black]"
+                        defaultChecked={props.defaults?.disableComments}
                     >
                         <CheckboxIndicator>
                             <Icon icon={faCheck.fas} className="text-black" />
                         </CheckboxIndicator>
-                    </Checkbox>
+                    </CheckboxFix>
                     <Label
                         htmlFor="disable_comments"
                         className="font-bold text-sm text-white/75"
