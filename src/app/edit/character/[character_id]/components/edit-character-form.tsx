@@ -1,6 +1,6 @@
 "use client";
 
-import { submitCharacterEdit } from "@/app/actions/edit/character";
+import { submitCharacterEdit } from "@/app/actions/data/characters/edit";
 import SubmitButton from "@/app/components/submit-button";
 import CharacterBasicInformation from "@/app/submit/character/components/new-character-form/character-basic-information";
 import CharacterCredits from "@/app/submit/character/components/new-character-form/character-credits";

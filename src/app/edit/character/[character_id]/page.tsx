@@ -1,6 +1,6 @@
 "use server";
 
-import { getCharacter } from "@/app/actions/data/characters/character";
+import { getCharacter } from "@/app/actions/data/characters/get";
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
 import Navigation from "@/app/components/navigation";
 import { notFound } from "next/navigation";

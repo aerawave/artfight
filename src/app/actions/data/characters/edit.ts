@@ -1,15 +1,15 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { GeneralErrors } from "../errors/general";
+import { GeneralErrors } from "@/app/actions/errors/general";
 import {
     CharacterBasicInformationErrors,
     CharacterCreditsErrors,
     CharacterFiltersErrors,
     CharacterMainImageErrors,
-} from "../errors/submissions-errors";
-import { CharacterSchemas } from "../schemas/character-schemas";
-import { getUser } from "../user";
+} from "@/app/actions/errors/submissions-errors";
+import { CharacterSchemas } from "@/app/actions/schemas/character-schemas";
+import { getUser } from "@/app/actions/user";
 import db from "@/data/db/database";
 import { Characters, Images } from "@/data/db/schema";
 import { and, eq, InferSelectModel } from "drizzle-orm";
