@@ -2,11 +2,11 @@
     [data-state="checked"] means dark mode is activated.
 */
 .theme-switch {
-    @apply relative py-[0.1rem] px-4 rounded-full border-2 bg-cyan-500 border-black overflow-clip transition-all duration-500 flex justify-center items-center;
+    @apply relative py-[0.1rem] px-4 rounded-full bg-cyan-400/65 overflow-clip transition-all duration-500 flex justify-center items-center;
 }
 
 .theme-switch[data-state="checked"] {
-    @apply bg-black border-white;
+    @apply bg-black/65;
 }
 
 .theme-switch .background {
@@ -47,7 +47,7 @@
 }
 
 .theme-switch .thumb {
-    @apply bg-gray-500 border border-black rounded-full h-8 w-8 flex justify-center items-center overflow-clip -translate-x-[0.9rem] transition-transform duration-500;
+    @apply bg-gray-500 rounded-full h-8 w-8 flex justify-center items-center overflow-clip -translate-x-[0.9rem] transition-transform duration-500;
 }
 
 .theme-switch[data-state="checked"] .thumb {
