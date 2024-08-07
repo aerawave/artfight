@@ -7,11 +7,13 @@ import Icon from "./icon";
 import { faCloud, faFloppyDisk, faMoon, faStar, faSun } from "./icons";
 import "./styles/theme-switch.css";
 import SubmitButton from "./submit-button";
+import { useLocalStorage } from "../hooks/local-storage";
 
 export default function ThemeSwitch(props: {
     defaultTheme?: ThemeType | null;
     onThemeChange?: (theme: ThemeType) => void;
 }) {
+    const localStorage = useLocalStorage();
     const local_theme = localStorage.getItem("site_theme") as ThemeType | null;
 
     const [default_theme, setDefaultTheme] = useState(props.defaultTheme);
