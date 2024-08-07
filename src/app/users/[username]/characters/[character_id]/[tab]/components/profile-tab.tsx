@@ -9,10 +9,11 @@ import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import Markdown from "react-markdown";
 
 import "./profile-tab.css";
+import Chip from "@/app/components/chip";
 
 async function getCharacter(username: string, character_id: number) {
     const user = await getUserByUsername(username);
@@ -99,7 +100,7 @@ export default async function CharacterProfileTab(props: {
                     </div>
                 </div>
                 <div className="w-1/3">
-                    <Section title="Images">
+                    <Card title="Images">
                         <div className="more-images">
                             <Image
                                 src={main_image_url}
@@ -138,7 +139,7 @@ export default async function CharacterProfileTab(props: {
                                 alt="ph"
                             />
                         </div>
-                    </Section>
+                    </Card>
                 </div>
             </div>
             <div>
@@ -152,31 +153,32 @@ export default async function CharacterProfileTab(props: {
                 </Markdown>
             </div>
             <div className="flex flex-row">
-                <Section
+                <Card
                     title="Permissions"
-                    className="flex-grow section-red"
+                    variant="danger"
+                    className="flex-grow"
                     noContentPadding
                 >
                     <div className="flex flex-col">
-                        <h5 className="p-2 bg-white/20 text-white">
-                            Character Permissions
-                        </h5>
-                        <div className="p-2">
-                            {result.character.permissions ? (
-                                <Markdown
-                                    className="markdown"
-                                    skipHtml
-                                    disallowedElements={["img"]} // should images be allowed?
-                                    unwrapDisallowed
-                                >
-                                    {result.character.permissions}
-                                </Markdown>
-                            ) : (
-                                "No permissions specified."
-                            )}
+                        <div className="field-v">
+                            <h5 className="sub-label">Character Permissions</h5>
+                            <div>
+                                {result.character.permissions ? (
+                                    <Markdown
+                                        className="markdown"
+                                        skipHtml
+                                        disallowedElements={["img"]} // should images be allowed?
+                                        unwrapDisallowed
+                                    >
+                                        {result.character.permissions}
+                                    </Markdown>
+                                ) : (
+                                    "No permissions specified."
+                                )}
+                            </div>
                         </div>
-                        <>
-                            <h5 className="p-2 bg-white/20 text-white">
+                        <div className="field-v">
+                            <h5>
                                 <Link
                                     href={`/users/${user.username}`}
                                     className="highlight"
@@ -185,19 +187,19 @@ export default async function CharacterProfileTab(props: {
                                 </Link>
                                 {"'s Global Permisisons"}
                             </h5>
-                            <p className="p-2">No permissions specified.</p>
-                        </>
+                            <p>No permissions specified.</p>
+                        </div>
                     </div>
-                </Section>
+                </Card>
                 <div className="w-1/5 flex-col-4">
-                    <Section
+                    <Card
                         title="Character Info"
-                        className="section-olive"
+                        variant="success dark"
                         noContentPadding
                     >
                         <div className="character-info">
-                            <div className="row">
-                                <div>Owner:</div>
+                            <div className="field-h">
+                                <h5>Owner:</h5>
                                 <div>
                                     <Link
                                         href={`/users/${user.username}`}
@@ -207,8 +209,8 @@ export default async function CharacterProfileTab(props: {
                                     </Link>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div>Designer:</div>
+                            <div className="field-h">
+                                <h5>Designer:</h5>
                                 <div>
                                     <Link
                                         href={`/users/${user.username}`}
@@ -219,18 +221,18 @@ export default async function CharacterProfileTab(props: {
                                 </div>
                             </div>
                         </div>
-                    </Section>
-                    <Section title="Tags" className="section-cyan">
+                    </Card>
+                    <Card title="Tags" variant="info">
                         <div className="tags-list">
                             {(result.character.tags ?? "")
                                 .split(" ")
                                 .map((tag) => (
-                                    <div key={tag} className="chip-cyan-half">
+                                    <Chip key={tag} variant="info">
                                         {tag}
-                                    </div>
+                                    </Chip>
                                 ))}
                         </div>
-                    </Section>
+                    </Card>
                 </div>
             </div>
             <div className="text-4xl">Comments...</div>

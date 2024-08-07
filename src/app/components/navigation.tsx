@@ -17,6 +17,11 @@ import {
     faQuestionCircle,
     faShoppingCart,
 } from "./icons";
+import ThemeSwitch from "./theme-switch";
+import Chip from "./chip";
+import { ThemeType, ThemeValues } from "../contexts/theming";
+import { getUser, getUserProperty, updateUserProperty } from "../actions/user";
+import { auth } from "@clerk/nextjs/server";
 
 const discord: NavLinkData = {
     href: "https://discord.gg/artfight",
@@ -48,7 +53,7 @@ const shop: NavLinkData = {
     label: (
         <>
             <span>Shop</span>
-            <div className="chip-indigo-emerald">new!</div>
+            <Chip variant="custom:indigo-emerald">new!</Chip>
         </>
     ),
     icon: faShoppingCart.fas,
@@ -61,8 +66,8 @@ const shop: NavLinkData = {
             label: (
                 <div className="flex-row-2">
                     <span>Wormston Plush</span>
-                    <div className="chip-blue">new!</div>
-                    <div className="chip-red">limited!!</div>
+                    <Chip variant="info">new!</Chip>
+                    <Chip variant="danger">limited!!</Chip>
                 </div>
             ),
         },
@@ -71,8 +76,8 @@ const shop: NavLinkData = {
             label: (
                 <div className="flex-row-2">
                     <span>Vampires vs Werewolves Pins</span>
-                    <div className="chip-blue">new!</div>
-                    <div className="chip-red">limited!!</div>
+                    <Chip variant="info">new!</Chip>
+                    <Chip variant="danger">limited!!</Chip>
                 </div>
             ),
         },
@@ -96,7 +101,7 @@ const browse: NavLinkData = {
             label: (
                 <div className="flex-row-2">
                     <span>Tag Search</span>
-                    <div className="chip-light-blue"></div>
+                    <Chip variant="info light">new!</Chip>
                 </div>
             ),
         },
@@ -121,6 +126,28 @@ export default async function Navigation(props: NavigationProps) {
         links.push(browse, submit);
     }
 
+    let user_id: number | null = null;
+    const { userId: clerk_id } = auth();
+
+    if (clerk_id) {
+        user_id = (await getUser(clerk_id)).id;
+    }
+
+    let initial_theme = user_id
+        ? ((await getUserProperty(user_id, "site_theme")) as ThemeType)
+        : null;
+
+    if (!initial_theme || !ThemeValues.includes(initial_theme)) {
+        initial_theme = null;
+    }
+
+    const themeChanged = async (theme: ThemeType) => {
+        "use server";
+        if (user_id) {
+            await updateUserProperty(user_id, "site_theme", theme);
+        }
+    };
+
     return (
         <>
             <div className="navigation-bar">
@@ -143,6 +170,12 @@ export default async function Navigation(props: NavigationProps) {
                     </ul>
                 </nav>
                 <ul className="link-list-end">
+                    <li>
+                        <ThemeSwitch
+                            onThemeChange={themeChanged}
+                            defaultTheme={initial_theme}
+                        />
+                    </li>
                     <SignedIn>
                         <UserLink />
                     </SignedIn>

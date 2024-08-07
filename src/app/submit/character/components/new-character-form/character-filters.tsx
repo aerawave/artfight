@@ -1,5 +1,5 @@
 import { ImageFilter } from "@/app/actions/user";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import YesNo, { YesNoType } from "@/app/components/yes-no";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -20,6 +20,7 @@ import {
     TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import CheckboxFix from "@/app/components/checkbox-fix";
+import Alert from "@/app/components/alert";
 
 export default function CharacterFilters(props: {
     defaults?: {
@@ -44,12 +45,14 @@ export default function CharacterFilters(props: {
     );
 
     return (
-        <Section title="Character Filters">
+        <Card title="Character Filters">
             <div className="flex-col-4">
-                <p className="alert-cyan">
-                    Check the filters that apply to this character&apos;
-                    description and other content on the profile.
-                </p>
+                <Alert variant="info">
+                    <p>
+                        Check the filters that apply to this character&apos;
+                        description and other content on the profile.
+                    </p>
+                </Alert>
                 <ErrorList errors={props.errors?.general} />
                 <div className="yes-no">
                     <Label htmlFor="needs_filters" className="required">
@@ -156,6 +159,6 @@ export default function CharacterFilters(props: {
                     </>
                 )}
             </div>
-        </Section>
+        </Card>
     );
 }

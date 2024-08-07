@@ -49,13 +49,16 @@ export default function NavLink({ data: link, isSub }: NavLinkProps) {
             return (
                 <li>
                     <DropdownMenuSub>
-                        <DropdownMenuSubTrigger>
+                        <DropdownMenuSubTrigger className="link">
                             {label}
                             <Icon icon={faCaretDown.fas} />
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
-                            <DropdownMenuSubContent className="navigation-dropdown">
-                                <ul>
+                            <DropdownMenuSubContent
+                                className="sub navigation-dropdown"
+                                asChild
+                            >
+                                <ul className="mt-0">
                                     {link.subs.map((sub, i) => (
                                         <NavLink key={i} data={sub} isSub />
                                     ))}
@@ -69,7 +72,7 @@ export default function NavLink({ data: link, isSub }: NavLinkProps) {
         return (
             <li>
                 <DropdownMenu modal={false}>
-                    <DropdownMenuTrigger>
+                    <DropdownMenuTrigger className="link">
                         {label}
                         <Icon icon={faCaretDown.fas} />
                     </DropdownMenuTrigger>
@@ -94,7 +97,9 @@ export default function NavLink({ data: link, isSub }: NavLinkProps) {
 
     return (
         <li>
-            <Link href={link.href}>{label}</Link>
+            <Link href={link.href} className="link">
+                {label}
+            </Link>
         </li>
     );
 }

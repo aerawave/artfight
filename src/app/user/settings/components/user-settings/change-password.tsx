@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { changePassword } from "@/app/actions";
 import { ErrorList } from "./error-list";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import { Label } from "@radix-ui/react-label";
 import SubmitButton from "@/app/components/submit-button";
 
@@ -32,8 +32,8 @@ export default function ChangePassword({
     }
 
     return (
-        <Section className={className} title={<h4>Change Password</h4>}>
-            <div className="flex flex-col gap-2">
+        <Card className={className} title={<h4>Change Password</h4>}>
+            <div className="flex-col-2">
                 <div>
                     {state.success ? (
                         <h5 className="text-green-400">Password updated!</h5>
@@ -104,6 +104,6 @@ export default function ChangePassword({
                     </div>
                 </form>
             </div>
-        </Section>
+        </Card>
     );
 }

@@ -1,0 +1,27 @@
+.alert {
+    @apply p-4 rounded-md mb-4;
+}
+
+.dark {
+    .alert.info {
+        @apply bg-cyan-400/40 text-white;
+    }
+    .alert.warning {
+        @apply bg-yellow-700 text-white;
+    }
+    .alert.danger {
+        @apply bg-red-500 text-white;
+    }
+}
+
+.light {
+    .alert.info {
+        @apply bg-cyan-600/40 text-black;
+    }
+    .alert.warning {
+        @apply bg-yellow-300 text-black;
+    }
+    .alert.danger {
+        @apply bg-red-500 text-black;
+    }
+}

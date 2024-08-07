@@ -9,16 +9,17 @@ import ChangeSiteTheme from "./user-settings/site-theme";
 import { checkUsernameExists, getUserProperties } from "@/app/actions/user";
 import ChangeUsername from "./user-settings/change-username";
 import ChangeImageFilters from "./user-settings/change-image-filters";
+import "./user-settings.css";
 
 type UserSettingsProps = {
     user: User;
 };
 
 export default async function UserSettings({ user }: UserSettingsProps) {
-    const { show_custom_themes, dark_mode } = await getUserProperties(user.id, [
-        "show_custom_themes",
-        "dark_mode",
-    ]);
+    const { show_custom_themes, site_theme } = await getUserProperties(
+        user.id,
+        ["show_custom_themes", "site_theme"]
+    );
     return (
         <div className="form-grid">
             <ChangePassword />
@@ -31,7 +32,12 @@ export default async function UserSettings({ user }: UserSettingsProps) {
             <ChangeSiteTheme
                 customThemesInitial={show_custom_themes === "true"}
                 styleInitial={
-                    (dark_mode as "dark" | "light" | null | undefined) ?? "dark"
+                    (site_theme as
+                        | "dark"
+                        | "light"
+                        | "auto"
+                        | null
+                        | undefined) ?? "dark"
                 }
             />
             {user.username && (

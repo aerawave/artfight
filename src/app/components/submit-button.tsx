@@ -13,7 +13,7 @@ export default function SubmitButton(props: SubmitButtonProps) {
     const { pending } = useFormStatus();
     return (
         <button
-            className="button-blue disabled:bg-cyan-500/25"
+            className="button-blue"
             disabled={pending || props.disabled}
             {...props}
         >

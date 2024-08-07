@@ -13,7 +13,7 @@ export type ImageFilter =
     | "filter_eyestrain"
     | "filter_sensitive_content";
 
-export type UserProperty = "show_custom_themes" | "dark_mode" | ImageFilter;
+export type UserProperty = "show_custom_themes" | "site_theme" | ImageFilter;
 
 export async function checkUsernameExists(username: string): Promise<boolean> {
     const users = await clerkClient().users.getUserList({
@@ -76,6 +76,13 @@ export async function getUser(userId: number | string) {
     };
 }
 
+export async function getUserId(user_id: number | string) {
+    if (typeof user_id === "string") {
+        return (await getUser(user_id)).id;
+    }
+    return user_id;
+}
+
 export async function authenticateUser() {
     const { userId: clerk_id } = auth();
 
@@ -87,25 +94,47 @@ export async function authenticateUser() {
 }
 
 export async function getUserProperties(
-    userId: number | string,
+    user_id: number | string,
     properties: UserProperty[]
-): Promise<Partial<{ [key in UserProperty]: string | null }>> {
-    userId = (await getUser(userId)).id;
+): Promise<Partial<Record<UserProperty, string | null>>> {
+    user_id = await getUserId(user_id);
 
     const records = (
         await db
             .select()
             .from(UserProperties)
-            .where((prop) => eq(prop.userId, userId))
+            .where((prop) => eq(prop.userId, user_id))
     ).filter((prop) => prop.key && (properties as string[]).includes(prop.key));
 
-    const value: Partial<{ [key in UserProperty]: string | null }> = {};
+    const value: Partial<Record<UserProperty, string | null>> = {};
 
     for (const record of records) {
         value[record.key as UserProperty] = record.value;
     }
 
     return value;
+}
+
+export async function getUserProperty(
+    user_id: number | string,
+    property: UserProperty
+): Promise<string | null> {
+    user_id = await getUserId(user_id);
+
+    const record = (
+        await db
+            .select()
+            .from(UserProperties)
+            .where(
+                and(
+                    eq(UserProperties.userId, user_id),
+                    eq(UserProperties.key, property)
+                )
+            )
+            .limit(1)
+    )[0];
+
+    return record?.value;
 }
 
 export async function updateUserProperty(

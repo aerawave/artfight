@@ -1,7 +1,7 @@
 "use client";
 
 import { changeSiteTheme } from "@/app/actions";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { ErrorList } from "./error-list";
@@ -17,8 +17,9 @@ import { faCheck, faChevronDown } from "@/app/components/icons";
 import { CheckboxIndicator } from "@radix-ui/react-checkbox";
 import CheckboxFix from "@/app/components/checkbox-fix";
 import SubmitButton from "@/app/components/submit-button";
+import { DEFAULT_THEME, useTheme } from "@/app/contexts/theming";
 
-type SiteTheme = "dark" | "light";
+type SiteTheme = "auto" | "dark" | "light";
 
 type ChangeSiteThemeProps = {
     className?: string;
@@ -27,8 +28,9 @@ type ChangeSiteThemeProps = {
 };
 
 const theme_entries: { key: SiteTheme; label: string }[] = [
-    { key: "dark", label: "Dark Fight (WIP)" },
-    { key: "light", label: "Light Fight" },
+    { key: "auto", label: "Same as Browser" },
+    { key: "dark", label: "Dark Mode" },
+    { key: "light", label: "Light Mode" },
 ];
 
 export default function ChangeSiteTheme({
@@ -38,9 +40,21 @@ export default function ChangeSiteTheme({
 }: ChangeSiteThemeProps) {
     const [style, setStyle] = useState(styleInitial);
     const [state, action] = useFormState(changeSiteTheme, {});
+    const { setTheme } = useTheme();
+
+    const submit = (data: FormData) => {
+        action(data);
+        if (style === "auto") {
+            localStorage.removeItem("site_theme");
+            setTheme(DEFAULT_THEME);
+        } else {
+            localStorage.setItem("site_theme", style);
+            setTheme(style);
+        }
+    };
 
     return (
-        <Section className={className} title={<h4>Site Theme</h4>}>
+        <Card className={className} title={<h4>Site Theme</h4>}>
             <div className="flex-col-2">
                 <div>
                     {state.success ? (
@@ -49,7 +63,7 @@ export default function ChangeSiteTheme({
                         <ErrorList errors={state.errors?.general} />
                     )}
                 </div>
-                <form className="flex-col-4" action={action}>
+                <form className="flex-col-4" action={submit}>
                     <div className="flex-row-2-center">
                         <CheckboxFix
                             id="show_custom_themes"
@@ -67,17 +81,17 @@ export default function ChangeSiteTheme({
                             Show custom themes on user profiles by default
                         </Label>
                     </div>
-                    <div className="flex-col-2">
-                        <Label htmlFor="dark_mode">Style</Label>
+                    <div className="flex-col-2 items-start">
+                        <Label htmlFor="site_theme">Site Theme</Label>
                         <input
-                            id="dark_mode"
+                            id="site_theme"
                             hidden
-                            name="dark_mode"
+                            name="site_theme"
                             value={style}
                             readOnly
                         />
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="input text-left hover:bg-white/20 w-full">
+                            <DropdownMenuTrigger className="input dropdown">
                                 <span className="dropdown-button">
                                     <span>
                                         {
@@ -89,7 +103,10 @@ export default function ChangeSiteTheme({
                                     <Icon icon={faChevronDown.fas} />
                                 </span>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="dropdown-menu">
+                            <DropdownMenuContent
+                                className="dropdown-menu"
+                                sideOffset={4}
+                            >
                                 {theme_entries.map((entry) => (
                                     <DropdownMenuItem
                                         key={entry.key}
@@ -107,6 +124,6 @@ export default function ChangeSiteTheme({
                     </div>
                 </form>
             </div>
-        </Section>
+        </Card>
     );
 }

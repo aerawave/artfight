@@ -14,22 +14,6 @@
     @apply h-60 w-60;
 }
 
-.character-info {
-    @apply flex flex-col;
-}
-
-.character-info .row {
-    @apply flex flex-row border-y border-black;
-}
-
-.character-info .row > div:nth-child(1) {
-    @apply w-2/5 align-middle p-2 bg-white/20 text-right;
-}
-
-.character-info .row > div:nth-last-child(1) {
-    @apply flex-grow p-2;
-}
-
 .tags-list {
     @apply flex flex-row flex-wrap gap-2;
 }

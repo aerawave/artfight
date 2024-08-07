@@ -1,12 +1,14 @@
 "use client";
 
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import Link from "next/link";
 import React, { useState } from "react";
 import { GeneralErrors } from "@/app/actions/errors/general";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
 import Icon from "@/app/components/icon";
 import { faPlus, faXMark } from "@/app/components/icons";
+import Alert from "@/app/components/alert";
+import Chip from "@/app/components/chip";
 
 export default function CharacterTags(props: {
     defaults?: { tags: string[] | undefined };
@@ -64,8 +66,8 @@ export default function CharacterTags(props: {
     };
 
     return (
-        <Section title="Tags">
-            <div className="alert-cyan deformat">
+        <Card title="Tags">
+            <Alert variant="info">
                 <p>
                     Tags are used to find certain types of characters in the{" "}
                     <Link className="highlight" href="/browse/tag">
@@ -86,23 +88,20 @@ export default function CharacterTags(props: {
                         .
                     </li>
                 </ul>
-            </div>
-
+            </Alert>
             <hr className="my-4" />
             <ErrorList errors={props.errors?.general} />
 
             <div className="flex-row-2 my-4">
                 {tags.map((tag, i) => (
-                    <button
-                        key={i}
-                        className="chip-tag"
-                        onClick={() => removeTag(i)}
-                    >
-                        {prettyTag(tag)}
-                        <Icon
-                            icon={faXMark.fas}
-                            className="ml-2 rounded-full"
-                        />
+                    <button key={i} onClick={() => removeTag(i)}>
+                        <Chip variant="custom:tag">
+                            {prettyTag(tag)}
+                            <Icon
+                                icon={faXMark.fas}
+                                className="ml-2 rounded-full"
+                            />
+                        </Chip>
                     </button>
                 ))}
             </div>
@@ -133,20 +132,18 @@ export default function CharacterTags(props: {
                 <div className="flex flex-row gap-2 mt-4">
                     <span>Suggested Tags: </span>
                     {suggestions.map((tag) => (
-                        <button
-                            key={tag}
-                            onClick={() => addCleanTag(tag)}
-                            className="chip-suggested-tag"
-                        >
-                            {prettyTag(tag)}
-                            <Icon
-                                icon={faPlus.fas}
-                                className="ml-2 rounded-full"
-                            />
+                        <button key={tag} onClick={() => addCleanTag(tag)}>
+                            <Chip variant="custom:suggested-tag">
+                                {prettyTag(tag)}
+                                <Icon
+                                    icon={faPlus.fas}
+                                    className="ml-2 rounded-full"
+                                />
+                            </Chip>
                         </button>
                     ))}
                 </div>
             )}
-        </Section>
+        </Card>
     );
 }

@@ -10,6 +10,7 @@ import {
     TabsTrigger,
 } from "@radix-ui/react-tabs";
 import { clsx } from "../util";
+import "./styles/tabs.css";
 
 export type TabData = {
     icon?: IconType;

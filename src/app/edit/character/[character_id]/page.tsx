@@ -13,6 +13,7 @@ import { eq } from "drizzle-orm";
 import DeleteCharacterButton from "./components/delete-character-button";
 import { requestDeleteCharacter } from "@/app/actions/data/characters/delete";
 import { tryRedirect } from "@/app/util";
+import Alert from "@/app/components/alert";
 
 export default async function EditCharacterPage(props: {
     params: {
@@ -95,12 +96,12 @@ export default async function EditCharacterPage(props: {
                         />
                     </div>
                 </div>
-                <div className="rounded-md bg-cyan-600 p-3 text-xl text-white m-2">
+                <Alert variant="info">
                     <p>
                         All fields with an asterisk need to be filled in. BBCode
                         can be used in text area fields.
                     </p>
-                </div>
+                </Alert>
                 <EditCharacterForm
                     owner={owner.username}
                     character={character}

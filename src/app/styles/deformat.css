@@ -1,41 +1,63 @@
-.deformat h1 {
-    @apply text-6xl font-bold;
-}
-.deformat h2 {
-    @apply text-4xl font-bold;
-}
-.deformat h3 {
-    @apply text-2xl font-bold;
-}
-.deformat h4 {
-    @apply text-lg font-bold;
-}
-.deformat h5 {
-    @apply text-sm font-bold;
-}
-.deformat h6 {
-    @apply text-xs font-bold;
-}
-.deformat hr {
-    @apply my-4;
+.deformat {
+    h1 {
+        @apply text-6xl font-bold;
+    }
+    h2 {
+        @apply text-4xl font-bold;
+    }
+    h3 {
+        @apply text-2xl font-bold;
+    }
+    h4 {
+        @apply text-lg font-bold;
+    }
+    h5 {
+        @apply text-sm font-bold;
+    }
+    h6 {
+        @apply text-xs font-bold;
+    }
+    hr {
+        @apply my-4;
+    }
+
+    blockquote {
+        @apply border-l-4 pl-2 rounded-l-sm my-2;
+    }
+
+    ul {
+        @apply list-disc ml-4;
+    }
+    ol {
+        @apply list-decimal ml-4;
+    }
+
+    ul li,
+    ol li {
+        @apply list-item;
+    }
+
+    a {
+        @apply highlight;
+    }
 }
 
-.deformat blockquote {
-    @apply border-l-4 border-white/20 pl-2 rounded-l-sm my-2;
+.dark {
+    .deformat {
+        blockquote {
+            @apply border-white/20;
+        }
+    }
 }
 
-.deformat ul {
-    @apply list-disc ml-4;
-}
-.deformat ol {
-    @apply list-decimal ml-4;
-}
+.light {
+    .deformat {
+        blockquote {
+            @apply border-black/20;
+        }
 
-.deformat ul li,
-.deformat ol li {
-    @apply list-item;
-}
-
-.deformat a {
-    @apply border-dotted border-b-2 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
+        hr {
+            @apply border-gray-700;
+        }
+    }
 }

@@ -3,6 +3,7 @@
 import React from "react";
 import { getCharacters } from "@/app/actions/data/characters/character-list";
 import CharacterPresenter from "@/app/components/characters/character-presenter";
+import Alert from "@/app/components/alert";
 
 type ActiveCharactersProps = {
     ownerUsername: string;
@@ -12,7 +13,7 @@ type ActiveCharactersProps = {
 export default async function ActiveCharacters(props: ActiveCharactersProps) {
     return (
         <div>
-            <div className="p-4 bg-cyan-400/40 rounded-md mb-4">
+            <Alert variant="info">
                 <p>
                     This is your active character roster - these are the
                     characters that will show on your profile and other users
@@ -36,7 +37,7 @@ export default async function ActiveCharacters(props: ActiveCharactersProps) {
                     to be re-uploaded as a new character if you wish to use them
                     again.
                 </p>
-            </div>
+            </Alert>
             <h1 className="text-4xl pb-2 border-b border-b-white/10">
                 <strong>Active characters</strong>: {props.data.length} / 100
             </h1>

@@ -1,7 +1,7 @@
 "use client";
 
 import MarkdownBox from "@/app/components/markdown-box";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import React from "react";
 import { CharacterBasicInformationErrors } from "@/app/actions/errors/submissions-errors";
 import { ErrorList } from "@/app/user/settings/components/user-settings/error-list";
@@ -30,7 +30,7 @@ export default function CharacterBasicInformation(props: {
     form?: string;
 }) {
     return (
-        <Section title="Basic Information">
+        <Card title="Basic Information">
             <div className="flex-col-4">
                 <ErrorList errors={props.errors?.general} />
                 <div className="flex-col-2">
@@ -155,6 +155,6 @@ export default function CharacterBasicInformation(props: {
                     </Label>
                 </div>
             </div>
-        </Section>
+        </Card>
     );
 }

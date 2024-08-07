@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import ChangeImageFilter from "./change-image-filters/change-image-filter";
 import Link from "next/link";
 import { useFormState } from "react-dom";
@@ -16,6 +16,7 @@ import {
     faTeeth,
 } from "@/app/components/icons";
 import SubmitButton from "@/app/components/submit-button";
+import Alert from "@/app/components/alert";
 
 type ChangeImageFiltersProps = {
     className?: string;
@@ -26,7 +27,7 @@ export default function ChangeImageFilters({
 }: ChangeImageFiltersProps) {
     const [state, action] = useFormState(changeFilters, {});
     return (
-        <Section className={className} title={<h4>Site Image Filters</h4>}>
+        <Card className={className} title={<h4>Site Image Filters</h4>}>
             <div className="flex-col-2">
                 <div>
                     {state.success ? (
@@ -35,18 +36,18 @@ export default function ChangeImageFilters({
                         <ErrorList errors={state.errors?.general} />
                     )}
                 </div>
-                <p className="alert-cyan">
-                    <span>
+                <Alert variant="info">
+                    <p>
                         Note that it is the submitting artist&apos;s
                         responsibility to put the appropiate filters on their
                         submissions!
-                    </span>
+                    </p>
                     <br />
-                    <span>
+                    <p>
                         Please report content that hasn&apos;t been marked
                         appropiately.
-                    </span>
-                </p>
+                    </p>
+                </Alert>
                 <p className="mb-4">
                     Choose what content you want to see. More information on
                     these categories can be found in the{" "}
@@ -57,22 +58,22 @@ export default function ChangeImageFilters({
                 </p>
                 <p className="text-sm mb-4">
                     <span>
-                        <strong className="text-red-600">Hide</strong>: Filtered
+                        <strong className="text-hide">Hide</strong>: Filtered
                         characters/attacks/images will be completely hidden.
                         Filteered characters/attacks will not show up while
                         browsing and will not be shown while voting.
                     </span>
                     <br />
                     <span>
-                        <strong className="text-orange-500">Censor</strong>:
+                        <strong className="text-censor">Censor</strong>:
                         Filtered content will show a generic cover thumbnail
                         (you can click on the character/attack/image at your own
                         risk).
                     </span>
                     <br />
                     <span>
-                        <strong className="text-lime-800">Show</strong>:
-                        Filtered characters/attacks/images will be visible.
+                        <strong className="text-show">Show</strong>: Filtered
+                        characters/attacks/images will be visible.
                     </span>
                 </p>
                 <form action={action} className="flex-col-2">
@@ -129,6 +130,6 @@ export default function ChangeImageFilters({
                     </div>
                 </form>
             </div>
-        </Section>
+        </Card>
     );
 }

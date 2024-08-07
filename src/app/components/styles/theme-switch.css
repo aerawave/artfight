@@ -1,0 +1,88 @@
+/*
+    [data-state="checked"] means dark mode is activated.
+*/
+.theme-block {
+    @apply flex flex-row gap-4 items-center;
+}
+.theme-block > button {
+    @apply flex gap-2 items-center rounded-full;
+}
+.theme-switch {
+    @apply relative py-[0.1rem] px-4 rounded-full bg-cyan-400/65 overflow-clip transition-all duration-500 flex justify-center items-center;
+}
+
+.theme-switch[data-state="checked"] {
+    @apply bg-black/65;
+}
+
+.theme-switch .background {
+    @apply absolute h-8 w-16 flex justify-center items-center transition-all duration-500;
+}
+.theme-switch > .background > i {
+    @apply absolute transition-all duration-500;
+}
+
+/* Day background */
+.theme-switch .background:nth-of-type(1) > i:nth-of-type(1) {
+    @apply text-gray-400;
+    font-size: 2.5rem;
+    transform: translate(1.25rem, 0.25rem) scaleX(-1);
+}
+.theme-switch .background:nth-of-type(1) > i:nth-of-type(2) {
+    @apply text-gray-100;
+    font-size: 2rem;
+    transform: translate(1.45rem, 0.25rem) scaleX(-1);
+}
+.theme-switch[data-state="checked"] > .background.background:nth-of-type(1) {
+    @apply -translate-x-8 opacity-0;
+}
+
+/* Night background */
+.theme-switch > .background:nth-of-type(2) > i {
+    @apply text-yellow-100;
+}
+.theme-switch > .background:nth-of-type(2) > i:nth-of-type(1) {
+    font-size: 0.5rem;
+    transform: translate(-1.25rem, -0.15rem) rotate(-30deg);
+}
+.theme-switch > .background:nth-of-type(2) > i:nth-of-type(2) {
+    font-size: 0.4rem;
+    transform: translate(-0.5rem, -0.5rem) rotate(15deg);
+}
+.theme-switch > .background:nth-of-type(2) > i:nth-of-type(3) {
+    font-size: 0.65rem;
+    transform: translate(-0.6rem, 0.3rem) rotate(-10deg);
+}
+.theme-switch[data-state="unchecked"] > .background:nth-of-type(2) {
+    @apply translate-x-8 opacity-0;
+}
+
+.theme-switch .thumb {
+    @apply bg-gray-500 rounded-full h-8 w-8 flex justify-center items-center overflow-clip -translate-x-[0.9rem] transition-transform duration-500;
+}
+
+.theme-switch[data-state="checked"] .thumb {
+    @apply translate-x-[0.9rem];
+}
+
+.theme-switch .thumb > i {
+    @apply absolute transition-transform duration-500;
+}
+
+/* Sun */
+.theme-switch .thumb > i:nth-of-type(1) {
+    @apply text-yellow-400;
+}
+
+.theme-switch[data-state="checked"] .thumb > i:nth-of-type(1) {
+    @apply -translate-x-8;
+}
+
+/* Moon */
+.theme-switch .thumb > i:nth-last-of-type(1) {
+    @apply text-blue-300;
+}
+
+.theme-switch[data-state="unchecked"] .thumb > i:nth-last-of-type(1) {
+    @apply translate-x-8;
+}
