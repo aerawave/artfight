@@ -69,7 +69,7 @@ export default function ChangeSiteTheme({
                         </Label>
                     </div>
                     <div className="flex-col-2 items-start">
-                        <Label htmlFor="site_theme">Style</Label>
+                        <Label htmlFor="site_theme">Site Theme</Label>
                         <input
                             id="site_theme"
                             hidden
