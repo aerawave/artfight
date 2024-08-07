@@ -32,7 +32,7 @@ export function Card(props: SectionProps) {
     }
 
     return (
-        <div
+        <section
             className={clsx(
                 "card",
                 props.variant?.split(" ").join("-"),
@@ -54,6 +54,6 @@ export function Card(props: SectionProps) {
             >
                 {props.children}
             </div>
-        </div>
+        </section>
     );
 }

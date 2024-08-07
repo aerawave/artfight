@@ -1,3 +1,7 @@
+.deformat.markdown {
+    @apply rounded-md p-4;
+}
+
 .deformat {
     h1 {
         @apply text-6xl font-bold;
@@ -46,7 +50,25 @@
     }
 }
 
+.dark {
+    .deformat.markdown {
+        @apply bg-white/20;
+    }
+    .deformat {
+        blockquote {
+            @apply border-white/20;
+        }
+
+        hr {
+            @apply border-gray-300;
+        }
+    }
+}
+
 .light {
+    .deformat.markdown {
+        @apply bg-black/20;
+    }
     .deformat {
         blockquote {
             @apply border-black/20;
