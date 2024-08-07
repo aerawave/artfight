@@ -33,7 +33,7 @@ export default function ChangePassword({
 
     return (
         <Card className={className} title={<h4>Change Password</h4>}>
-            <div className="flex flex-col gap-2">
+            <div className="flex-col-2">
                 <div>
                     {state.success ? (
                         <h5 className="text-green-400">Password updated!</h5>

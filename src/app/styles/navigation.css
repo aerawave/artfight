@@ -1,5 +1,5 @@
 .navigation-bar {
-    @apply px-4 sm:px-6 lg:px-8 py-2 flex flex-row justify-between sticky top-0;
+    @apply h-14 px-4 sm:px-6 lg:px-8 py-2 flex flex-row justify-between sticky top-0;
     background-color: var(--navigation-bg);
     color: var(--navigation-fg);
     z-index: 10000;

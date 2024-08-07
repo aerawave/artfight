@@ -26,7 +26,8 @@ export type IconTypeBase =
     | "fa-sun"
     | "fa-moon"
     | "fa-star"
-    | "fa-cloud";
+    | "fa-cloud"
+    | "fa-floppy-disk";
 export type IconType = `${IconSource} ${IconTypeBase}`;
 
 const IconSet = function <TBase extends IconTypeBase, TSrc extends IconSource>(
@@ -70,3 +71,4 @@ export const faSun = IconSet("fa-sun", ["fas", "far"]);
 export const faMoon = IconSet("fa-moon", ["fas", "far"]);
 export const faStar = IconSet("fa-star", ["fas", "far"]);
 export const faCloud = IconSet("fa-cloud", ["fas"]);
+export const faFloppyDisk = IconSet("fa-floppy-disk", ["fas", "far"]);

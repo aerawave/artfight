@@ -76,6 +76,13 @@ export async function getUser(userId: number | string) {
     };
 }
 
+export async function getUserId(user_id: number | string) {
+    if (typeof user_id === "string") {
+        return (await getUser(user_id)).id;
+    }
+    return user_id;
+}
+
 export async function authenticateUser() {
     const { userId: clerk_id } = auth();
 
@@ -90,7 +97,7 @@ export async function getUserProperties(
     user_id: number | string,
     properties: UserProperty[]
 ): Promise<Partial<Record<UserProperty, string | null>>> {
-    user_id = (await getUser(user_id)).id;
+    user_id = await getUserId(user_id);
 
     const records = (
         await db
@@ -112,7 +119,7 @@ export async function getUserProperty(
     user_id: number | string,
     property: UserProperty
 ): Promise<string | null> {
-    user_id = (await getUser(user_id)).id;
+    user_id = await getUserId(user_id);
 
     const record = (
         await db

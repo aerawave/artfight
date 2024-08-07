@@ -19,6 +19,9 @@ import {
 } from "./icons";
 import ThemeSwitch from "./theme-switch";
 import Chip from "./chip";
+import { ThemeType } from "../contexts/theming";
+import { getUser, getUserProperty, updateUserProperty } from "../actions/user";
+import { auth } from "@clerk/nextjs/server";
 
 const discord: NavLinkData = {
     href: "https://discord.gg/artfight",
@@ -123,6 +126,24 @@ export default async function Navigation(props: NavigationProps) {
         links.push(browse, submit);
     }
 
+    let user_id: number | null = null;
+    const { userId: clerk_id } = auth();
+
+    if (clerk_id) {
+        user_id = (await getUser(clerk_id)).id;
+    }
+
+    const initial_theme = user_id
+        ? ((await getUserProperty(user_id, "site_theme")) as ThemeType)
+        : null;
+
+    const themeChanged = async (theme: ThemeType) => {
+        "use server";
+        if (user_id) {
+            await updateUserProperty(user_id, "site_theme", theme);
+        }
+    };
+
     return (
         <>
             <div className="navigation-bar">
@@ -146,7 +167,10 @@ export default async function Navigation(props: NavigationProps) {
                 </nav>
                 <ul className="link-list-end">
                     <li>
-                        <ThemeSwitch />
+                        <ThemeSwitch
+                            onThemeChange={themeChanged}
+                            defaultTheme={initial_theme}
+                        />
                     </li>
                     <SignedIn>
                         <UserLink />

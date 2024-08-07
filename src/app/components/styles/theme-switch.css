@@ -1,6 +1,12 @@
 /*
     [data-state="checked"] means dark mode is activated.
 */
+.theme-block {
+    @apply flex flex-row gap-4 items-center;
+}
+.theme-block > button {
+    @apply flex gap-2 items-center rounded-full;
+}
 .theme-switch {
     @apply relative py-[0.1rem] px-4 rounded-full bg-cyan-400/65 overflow-clip transition-all duration-500 flex justify-center items-center;
 }
