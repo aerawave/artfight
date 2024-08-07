@@ -15,9 +15,9 @@ export const useTheme = create<ThemeContext>((set) => ({
     theme: DEFAULT_THEME,
     setTheme: (theme: ThemeType) => {
         for (const theme of ThemeValues) {
-            document.documentElement.classList.remove(theme);
+            document.body.classList.remove(theme);
         }
-        document.documentElement.classList.add(theme);
+        document.body.classList.add(theme);
         return set({ theme });
     },
 }));

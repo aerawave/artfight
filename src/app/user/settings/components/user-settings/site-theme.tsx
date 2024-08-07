@@ -27,9 +27,9 @@ type ChangeSiteThemeProps = {
 };
 
 const theme_entries: { key: SiteTheme; label: string }[] = [
-    { key: "auto", label: "Auto Fight" },
-    { key: "dark", label: "Dark Fight (WIP)" },
-    { key: "light", label: "Light Fight" },
+    { key: "auto", label: "Same as Browser" },
+    { key: "dark", label: "Dark Mode" },
+    { key: "light", label: "Light Mode" },
 ];
 
 export default function ChangeSiteTheme({
@@ -68,7 +68,7 @@ export default function ChangeSiteTheme({
                             Show custom themes on user profiles by default
                         </Label>
                     </div>
-                    <div className="flex-col-2">
+                    <div className="flex-col-2 items-start">
                         <Label htmlFor="site_theme">Style</Label>
                         <input
                             id="site_theme"
@@ -78,7 +78,7 @@ export default function ChangeSiteTheme({
                             readOnly
                         />
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="input text-left hover:bg-white/20 w-full">
+                            <DropdownMenuTrigger className="input dropdown">
                                 <span className="dropdown-button">
                                     <span>
                                         {
@@ -90,7 +90,10 @@ export default function ChangeSiteTheme({
                                     <Icon icon={faChevronDown.fas} />
                                 </span>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="dropdown-menu">
+                            <DropdownMenuContent
+                                className="dropdown-menu"
+                                sideOffset={4}
+                            >
                                 {theme_entries.map((entry) => (
                                     <DropdownMenuItem
                                         key={entry.key}

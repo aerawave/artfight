@@ -2,7 +2,7 @@ import { redirect, RedirectType } from "next/navigation";
 
 export function clsx(
     base: string,
-    ...extra: (string | false | undefined)[]
+    ...extra: (string | false | undefined | null)[]
 ): string {
     extra = extra.filter((v) => v);
 

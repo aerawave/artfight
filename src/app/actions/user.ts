@@ -87,25 +87,47 @@ export async function authenticateUser() {
 }
 
 export async function getUserProperties(
-    userId: number | string,
+    user_id: number | string,
     properties: UserProperty[]
-): Promise<Partial<{ [key in UserProperty]: string | null }>> {
-    userId = (await getUser(userId)).id;
+): Promise<Partial<Record<UserProperty, string | null>>> {
+    user_id = (await getUser(user_id)).id;
 
     const records = (
         await db
             .select()
             .from(UserProperties)
-            .where((prop) => eq(prop.userId, userId))
+            .where((prop) => eq(prop.userId, user_id))
     ).filter((prop) => prop.key && (properties as string[]).includes(prop.key));
 
-    const value: Partial<{ [key in UserProperty]: string | null }> = {};
+    const value: Partial<Record<UserProperty, string | null>> = {};
 
     for (const record of records) {
         value[record.key as UserProperty] = record.value;
     }
 
     return value;
+}
+
+export async function getUserProperty(
+    user_id: number | string,
+    property: UserProperty
+): Promise<string | null> {
+    user_id = (await getUser(user_id)).id;
+
+    const record = (
+        await db
+            .select()
+            .from(UserProperties)
+            .where(
+                and(
+                    eq(UserProperties.userId, user_id),
+                    eq(UserProperties.key, property)
+                )
+            )
+            .limit(1)
+    )[0];
+
+    return record?.value;
 }
 
 export async function updateUserProperty(

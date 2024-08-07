@@ -1,27 +1,46 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useTheme } from "../contexts/theming";
+import { ThemeType, ThemeValues, useTheme } from "../contexts/theming";
 import { Switch, SwitchThumb } from "@radix-ui/react-switch";
 import Icon from "./icon";
 import { faCloud, faMoon, faStar, faSun } from "./icons";
 import "./styles/theme-switch.css";
 
-export default function ThemeSwitch() {
+export default function ThemeSwitch(props: {
+    defaultTheme?: ThemeType | null;
+}) {
     const { theme, setTheme } = useTheme();
 
     useEffect(() => {
-        document.body.classList.add(theme);
+        if (props.defaultTheme) {
+            setTheme(props.defaultTheme);
+        } else {
+            let found_theme = false;
+            for (const theme of ThemeValues) {
+                if (document.body.classList.contains(theme)) {
+                    setTheme(theme);
+                    found_theme = true;
+                }
+            }
+            if (!found_theme) {
+                const preferred_theme_prop = document.documentElement
+                    .computedStyleMap()
+                    .get("--preferred-theme");
+
+                if (preferred_theme_prop) {
+                    const preferred_theme =
+                        preferred_theme_prop.toString() as ThemeType;
+
+                    if (ThemeValues.includes(preferred_theme)) {
+                        setTheme(preferred_theme);
+                    }
+                }
+            }
+        }
     }, []);
 
-    const switchTheme = () => {
-        const new_theme = theme === "dark" ? "light" : "dark";
-
-        document.body.classList.remove(theme);
-        document.body.classList.add(new_theme);
-
-        return setTheme(new_theme);
-    };
+    const switchTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
     const is_dark = theme === "dark";
 

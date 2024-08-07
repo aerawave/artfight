@@ -78,8 +78,8 @@ label {
     @apply grid grid-cols-1 md:grid-cols-2 gap-8;
 }
 
-.dropdown-button {
-    @apply flex flex-row justify-between;
+.dropdown-button[data-state="open"] {
+    @apply rounded-b-none;
 }
 
 .dropdown-button i {
@@ -87,15 +87,11 @@ label {
 }
 
 .dropdown-menu {
-    @apply flex flex-col bg-white/5 items-start overflow-clip cursor-default;
+    @apply flex flex-col items-start overflow-clip cursor-default rounded-md border-2;
 }
 
 .dropdown-menu .dropdown-item {
     @apply block p-2 text-left w-full;
-}
-
-.dropdown-menu .dropdown-item:hover {
-    @apply hover:bg-white/20;
 }
 
 .field-v {
@@ -179,6 +175,10 @@ input,
     @apply button bg-gray-500;
 }
 
+.dropdown {
+    @apply text-left;
+}
+
 .dark {
     label {
         @apply text-white/75;
@@ -213,6 +213,18 @@ input,
     .button-group button[data-state="checked"]:not([class]) {
         @apply bg-white/15;
     }
+
+    .dropdown {
+        @apply hover:bg-white/20;
+    }
+
+    .dropdown-menu {
+        @apply border-white/10;
+    }
+
+    .dropdown-menu > .dropdown-item {
+        @apply bg-white/5 hover:bg-white/20;
+    }
 }
 
 .light {
@@ -227,7 +239,7 @@ input,
 
     input,
     .input {
-        @apply p-2 border-black/5 bg-white text-black/90;
+        @apply p-2 border-black/75 bg-white text-black/90;
     }
     input[disabled],
     .input[disabled] {
@@ -248,5 +260,17 @@ input,
 
     .button-group button[data-state="checked"]:not([class]) {
         @apply bg-black/15;
+    }
+
+    .dropdown {
+        @apply hover:bg-black/20;
+    }
+
+    .dropdown-menu {
+        @apply border-black/75;
+    }
+
+    .dropdown-menu > .dropdown-item {
+        @apply bg-black/15 hover:bg-black/55;
     }
 }

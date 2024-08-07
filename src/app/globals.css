@@ -6,7 +6,7 @@
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
-    --preferred-theme: "default";
+    --preferred-theme: default;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,13 +14,13 @@
         --foreground-rgb: 200, 200, 200;
         --background-start-rgb: 0, 0, 0;
         --background-end-rgb: 0, 0, 0;
-        --preferred-theme: "dark";
+        --preferred-theme: dark;
     }
 }
 
 @media (prefers-color-scheme: light) {
     :root {
-        --preferred-theme: "light";
+        --preferred-theme: light;
     }
 }
 
