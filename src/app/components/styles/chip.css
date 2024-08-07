@@ -1,0 +1,38 @@
+@tailwind utilities;
+
+@layer utilities {
+    .chip {
+        @apply inline-block rounded-full px-1.5 py-1 text-xs;
+    }
+    .dark .chip {
+        @apply text-white;
+    }
+    .light .chip {
+        @apply text-black;
+    }
+}
+
+.chip.indigo-emerald {
+    @apply bg-gradient-to-r from-indigo-500 to-emerald-300 text-white;
+}
+
+.chip.tag {
+    @apply bg-cyan-400/80 hover:bg-red-500/80 text-white;
+    transition-property: background-color;
+    transition-duration: 200ms;
+}
+
+.chip.suggested-tag {
+    @apply bg-lime-800 hover:bg-lime-600  text-white;
+}
+
+.chip.info {
+    @apply bg-cyan-400/80 text-white;
+}
+.chip.info-light {
+    @apply bg-cyan-300 text-white;
+}
+
+.chip.danger {
+    @apply bg-red-500 text-white;
+}

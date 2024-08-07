@@ -1,7 +1,7 @@
 "use client";
 
 import { changeAvatar } from "@/app/actions";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
@@ -23,7 +23,7 @@ export default function ChangeAvatar({ imageUrl }: ChangeAvatarProps) {
     }
 
     return (
-        <Section title={<h4>Change Avatar</h4>}>
+        <Card title={<h4>Change Avatar</h4>}>
             <div>
                 {state.success ? (
                     <h5 className="text-green-400">Avatar updated!</h5>
@@ -49,6 +49,6 @@ export default function ChangeAvatar({ imageUrl }: ChangeAvatarProps) {
                     <SubmitButton label="Upload" />
                 </div>
             </form>
-        </Section>
+        </Card>
     );
 }

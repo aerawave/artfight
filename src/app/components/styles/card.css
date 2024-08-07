@@ -1,0 +1,56 @@
+.card {
+    @apply shadow-xl overflow-clip rounded-xl m-2;
+}
+
+.card > .title {
+    @apply w-full p-3 rounded-t-md;
+}
+
+.card > .body:not(.no-content-padding) {
+    @apply p-4;
+}
+
+.card.varianted {
+    @apply border;
+}
+
+.card.danger {
+    @apply border-red-500;
+}
+.card.danger > .title {
+    @apply bg-red-500;
+}
+
+.card.success-dark {
+    @apply border-lime-800;
+}
+.card.success-dark > .title {
+    @apply bg-lime-800;
+}
+
+.card.info {
+    @apply border-cyan-600;
+}
+.card.info > .title {
+    @apply bg-cyan-600;
+}
+
+.dark {
+    .card {
+        @apply bg-white/5;
+    }
+
+    .card:not(.varianted) > .title {
+        @apply bg-white/20;
+    }
+}
+
+.light {
+    .card:not(.varianted) > .title {
+        @apply bg-black/20;
+    }
+
+    .card {
+        @apply bg-black/10;
+    }
+}

@@ -33,14 +33,14 @@ export default function DeleteCharacterButton(props: {
     return (
         <Dialog onOpenChange={() => setDeleteConfirm(false)}>
             <DialogTrigger asChild>
-                <button className="button-red text-gray-200">
+                <button className="button-red">
                     <Icon icon={faTrash.fas} />
                     <span>Delete character</span>
                 </button>
             </DialogTrigger>
             <DialogPortal>
-                <DialogOverlay className="bg-black/50 fixed inset-0" />
-                <DialogContent className="p-4 bg-white rounded-xl fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] text-black">
+                <DialogOverlay className="dialog-overlay" />
+                <DialogContent className="dialog-content">
                     <DialogTitle className="text-2xl font-bold">
                         Confirm Delete
                     </DialogTitle>
@@ -53,7 +53,7 @@ export default function DeleteCharacterButton(props: {
                     <div className="flex flex-row justify-between mt-4">
                         {delete_confirm ? (
                             <button
-                                className="rounded-lg bg-red-900 text-white py-2 px-4 flex flex-row justify-center items-center gap-2"
+                                className="button-red-dark"
                                 onClick={tryDelete}
                             >
                                 <Icon icon={faTrash.fas} />
@@ -61,7 +61,7 @@ export default function DeleteCharacterButton(props: {
                             </button>
                         ) : (
                             <button
-                                className="rounded-lg bg-red-500 text-white py-2 px-4 flex flex-row justify-center items-center gap-2"
+                                className="button-red-dark"
                                 onClick={tryDelete}
                             >
                                 <Icon icon={faTrash.fas} />
@@ -69,9 +69,7 @@ export default function DeleteCharacterButton(props: {
                             </button>
                         )}
                         <DialogClose asChild>
-                            <button className="rounded-lg bg-gray-300 text-gray-700 py-2 px-4">
-                                Cancel
-                            </button>
+                            <button className="button-gray">Cancel</button>
                         </DialogClose>
                     </div>
                 </DialogContent>

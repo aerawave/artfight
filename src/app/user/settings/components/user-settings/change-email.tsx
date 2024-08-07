@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import { useFormState } from "react-dom";
 import { ErrorList } from "./error-list";
 import { changeEmail } from "@/app/actions";
 import { Label } from "@radix-ui/react-label";
 import SubmitButton from "@/app/components/submit-button";
+import Alert from "@/app/components/alert";
 
 type ChangeEmailProps = {
     email: string;
@@ -19,7 +20,7 @@ export default function ChangeEmail({ email }: ChangeEmailProps) {
     const [email_confirmation, setEmailConfirmation] = useState("");
 
     return (
-        <Section title={<h4>Change Email Address</h4>}>
+        <Card title={<h4>Change Email Address</h4>}>
             <div className="flex-col-2">
                 <div>
                     {state.success ? (
@@ -28,10 +29,10 @@ export default function ChangeEmail({ email }: ChangeEmailProps) {
                         <ErrorList errors={state.errors?.email} />
                     )}
                 </div>
-                <p className="alert-orange mb-4">
+                <Alert variant="warning">
                     You will be required to verify your new email by clicking a
                     link in an email sent to your new address.
-                </p>
+                </Alert>
                 <form className="flex-col-4" action={action}>
                     <div className="flex-col-2">
                         <Label htmlFor="current_password">
@@ -73,6 +74,6 @@ export default function ChangeEmail({ email }: ChangeEmailProps) {
                     </div>
                 </form>
             </div>
-        </Section>
+        </Card>
     );
 }

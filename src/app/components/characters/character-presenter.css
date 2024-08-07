@@ -3,7 +3,23 @@
 }
 
 .image-holder {
-    @apply rounded-md p-1 border-2 border-dotted border-indigo-400 flex justify-center items-center h-60 w-60;
+    @apply rounded-md p-1 border-2 border-dotted flex justify-center items-center h-60 w-60;
+}
+
+.dark .image-holder {
+    @apply border-indigo-400;
+}
+
+.light .image-holder {
+    @apply border-indigo-700;
+}
+
+.dark .image-holder:hover {
+    @apply border-yellow-400;
+}
+
+.light .image-holder:hover {
+    @apply border-yellow-600;
 }
 
 .image-clipper {
@@ -19,9 +35,31 @@
 }
 
 .main-link {
-    @apply h-8 bg-gray-800 flex-grow hover:underline flex flex-row justify-start items-center rounded-md italic text-indigo-400 overflow-clip truncate text-left pl-2;
+    @apply h-8 flex-grow hover:underline flex flex-row justify-start items-center rounded-md italic overflow-clip truncate text-left pl-2;
 }
 
 .side-link {
-    @apply h-8 w-8 bg-gray-800 flex flex-row justify-center items-center hover:text-yellow-400 rounded-md;
+    @apply h-8 w-8 flex flex-row justify-center items-center rounded-md;
+}
+
+.dark {
+    .main-link,
+    .side-link {
+        @apply bg-gray-800 text-indigo-400;
+    }
+
+    .side-link:hover {
+        @apply text-yellow-400;
+    }
+}
+
+.light {
+    .main-link,
+    .side-link {
+        @apply bg-gray-400 text-indigo-700;
+    }
+
+    .side-link:hover {
+        @apply text-yellow-600;
+    }
 }

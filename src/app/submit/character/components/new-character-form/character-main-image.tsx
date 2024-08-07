@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import YesNo, { YesNoType } from "@/app/components/yes-no";
 import Link from "next/link";
 import { filters } from "./filters";
@@ -22,6 +22,7 @@ import {
 } from "@/app/components/icons";
 import { CheckboxIndicator } from "@radix-ui/react-checkbox";
 import CheckboxFix from "@/app/components/checkbox-fix";
+import Alert from "@/app/components/alert";
 
 export default function CharacterMainImage(props: {
     defaults?: {
@@ -57,9 +58,9 @@ export default function CharacterMainImage(props: {
     );
 
     return (
-        <Section title="Main Image">
+        <Card title="Main Image">
             <div className="flex-col-4">
-                <div className="alert-orange">
+                <Alert variant="warning">
                     <p>
                         Please upload only images that you have permission to
                         use, and credit the original artist appropriately if you
@@ -73,7 +74,7 @@ export default function CharacterMainImage(props: {
                         More images can be uploaded after the character has been
                         submitted.
                     </p>
-                </div>
+                </Alert>
                 <ErrorList errors={props.errors?.general} />
                 {!props.defaults?.imageId ? (
                     <>
@@ -127,10 +128,14 @@ export default function CharacterMainImage(props: {
                         </div>
                     </>
                 ) : (
-                    <div className="alert-red flex-row-2-center">
-                        <Icon icon={faTriangleExclamation.fas} />
-                        <span>Main image cannot be modified at this time.</span>
-                    </div>
+                    <Alert variant="danger">
+                        <div className="flex-row-2-center">
+                            <Icon icon={faTriangleExclamation.fas} />
+                            <span>
+                                Main image cannot be modified at this time.
+                            </span>
+                        </div>
+                    </Alert>
                 )}
                 <div className="yes-no">
                     <Label htmlFor="is_artist" className="required">
@@ -305,6 +310,6 @@ export default function CharacterMainImage(props: {
                     </>
                 )}
             </div>
-        </Section>
+        </Card>
     );
 }

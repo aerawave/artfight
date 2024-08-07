@@ -5,7 +5,7 @@ import { useTheme } from "../contexts/theming";
 import { Switch, SwitchThumb } from "@radix-ui/react-switch";
 import Icon from "./icon";
 import { faCloud, faMoon, faStar, faSun } from "./icons";
-import "@/app/styles/theme-switch.css";
+import "./styles/theme-switch.css";
 
 export default function ThemeSwitch() {
     const { theme, setTheme } = useTheme();
@@ -27,11 +27,12 @@ export default function ThemeSwitch() {
 
     return (
         <Switch
-            className="theme-switch"
+            className="destyle theme-switch"
             onCheckedChange={switchTheme}
             checked={is_dark}
         >
             <div className="background">
+                <Icon icon={faCloud.fas} />
                 <Icon icon={faCloud.fas} />
             </div>
             <div className="background">

@@ -6,6 +6,7 @@
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
+    --preferred-theme: "default";
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,17 +14,27 @@
         --foreground-rgb: 200, 200, 200;
         --background-start-rgb: 0, 0, 0;
         --background-end-rgb: 0, 0, 0;
+        --preferred-theme: "dark";
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --preferred-theme: "light";
     }
 }
 
 body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-            to bottom,
-            transparent,
-            rgb(var(--background-end-rgb))
-        )
-        rgb(var(--background-start-rgb));
+    transition-property: background-color, color;
+    transition-duration: 500ms;
+}
+
+body.dark {
+    @apply bg-black text-white;
+}
+
+body.light {
+    @apply bg-white text-black;
 }
 
 @layer utilities {
@@ -34,10 +45,13 @@ body {
         @apply rounded-md p-3 text-lg text-white;
     }
     .highlight {
-        @apply border-dotted border-b-2 border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
+        @apply border-dotted border-b-2;
     }
-    .chip {
-        @apply inline-block rounded-full px-1.5 py-1 text-xs text-white;
+    .dark .highlight {
+        @apply text-white border-b-blue-200 hover:text-blue-200 hover:border-b-blue-400;
+    }
+    .light .highlight {
+        @apply text-black border-b-blue-800 hover:text-blue-800 hover:border-b-blue-600;
     }
 }
 
@@ -52,77 +66,8 @@ body {
     @apply flex flex-col gap-4;
 }
 
-input,
-.input {
-    @apply p-2 rounded-md border-white/15 border-2 bg-white/5 text-white/90;
-}
-input[disabled],
-.input[disabled] {
-    @apply bg-white/30 border-white/10;
-}
-
-.chip-indigo-emerald {
-    @apply chip bg-gradient-to-r from-indigo-500 to-emerald-300 ml-1;
-}
-
-.chip-light-blue {
-    @apply chip bg-blue-400;
-}
-
-.chip-blue {
-    @apply chip bg-blue-500;
-}
-
-.chip-cyan-half {
-    @apply chip bg-cyan-400/50;
-}
-
-.chip-red-half {
-    @apply chip bg-red-500/50;
-}
-
-.chip-red {
-    @apply chip bg-red-500;
-}
-
-.chip-tag {
-    @apply chip-cyan-half;
-}
-
-.chip-tag:hover {
-    @apply chip-red-half;
-}
-
-.chip-olive {
-    @apply chip bg-lime-800;
-}
-
-.chip-suggested-tag {
-    @apply chip-olive;
-}
-
-.chip-suggested-tag:hover {
-    @apply chip bg-lime-700;
-}
-
-.checkbox {
-    @apply bg-white h-6 w-6 rounded-md text-black cursor-pointer data-[state=checked]:bg-blue-200;
-}
-
 .tooltip-content {
     @apply w-40 text-center text-xs p-2 rounded-lg bg-black text-white border-white/20 border;
-}
-
-.alert-cyan {
-    @apply alert rounded-md bg-cyan-600 p-3 text-lg text-white;
-}
-
-.alert-orange {
-    @apply alert bg-orange-600;
-}
-
-.alert-red {
-    @apply alert bg-red-500;
 }
 
 .hr-gray {
@@ -133,7 +78,38 @@ input[disabled],
     @apply italic text-white/30;
 }
 
-@import "./styles/tabs.css";
+.avatar {
+    @apply bg-rose-400 text-white h-8 w-8 rounded-full overflow-clip flex justify-center items-center;
+}
+
+.dialog-overlay {
+    @apply fixed inset-0;
+}
+
+.dialog-content {
+    @apply p-4 rounded-xl fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%];
+}
+
+.dark {
+    .dialog-overlay {
+        @apply bg-black/50;
+    }
+
+    .dialog-content {
+        @apply bg-gray-700 text-white;
+    }
+}
+
+.light {
+    .dialog-overlay {
+        @apply bg-white/50;
+    }
+
+    .dialog-content {
+        @apply bg-gray-300 text-black;
+    }
+}
+
 @import "./styles/deformat.css";
 @import "./styles/spinner.css";
 @import "./styles/navigation.css";

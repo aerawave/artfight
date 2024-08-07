@@ -62,7 +62,7 @@ export default function MarkdownBox(props: TextBoxProps) {
             />
             {mode === "edit" && (
                 <Editor
-                    className="h-40"
+                    className="monaco-editor"
                     defaultLanguage="markdown"
                     value={value}
                     onChange={(v) => setValue((v ?? "").trim())}

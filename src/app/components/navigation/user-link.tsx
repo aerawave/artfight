@@ -9,6 +9,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Icon from "../icon";
 import { faBell } from "../icons";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export default async function UserLink() {
     const { userId } = auth();
@@ -23,14 +24,19 @@ export default async function UserLink() {
     const nav_link: NavLinkData = {
         href: "",
         label: (
-            <span className="flex flex-row items-center flex-grow">
-                <Image
-                    className="flex flex-row bg-rose-400 text-white rounded-full h-8 w-8 text-xs mr-2 justify-center items-center"
-                    src={user.imageUrl}
-                    alt="avatar"
-                    width="48"
-                    height="48"
-                />
+            <span className="flex flex-row items-center flex-grow gap-2">
+                <Avatar className="avatar">
+                    <AvatarImage
+                        src={user.imageUrl}
+                        alt={user.username ?? ""}
+                    />
+                    <AvatarFallback>
+                        {user.username
+                            ?.split(" ")
+                            .map((w) => w.charAt(0).toUpperCase())
+                            .join("")}
+                    </AvatarFallback>
+                </Avatar>
                 <span>{user.username}</span>
             </span>
         ),

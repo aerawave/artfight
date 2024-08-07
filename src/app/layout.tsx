@@ -6,6 +6,7 @@ import "./globals.css";
 import "@/font-awesome/css/all.min.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { DEFAULT_THEME } from "./contexts/theming";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
         <ClerkProvider>
             <TooltipProvider>
                 <html lang="en">
-                    <body className={inter.className}>{children}</body>
+                    <body className={`${DEFAULT_THEME} ${inter.className}`}>
+                        {children}
+                    </body>
                 </html>
             </TooltipProvider>
         </ClerkProvider>

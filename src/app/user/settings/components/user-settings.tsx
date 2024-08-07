@@ -9,6 +9,7 @@ import ChangeSiteTheme from "./user-settings/site-theme";
 import { checkUsernameExists, getUserProperties } from "@/app/actions/user";
 import ChangeUsername from "./user-settings/change-username";
 import ChangeImageFilters from "./user-settings/change-image-filters";
+import "./user-settings.css";
 
 type UserSettingsProps = {
     user: User;

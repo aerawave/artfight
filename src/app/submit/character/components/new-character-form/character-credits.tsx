@@ -1,5 +1,5 @@
 import MarkdownBox from "@/app/components/markdown-box";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import YesNo, { YesNoType } from "@/app/components/yes-no";
 import React, { useState } from "react";
 import { CharacterCreditsErrors } from "@/app/actions/errors/submissions-errors";
@@ -44,7 +44,7 @@ export default function CharacterCredits(props: {
     );
 
     return (
-        <Section title="Credits">
+        <Card title="Credits">
             <div className="flex flex-col gap-4">
                 <ErrorList errors={props.errors?.general} />
                 <div className="yes-no">
@@ -209,6 +209,6 @@ export default function CharacterCredits(props: {
                     />
                 </div>
             </div>
-        </Section>
+        </Card>
     );
 }

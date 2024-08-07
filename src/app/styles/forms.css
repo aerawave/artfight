@@ -2,20 +2,26 @@
 
 @layer utilities {
     .button {
-        @apply rounded-lg text-white flex flex-row justify-center items-center gap-1 py-2 px-4;
+        @apply rounded-lg flex flex-row justify-center items-center gap-1 py-2 px-4;
+    }
+
+    .dark .button {
+        @apply text-white;
+    }
+
+    .light .button {
+        @apply text-black;
     }
 }
 
 label {
-    @apply font-bold text-sm text-white/75;
+    @apply font-bold text-sm;
 }
 
 .error-list {
     @apply mt-1 text-sm;
 }
-.error {
-    @apply text-red-500;
-}
+
 .error::before {
     content: "* ";
 }
@@ -29,7 +35,7 @@ label {
 }
 
 .link-input {
-    @apply grid grid-cols-1 md:grid-cols-2 md:gap-0 gap-2 bg-white/5 p-2 rounded-lg;
+    @apply grid grid-cols-1 md:grid-cols-2 md:gap-0 gap-2 p-2 rounded-lg;
 }
 
 .link-input > div {
@@ -48,26 +54,12 @@ label {
     @apply flex flex-row justify-between items-center;
 }
 
-.button-blue {
-    @apply button bg-cyan-600 hover:bg-cyan-400;
-}
-
-.button-red {
-    @apply button bg-red-500 hover:bg-red-400;
-}
-
 .button-group {
     @apply flex flex-row;
 }
 
 .button-group button {
-    @apply p-2 border-white/10 border-2 uppercase;
-}
-.button-group button:not([data-state="checked"]) {
-    @apply hover:bg-white/5;
-}
-.button-group button:not([class]) {
-    @apply data-[state=checked]:bg-white/15;
+    @apply p-2 border-2 uppercase;
 }
 
 .button-group button:nth-of-type(1) {
@@ -106,38 +98,155 @@ label {
     @apply hover:bg-white/20;
 }
 
-.button-filters-hide {
-    @apply data-[state=checked]:bg-red-600/75 flex flex-row gap-2 justify-center items-center flex-grow;
+.field-v {
+    @apply flex flex-col border-t;
 }
 
-.button-filters-censor {
-    @apply data-[state=checked]:bg-orange-500/75 flex flex-row gap-2 justify-center items-center flex-grow;
+.field-v > * {
+    @apply p-2;
 }
 
-.button-filters-show {
-    @apply data-[state=checked]:bg-lime-800/75 flex flex-row gap-2 justify-center items-center flex-grow;
+.dark .field-v {
+    @apply border-black;
 }
 
-.section-red {
-    @apply border border-red-500;
+.light .field-v {
+    @apply border-white;
 }
 
-.section-red .title {
-    @apply bg-red-500;
+.dark .field-v > :nth-child(1) {
+    @apply bg-white/20;
 }
 
-.section-olive {
-    @apply border border-lime-800;
+.light .field-v > :nth-child(1) {
+    @apply bg-black/20;
 }
 
-.section-olive .title {
-    @apply bg-lime-800;
+.field-h {
+    @apply flex flex-row border-t;
 }
 
-.section-cyan {
-    @apply border border-cyan-600;
+.dark .field-h {
+    @apply border-black;
 }
 
-.section-cyan .title {
-    @apply bg-cyan-600 text-white/80;
+.light .field-h {
+    @apply border-white;
+}
+
+.field-h > :nth-child(1) {
+    @apply w-2/5 align-middle p-2 text-right;
+}
+
+.dark .field-h > :nth-child(1) {
+    @apply bg-white/20 text-white;
+}
+
+.light .field-h > :nth-child(1) {
+    @apply bg-black/20 text-black;
+}
+
+.field-h > :nth-child(2) {
+    @apply flex-grow p-2;
+}
+
+input,
+.input {
+    @apply rounded-lg border-2;
+}
+
+.monaco-editor {
+    @apply h-40;
+}
+
+.checkbox {
+    @apply bg-white h-6 w-6 rounded-md text-black cursor-pointer data-[state=checked]:bg-blue-200;
+}
+
+.button-blue {
+    @apply button bg-cyan-600 hover:bg-cyan-400 disabled:bg-cyan-500/25;
+}
+
+.button-red {
+    @apply button bg-red-500 hover:bg-red-300 disabled:bg-red-400/25;
+}
+
+.button-red-dark {
+    @apply button bg-red-700 hover:bg-red-500 disabled:bg-red-600/75;
+}
+
+.button-gray {
+    @apply button bg-gray-500;
+}
+
+.dark {
+    label {
+        @apply text-white/75;
+    }
+
+    .error,
+    .required::after {
+        @apply text-red-500;
+    }
+
+    input,
+    .input {
+        @apply p-2 border-white/15 bg-white/5 text-white/90;
+    }
+
+    input[disabled],
+    .input[disabled] {
+        @apply bg-white/30 border-white/10;
+    }
+    .link-input {
+        @apply bg-white/5;
+    }
+
+    .button-group button {
+        @apply border-white/10;
+    }
+
+    .button-group button:not([data-state="checked"]):hover {
+        @apply bg-white/5;
+    }
+
+    .button-group button[data-state="checked"]:not([class]) {
+        @apply bg-white/15;
+    }
+}
+
+.light {
+    label {
+        @apply text-black/75;
+    }
+
+    .error,
+    .required::after {
+        @apply text-red-600;
+    }
+
+    input,
+    .input {
+        @apply p-2 border-black/5 bg-white text-black/90;
+    }
+    input[disabled],
+    .input[disabled] {
+        @apply bg-black/30 border-black/10;
+    }
+
+    .link-input {
+        @apply bg-black/10;
+    }
+
+    .button-group button {
+        @apply border-black/10;
+    }
+
+    .button-group button:not([data-state="checked"]):hover {
+        @apply bg-black/5;
+    }
+
+    .button-group button[data-state="checked"]:not([class]) {
+        @apply bg-black/15;
+    }
 }

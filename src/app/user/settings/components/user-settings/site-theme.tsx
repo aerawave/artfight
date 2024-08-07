@@ -1,7 +1,7 @@
 "use client";
 
 import { changeSiteTheme } from "@/app/actions";
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import { ErrorList } from "./error-list";
@@ -18,7 +18,7 @@ import { CheckboxIndicator } from "@radix-ui/react-checkbox";
 import CheckboxFix from "@/app/components/checkbox-fix";
 import SubmitButton from "@/app/components/submit-button";
 
-type SiteTheme = "dark" | "light";
+type SiteTheme = "auto" | "dark" | "light";
 
 type ChangeSiteThemeProps = {
     className?: string;
@@ -27,6 +27,7 @@ type ChangeSiteThemeProps = {
 };
 
 const theme_entries: { key: SiteTheme; label: string }[] = [
+    { key: "auto", label: "Auto Fight" },
     { key: "dark", label: "Dark Fight (WIP)" },
     { key: "light", label: "Light Fight" },
 ];
@@ -40,7 +41,7 @@ export default function ChangeSiteTheme({
     const [state, action] = useFormState(changeSiteTheme, {});
 
     return (
-        <Section className={className} title={<h4>Site Theme</h4>}>
+        <Card className={className} title={<h4>Site Theme</h4>}>
             <div className="flex-col-2">
                 <div>
                     {state.success ? (
@@ -107,6 +108,6 @@ export default function ChangeSiteTheme({
                     </div>
                 </form>
             </div>
-        </Section>
+        </Card>
     );
 }

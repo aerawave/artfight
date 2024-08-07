@@ -1,0 +1,39 @@
+@tailwind utilities;
+
+@layer utilities {
+    .text-hide {
+        @apply text-red-600;
+    }
+
+    .text-censor {
+        @apply text-orange-500;
+    }
+
+    .text-show {
+        @apply text-lime-800;
+    }
+
+    .bg-hide {
+        @apply bg-red-600/75;
+    }
+
+    .bg-censor {
+        @apply bg-orange-500/75;
+    }
+
+    .bg-show {
+        @apply bg-lime-800/75;
+    }
+}
+
+.button-filters-hide {
+    @apply data-[state=checked]:bg-hide flex flex-row gap-2 justify-center items-center flex-grow;
+}
+
+.button-filters-censor {
+    @apply data-[state=checked]:bg-censor flex flex-row gap-2 justify-center items-center flex-grow;
+}
+
+.button-filters-show {
+    @apply data-[state=checked]:bg-show flex flex-row gap-2 justify-center items-center flex-grow;
+}

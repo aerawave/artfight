@@ -32,7 +32,7 @@ export default function NewCharacterForm() {
         <div className="flex flex-col gap-4">
             {state.errors && (
                 <div>
-                    <h5 className="text-red-500">
+                    <h5 className="error">
                         There were errors in your submission.
                         <p>{JSON.stringify(state.errors)}</p>
                     </h5>

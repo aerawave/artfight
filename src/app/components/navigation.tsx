@@ -17,6 +17,8 @@ import {
     faQuestionCircle,
     faShoppingCart,
 } from "./icons";
+import ThemeSwitch from "./theme-switch";
+import Chip from "./chip";
 
 const discord: NavLinkData = {
     href: "https://discord.gg/artfight",
@@ -48,7 +50,7 @@ const shop: NavLinkData = {
     label: (
         <>
             <span>Shop</span>
-            <div className="chip-indigo-emerald">new!</div>
+            <Chip variant="custom:indigo-emerald">new!</Chip>
         </>
     ),
     icon: faShoppingCart.fas,
@@ -61,8 +63,8 @@ const shop: NavLinkData = {
             label: (
                 <div className="flex-row-2">
                     <span>Wormston Plush</span>
-                    <div className="chip-blue">new!</div>
-                    <div className="chip-red">limited!!</div>
+                    <Chip variant="info">new!</Chip>
+                    <Chip variant="danger">limited!!</Chip>
                 </div>
             ),
         },
@@ -71,8 +73,8 @@ const shop: NavLinkData = {
             label: (
                 <div className="flex-row-2">
                     <span>Vampires vs Werewolves Pins</span>
-                    <div className="chip-blue">new!</div>
-                    <div className="chip-red">limited!!</div>
+                    <Chip variant="info">new!</Chip>
+                    <Chip variant="danger">limited!!</Chip>
                 </div>
             ),
         },
@@ -96,7 +98,7 @@ const browse: NavLinkData = {
             label: (
                 <div className="flex-row-2">
                     <span>Tag Search</span>
-                    <div className="chip-light-blue"></div>
+                    <Chip variant="info light">new!</Chip>
                 </div>
             ),
         },
@@ -143,6 +145,9 @@ export default async function Navigation(props: NavigationProps) {
                     </ul>
                 </nav>
                 <ul className="link-list-end">
+                    <li>
+                        <ThemeSwitch />
+                    </li>
                     <SignedIn>
                         <UserLink />
                     </SignedIn>

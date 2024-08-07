@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Section } from "@/app/components/section";
+import { Card } from "@/app/components/card";
 import { useState } from "react";
 import { useFormState } from "react-dom";
 import { ErrorList } from "./error-list";
@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Label } from "@radix-ui/react-label";
 import SubmitButton from "@/app/components/submit-button";
 import { clsx } from "@/app/util";
+import Alert from "@/app/components/alert";
 
 type ChangeUsernameProps = {
     className?: string;
@@ -37,7 +38,7 @@ export default function ChangeUsername({
     }
 
     return (
-        <Section className={className} title={<h4>Change Username</h4>}>
+        <Card className={className} title={<h4>Change Username</h4>}>
             <div className="flex-col-2">
                 <div>
                     {state.success ? (
@@ -46,7 +47,7 @@ export default function ChangeUsername({
                         <ErrorList errors={state.errors?.username} />
                     )}
                 </div>
-                <div className="deformat alert-cyan felx-col-2">
+                <Alert variant="info">
                     <div>
                         <strong>Usernames:</strong>
                         <ul>
@@ -89,7 +90,7 @@ export default function ChangeUsername({
                         30 days.
                     </p>
                     <p>
-                        Mnior changes such as capitalizations, 1-2 letter
+                        Minor changes such as capitalizations, 1-2 letter
                         changes, etc... can be changed for free by contacting
                         anyone listed on the{" "}
                         <Link className="highlight" href="/info/contact">
@@ -97,7 +98,7 @@ export default function ChangeUsername({
                         </Link>{" "}
                         page.
                     </p>
-                </div>
+                </Alert>
                 <form
                     className="flex-col-4"
                     action={async (data) => {
@@ -152,6 +153,6 @@ export default function ChangeUsername({
                     </div>
                 </form>
             </div>
-        </Section>
+        </Card>
     );
 }

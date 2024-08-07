@@ -1,0 +1,49 @@
+.tab-group {
+    @apply m-4;
+}
+
+.tab-group > .tab-list {
+    @apply flex flex-row border-b-2;
+}
+.tab-list > .tab > .tab-content {
+    @apply block rounded-t-md border-2 border-b-0 border-transparent p-1;
+}
+
+.tab-group > .tab-panel {
+    @apply mt-3 mx-2;
+}
+
+.dark {
+    .tab-group > .tab-list {
+        @apply border-white/20;
+    }
+    .tab-list > .tab[data-state="active"] > .tab-content {
+        @apply border-white/50 text-white;
+    }
+
+    .tab-list > .tab:not([data-state="active"]):hover > .tab-content {
+        @apply border-white/25 text-cyan-300/75;
+    }
+
+    .tab-list > .tab > .tab-content {
+        @apply text-cyan-300/50;
+    }
+}
+
+.light {
+    .tab-group > .tab-list {
+        @apply border-black/20;
+    }
+
+    .tab-list > .tab[data-state="active"] > .tab-content {
+        @apply border-black/50 text-black;
+    }
+
+    .tab-list > .tab:not([data-state="active"]):hover > .tab-content {
+        @apply border-black/25 text-cyan-700/75;
+    }
+
+    .tab-list > .tab > .tab-content {
+        @apply text-cyan-700/50;
+    }
+}
