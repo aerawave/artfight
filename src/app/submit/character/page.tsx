@@ -1,7 +1,7 @@
 "use server";
 
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
-import Navigation from "@/app/components/navigation";
+import Header from "@/app/components/header";
 import React from "react";
 import NewCharacterForm from "./components/new-character-form";
 import Alert from "@/app/components/alert";
@@ -20,7 +20,7 @@ export default async function SubmitCharacterPage() {
 
     return (
         <>
-            <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
+            <Header crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="flex flex-col gap-4 m-4">
                 <h1 className="text-4xl">Submit Character</h1>
                 <Alert variant="info">

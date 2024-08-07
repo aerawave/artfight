@@ -23,6 +23,8 @@ import { ThemeType, ThemeValues } from "../contexts/theming";
 import { getUser, getUserProperty, updateUserProperty } from "../actions/user";
 import { auth } from "@clerk/nextjs/server";
 
+import "./styles/header.css";
+
 const discord: NavLinkData = {
     href: "https://discord.gg/artfight",
     label: "Discord",
@@ -119,7 +121,7 @@ type NavigationProps = {
     crumbs?: Crumb[];
 };
 
-export default async function Navigation(props: NavigationProps) {
+export default async function Header(props: NavigationProps) {
     const links: NavLinkData[] = [discord, help, shop];
 
     if (props.user) {
@@ -149,7 +151,7 @@ export default async function Navigation(props: NavigationProps) {
     };
 
     return (
-        <>
+        <header>
             <div className="navigation-bar">
                 <nav>
                     <ul className="link-list">
@@ -188,7 +190,7 @@ export default async function Navigation(props: NavigationProps) {
             </div>
             <Banner />
             {props.crumbs && (
-                <div className="pt-8">
+                <nav className="pt-8">
                     <Breadcrumb>
                         {props.crumbs.map((crumb, i) => (
                             <Link
@@ -203,8 +205,8 @@ export default async function Navigation(props: NavigationProps) {
                             </Link>
                         ))}
                     </Breadcrumb>
-                </div>
+                </nav>
             )}
-        </>
+        </header>
     );
 }

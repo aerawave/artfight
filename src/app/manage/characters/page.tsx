@@ -1,7 +1,7 @@
 "use server";
 
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
-import Navigation from "@/app/components/navigation";
+import Header from "@/app/components/header";
 import Tabs, { TabData } from "@/app/components/tabs";
 import Link from "next/link";
 import React from "react";
@@ -48,7 +48,7 @@ export default async function ManageCharactersPage() {
     ];
     return (
         <>
-            <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
+            <Header crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="p-4 pt-8">
                 <div className="flex flex-row justify-between">
                     <h1 className="text-4xl font-bold">My Characters</h1>

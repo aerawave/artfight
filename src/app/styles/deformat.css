@@ -36,10 +36,6 @@
     ol li {
         @apply list-item;
     }
-
-    a {
-        @apply highlight;
-    }
 }
 
 .dark {

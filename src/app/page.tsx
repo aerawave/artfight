@@ -2,12 +2,12 @@
 
 import React from "react";
 
-import Navigation from "./components/navigation";
+import Header from "./components/header";
 
 export default async function Home() {
     return (
         <>
-            <Navigation />
+            <Header />
         </>
     );
 }

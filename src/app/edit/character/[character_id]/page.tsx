@@ -2,7 +2,7 @@
 
 import { getCharacter } from "@/app/actions/data/characters/get";
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
-import Navigation from "@/app/components/navigation";
+import Header from "@/app/components/header";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 import EditCharacterForm from "./components/edit-character-form";
@@ -83,7 +83,7 @@ export default async function EditCharacterPage(props: {
 
     return (
         <>
-            <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
+            <Header crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="flex flex-col gap-4 m-4">
                 <div className="flex flex-row justify-between items-center">
                     <h1 className="text-4xl">
