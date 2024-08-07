@@ -13,7 +13,7 @@ export type ImageFilter =
     | "filter_eyestrain"
     | "filter_sensitive_content";
 
-export type UserProperty = "show_custom_themes" | "dark_mode" | ImageFilter;
+export type UserProperty = "show_custom_themes" | "site_theme" | ImageFilter;
 
 export async function checkUsernameExists(username: string): Promise<boolean> {
     const users = await clerkClient().users.getUserList({

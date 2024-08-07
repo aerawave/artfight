@@ -69,11 +69,11 @@ export default function ChangeSiteTheme({
                         </Label>
                     </div>
                     <div className="flex-col-2">
-                        <Label htmlFor="dark_mode">Style</Label>
+                        <Label htmlFor="site_theme">Style</Label>
                         <input
-                            id="dark_mode"
+                            id="site_theme"
                             hidden
-                            name="dark_mode"
+                            name="site_theme"
                             value={style}
                             readOnly
                         />

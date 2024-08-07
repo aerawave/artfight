@@ -253,11 +253,11 @@ export async function changeSiteTheme(
     const validation = z
         .object({
             show_custom_themes: z.boolean(),
-            dark_mode: z.string(),
+            site_theme: z.string(),
         })
         .safeParse({
             show_custom_themes: data.get("show_custom_themes") === "on",
-            dark_mode: data.get("dark_mode"),
+            site_theme: data.get("site_theme"),
         });
 
     if (validation.error) {
@@ -268,14 +268,14 @@ export async function changeSiteTheme(
         };
     }
 
-    const { show_custom_themes, dark_mode } = validation.data;
+    const { show_custom_themes, site_theme } = validation.data;
 
     await updateUserProperty(
         userId,
         "show_custom_themes",
         show_custom_themes ? "true" : "false"
     );
-    await updateUserProperty(userId, "dark_mode", dark_mode);
+    await updateUserProperty(userId, "site_theme", site_theme);
 
     return {
         success: true,
