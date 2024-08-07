@@ -30,6 +30,7 @@ export default function ThemeSwitch(props: {
                     found_theme = true;
                 }
             }
+
             if (!found_theme) {
                 const preferred_theme_prop = document.documentElement
                     .computedStyleMap()
@@ -58,6 +59,7 @@ export default function ThemeSwitch(props: {
         if (props.onThemeChange) {
             props.onThemeChange(theme);
             setDefaultTheme(theme);
+            localStorage.setItem("site_theme", theme);
         }
     };
 
@@ -65,7 +67,7 @@ export default function ThemeSwitch(props: {
 
     return (
         <div className="theme-block">
-            {theme !== default_theme && (
+            {theme !== default_theme && local_theme && (
                 <form action={saveTheme}>
                     <SubmitButton>
                         {(pending) =>

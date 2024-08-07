@@ -17,6 +17,7 @@ import { faCheck, faChevronDown } from "@/app/components/icons";
 import { CheckboxIndicator } from "@radix-ui/react-checkbox";
 import CheckboxFix from "@/app/components/checkbox-fix";
 import SubmitButton from "@/app/components/submit-button";
+import { DEFAULT_THEME, useTheme } from "@/app/contexts/theming";
 
 type SiteTheme = "auto" | "dark" | "light";
 
@@ -39,6 +40,18 @@ export default function ChangeSiteTheme({
 }: ChangeSiteThemeProps) {
     const [style, setStyle] = useState(styleInitial);
     const [state, action] = useFormState(changeSiteTheme, {});
+    const { setTheme } = useTheme();
+
+    const submit = (data: FormData) => {
+        action(data);
+        if (style === "auto") {
+            localStorage.removeItem("site_theme");
+            setTheme(DEFAULT_THEME);
+        } else {
+            localStorage.setItem("site_theme", style);
+            setTheme(style);
+        }
+    };
 
     return (
         <Card className={className} title={<h4>Site Theme</h4>}>
@@ -50,7 +63,7 @@ export default function ChangeSiteTheme({
                         <ErrorList errors={state.errors?.general} />
                     )}
                 </div>
-                <form className="flex-col-4" action={action}>
+                <form className="flex-col-4" action={submit}>
                     <div className="flex-row-2-center">
                         <CheckboxFix
                             id="show_custom_themes"

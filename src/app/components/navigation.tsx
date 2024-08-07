@@ -19,7 +19,7 @@ import {
 } from "./icons";
 import ThemeSwitch from "./theme-switch";
 import Chip from "./chip";
-import { ThemeType } from "../contexts/theming";
+import { ThemeType, ThemeValues } from "../contexts/theming";
 import { getUser, getUserProperty, updateUserProperty } from "../actions/user";
 import { auth } from "@clerk/nextjs/server";
 
@@ -133,9 +133,13 @@ export default async function Navigation(props: NavigationProps) {
         user_id = (await getUser(clerk_id)).id;
     }
 
-    const initial_theme = user_id
+    let initial_theme = user_id
         ? ((await getUserProperty(user_id, "site_theme")) as ThemeType)
         : null;
+
+    if (!initial_theme || !ThemeValues.includes(initial_theme)) {
+        initial_theme = null;
+    }
 
     const themeChanged = async (theme: ThemeType) => {
         "use server";
