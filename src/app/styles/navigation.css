@@ -5,14 +5,6 @@
     z-index: 10000;
 }
 
-.dark .navigation-bar {
-    @apply bg-gray-800 text-gray-200;
-}
-
-.light .navigation-bar {
-    @apply bg-gray-400 text-gray-700;
-}
-
 .navigation-bar .link {
     @apply flex flex-row items-center gap-1;
 }
@@ -62,6 +54,10 @@
 }
 
 .dark {
+    .navigation-bar {
+        @apply bg-gray-800 text-gray-200;
+    }
+
     .breadcrumbs {
         @apply bg-gray-800 text-gray-400;
     }
@@ -77,6 +73,10 @@
 }
 
 .light {
+    .navigation-bar {
+        @apply bg-gray-400 text-gray-700;
+    }
+
     .breadcrumbs {
         @apply bg-gray-400 text-gray-700;
     }
