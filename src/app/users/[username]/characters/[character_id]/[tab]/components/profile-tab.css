@@ -1,25 +1,41 @@
 .image-viewer {
-    @apply flex flex-row gap-2;
+    @apply flex flex-row gap-2 flex-wrap lg:flex-nowrap;
 }
 
-.main-image-box {
+.image-viewer > div:nth-of-type(1) {
+    @apply flex-grow;
+}
+
+.image-viewer > aside:nth-of-type(1) {
+    @apply lg:w-1/3;
+}
+
+.image-box {
     @apply flex flex-col gap-1 items-center;
 }
 
-.main-image-box > div:nth-of-type(1) {
+.image-box > div:nth-of-type(1) {
     @apply h-[600px];
 }
 
-.more-images {
-    @apply grid grid-cols-2 gap-4 max-h-[32.5rem] overflow-y-auto;
+.image-box > div:nth-of-type(1) > img {
+    @apply object-scale-down h-full w-auto;
 }
 
-.more-images img {
-    @apply h-60 w-60;
+.more-images {
+    @apply flex flex-row flex-wrap gap-4 overflow-y-auto justify-center max-h-[45rem] overflow-y-auto;
+}
+
+.more-images > img {
+    @apply h-56 w-56 object-cover;
+}
+
+.character-details {
+    @apply flex flex-row flex-wrap justify-center;
 }
 
 .character-details > h1:nth-of-type(1) {
-    @apply m-4 ml-8 text-2xl;
+    @apply m-4 ml-8 text-2xl w-full;
 
     & > span:nth-of-type(1) {
         @apply font-bold;
@@ -31,7 +47,19 @@
 }
 
 .character-details > .markdown {
-    @apply m-4;
+    @apply m-4 w-full;
+}
+
+.character-details > .character-permissions {
+    @apply flex-grow lg:w-2/4 xl:w-3/5;
+}
+
+.character-permissions > .body {
+    @apply flex flex-col;
+}
+
+.character-details > .character-information {
+    @apply w-full lg:w-1/4 xl:w-1/5 flex flex-col gap-4;
 }
 
 .tags-list {

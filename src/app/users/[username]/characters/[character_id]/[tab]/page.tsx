@@ -67,7 +67,7 @@ export default async function ViewCharacterPage(props: {
     ];
 
     return (
-        <div>
+        <>
             <Header crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="flex flex-row justify-end mx-4 gap-4">
                 <a
@@ -81,6 +81,6 @@ export default async function ViewCharacterPage(props: {
                 </a>
             </div>
             <Tabs tabs={tabs} activeTab={tab} />
-        </div>
+        </>
     );
 }

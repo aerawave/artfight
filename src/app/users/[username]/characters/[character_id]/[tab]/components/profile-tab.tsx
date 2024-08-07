@@ -72,15 +72,14 @@ export default async function CharacterProfileTab(props: {
     return (
         <div className="flex-col-4">
             <section className="image-viewer">
-                <div className="flex-grow">
-                    <div className="main-image-box">
+                <div>
+                    <div className="image-box">
                         <div>
                             <Image
                                 src={main_image_url}
                                 width="6000"
                                 height="6000"
                                 alt="main image"
-                                className="h-full w-fit"
                             />
                         </div>
                         <span>
@@ -105,7 +104,7 @@ export default async function CharacterProfileTab(props: {
                         </span>
                     </div>
                 </div>
-                <aside className="w-1/3">
+                <aside>
                     <Card title="Images">
                         <div className="more-images">
                             <Image
@@ -169,90 +168,84 @@ export default async function CharacterProfileTab(props: {
                 >
                     {result.character.description}
                 </Markdown>
-                <div className="flex flex-row">
+                <Card
+                    title="Permissions"
+                    variant="danger"
+                    className="character-permissions"
+                    noContentPadding
+                >
+                    <div className="field-v">
+                        <h5 className="sub-label">Character Permissions</h5>
+                        <div>
+                            {result.character.permissions ? (
+                                <Markdown
+                                    className="deformat markdown"
+                                    skipHtml
+                                    disallowedElements={["img"]} // should images be allowed?
+                                    unwrapDisallowed
+                                >
+                                    {result.character.permissions}
+                                </Markdown>
+                            ) : (
+                                "No permissions specified."
+                            )}
+                        </div>
+                    </div>
+                    <div className="field-v">
+                        <h5>
+                            <Link
+                                href={`/users/${user.username}`}
+                                className="highlight"
+                            >
+                                {user.username}
+                            </Link>
+                            {"'s Global Permisisons"}
+                        </h5>
+                        <p>No permissions specified.</p>
+                    </div>
+                </Card>
+                <div className="character-information">
                     <Card
-                        title="Permissions"
-                        variant="danger"
-                        className="flex-grow"
+                        title="Character Info"
+                        variant="success dark"
                         noContentPadding
                     >
-                        <div className="flex flex-col">
-                            <div className="field-v">
-                                <h5 className="sub-label">
-                                    Character Permissions
-                                </h5>
+                        <div className="character-info">
+                            <div className="field-h">
+                                <h5>Owner:</h5>
                                 <div>
-                                    {result.character.permissions ? (
-                                        <Markdown
-                                            className="deformat markdown"
-                                            skipHtml
-                                            disallowedElements={["img"]} // should images be allowed?
-                                            unwrapDisallowed
-                                        >
-                                            {result.character.permissions}
-                                        </Markdown>
-                                    ) : (
-                                        "No permissions specified."
-                                    )}
-                                </div>
-                            </div>
-                            <div className="field-v">
-                                <h5>
                                     <Link
                                         href={`/users/${user.username}`}
                                         className="highlight"
                                     >
                                         {user.username}
                                     </Link>
-                                    {"'s Global Permisisons"}
-                                </h5>
-                                <p>No permissions specified.</p>
+                                </div>
+                            </div>
+                            <div className="field-h">
+                                <h5>Designer:</h5>
+                                <div>
+                                    <Link
+                                        href={`/users/${user.username}`}
+                                        className="highlight"
+                                    >
+                                        {user.username}
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </Card>
-                    <div className="w-1/5 flex-col-4">
-                        <Card
-                            title="Character Info"
-                            variant="success dark"
-                            noContentPadding
-                        >
-                            <div className="character-info">
-                                <div className="field-h">
-                                    <h5>Owner:</h5>
-                                    <div>
-                                        <Link
-                                            href={`/users/${user.username}`}
-                                            className="highlight"
-                                        >
-                                            {user.username}
-                                        </Link>
-                                    </div>
-                                </div>
-                                <div className="field-h">
-                                    <h5>Designer:</h5>
-                                    <div>
-                                        <Link
-                                            href={`/users/${user.username}`}
-                                            className="highlight"
-                                        >
-                                            {user.username}
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </Card>
-                        <Card title="Tags" variant="info">
-                            <div className="tags-list">
-                                {(result.character.tags ?? "")
-                                    .split(" ")
-                                    .map((tag) => (
-                                        <Chip key={tag} variant="info">
-                                            {tag}
-                                        </Chip>
-                                    ))}
-                            </div>
-                        </Card>
-                    </div>
+                    <Card title="Tags" variant="info">
+                        <div className="tags-list">
+                            {(result.character.tags ?? "")
+                                .split(" ")
+                                .map((tag) => (
+                                    <Chip key={tag} variant="info">
+                                        {tag}
+                                    </Chip>
+                                ))}
+                        </div>
+                    </Card>
                 </div>
             </section>
             <section className="comments">Comments...</section>
