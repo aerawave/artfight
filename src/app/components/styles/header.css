@@ -37,15 +37,19 @@
 .link-list,
 .link-list-end {
     @apply flex flex-row gap-8 items-center;
+
+    & > li {
+        @apply block;
+
+        & > a,
+        & > button {
+            @apply h-8;
+        }
+    }
 }
 
 .link-list-end {
     @apply justify-end;
-}
-
-.link-list > li,
-.link-list-end > li {
-    @apply block;
 }
 
 .logo-link {
