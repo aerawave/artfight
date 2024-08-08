@@ -41,28 +41,6 @@ const help: NavLinkData = {
         { href: "/guide/bbcode", label: "BBCode" },
         "divider",
         { href: "/news", label: "News" },
-        {
-            label: "Test",
-            subs: [
-                {
-                    label: "Test",
-                    subs: [
-                        { label: "Test", subs: [{ label: "Test", subs: [] }] },
-                    ],
-                },
-            ],
-        },
-        {
-            label: "Test",
-            subs: [
-                {
-                    label: "Test",
-                    subs: [
-                        { label: "Test", subs: [{ label: "Test", subs: [] }] },
-                    ],
-                },
-            ],
-        },
     ],
 };
 

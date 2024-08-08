@@ -37,7 +37,7 @@
     }
 
     & > .content {
-        @apply flex flex-col items-center text-2xl pt-4;
+        @apply flex flex-col items-center text-2xl;
 
         & > li {
             @apply w-full flex flex-row justify-center;
