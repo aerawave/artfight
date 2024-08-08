@@ -1,0 +1,7 @@
+.sign-in {
+    @apply flex flex-col justify-center items-center pt-8;
+
+    input {
+        @apply text-gray-800;
+    }
+}

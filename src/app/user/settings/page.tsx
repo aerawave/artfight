@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import Navigation from "@/app/components/navigation";
+import Header from "@/app/components/header";
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -37,7 +37,7 @@ export default async function UserSettingsPage() {
 
     return (
         <>
-            <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
+            <Header crumbs={[HomeCrumb, ...local_crumbs]} />
             <Tabs tabs={tabs} />
         </>
     );

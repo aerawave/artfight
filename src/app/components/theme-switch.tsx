@@ -7,11 +7,14 @@ import Icon from "./icon";
 import { faCloud, faFloppyDisk, faMoon, faStar, faSun } from "./icons";
 import "./styles/theme-switch.css";
 import SubmitButton from "./submit-button";
+import { useLocalStorage } from "../hooks/local-storage";
 
 export default function ThemeSwitch(props: {
+    allowSave: boolean;
     defaultTheme?: ThemeType | null;
     onThemeChange?: (theme: ThemeType) => void;
 }) {
+    const localStorage = useLocalStorage();
     const local_theme = localStorage.getItem("site_theme") as ThemeType | null;
 
     const [default_theme, setDefaultTheme] = useState(props.defaultTheme);
@@ -48,13 +51,6 @@ export default function ThemeSwitch(props: {
         }
     }, []);
 
-    const switchTheme = () => {
-        const new_theme = theme === "dark" ? "light" : "dark";
-        setTheme(new_theme);
-
-        localStorage.setItem("site_theme", new_theme);
-    };
-
     const saveTheme = () => {
         if (props.onThemeChange) {
             props.onThemeChange(theme);
@@ -63,19 +59,23 @@ export default function ThemeSwitch(props: {
         }
     };
 
+    const switchTheme = () => {
+        const new_theme = theme === "dark" ? "light" : "dark";
+        setTheme(new_theme);
+
+        localStorage.setItem("site_theme", new_theme);
+    };
+
     const is_dark = theme === "dark";
 
     return (
         <div className="theme-block">
-            {theme !== default_theme && local_theme && (
+            {props.allowSave && theme !== default_theme && local_theme && (
                 <form action={saveTheme}>
                     <SubmitButton>
                         {(pending) =>
                             !pending ? (
-                                <>
-                                    <Icon icon={faFloppyDisk.fas} />
-                                    <span>Save theme</span>
-                                </>
+                                <Icon icon={faFloppyDisk.fas} />
                             ) : (
                                 <i className="spinner" />
                             )

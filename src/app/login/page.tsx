@@ -1,8 +1,9 @@
 import React from "react";
 import { SignedOut, SignIn } from "@clerk/nextjs";
-import Navigation from "../components/navigation";
+import Header from "../components/header";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import "./styles.css";
 
 export default async function LoginPage() {
     const { userId } = auth();
@@ -12,8 +13,8 @@ export default async function LoginPage() {
     }
     return (
         <>
-            <Navigation />
-            <main className="flex flex-col justify-center items-center pt-8">
+            <Header />
+            <main className="sign-in">
                 <SignedOut>
                     <SignIn routing="hash" />
                 </SignedOut>

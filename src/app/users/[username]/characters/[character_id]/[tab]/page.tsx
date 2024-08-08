@@ -3,7 +3,7 @@
 import { getCharacter } from "@/app/actions/data/characters/get";
 import { getUser } from "@/app/actions/user";
 import { Crumb, HomeCrumb } from "@/app/components/crumb";
-import Navigation from "@/app/components/navigation";
+import Header from "@/app/components/header";
 import Tabs, { TabData } from "@/app/components/tabs";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -67,8 +67,8 @@ export default async function ViewCharacterPage(props: {
     ];
 
     return (
-        <div>
-            <Navigation crumbs={[HomeCrumb, ...local_crumbs]} />
+        <>
+            <Header crumbs={[HomeCrumb, ...local_crumbs]} />
             <div className="flex flex-row justify-end mx-4 gap-4">
                 <a
                     href={`/edit/character/${
@@ -81,6 +81,6 @@ export default async function ViewCharacterPage(props: {
                 </a>
             </div>
             <Tabs tabs={tabs} activeTab={tab} />
-        </div>
+        </>
     );
 }
