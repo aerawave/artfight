@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 function getItem<T extends string>(): T | null {
     return null;
 }
@@ -23,8 +27,11 @@ const fake_storage: StorageBase = Object.freeze({
 });
 
 export function useLocalStorage(): StorageBase {
-    if (typeof localStorage === "object") {
-        return localStorage;
-    }
-    return fake_storage;
+    const [localStorage, setLocalStorage] = useState(fake_storage);
+
+    useEffect(() => {
+        setLocalStorage(window.localStorage);
+    }, []);
+
+    return localStorage;
 }

@@ -8,6 +8,7 @@ export type IconTypeBase =
     | "fa-magnifying-glass"
     | "fa-plus"
     | "fa-caret-down"
+    | "fa-caret-right"
     | "fa-bell"
     | "fa-bookmark"
     | "fa-pencil"
@@ -22,12 +23,14 @@ export type IconTypeBase =
     | "fa-heart"
     | "fa-asterisk"
     | "fa-chevron-down"
+    | "fa-chevron-left"
     | "fa-trash"
     | "fa-sun"
     | "fa-moon"
     | "fa-star"
     | "fa-cloud"
-    | "fa-floppy-disk";
+    | "fa-floppy-disk"
+    | "fa-bars";
 export type IconType = `${IconSource} ${IconTypeBase}`;
 
 const IconSet = function <TBase extends IconTypeBase, TSrc extends IconSource>(
@@ -49,6 +52,7 @@ export const faShoppingCart = IconSet("fa-cart-shopping", ["fas"]);
 export const faMagnifyingGlass = IconSet("fa-magnifying-glass", ["fas"]);
 export const faPlus = IconSet("fa-plus", ["fas"]);
 export const faCaretDown = IconSet("fa-caret-down", ["fas"]);
+export const faCaretRight = IconSet("fa-caret-right", ["fas"]);
 export const faBell = IconSet("fa-bell", ["far", "fas"]);
 export const faHouse = IconSet("fa-house", ["fas"]);
 export const faBookmark = IconSet("fa-bookmark", ["far", "fas"]);
@@ -72,3 +76,5 @@ export const faMoon = IconSet("fa-moon", ["fas", "far"]);
 export const faStar = IconSet("fa-star", ["fas", "far"]);
 export const faCloud = IconSet("fa-cloud", ["fas"]);
 export const faFloppyDisk = IconSet("fa-floppy-disk", ["fas", "far"]);
+export const faBars = IconSet("fa-bars", ["fas"]);
+export const faChevronLeft = IconSet("fa-chevron-left", ["fas"]);

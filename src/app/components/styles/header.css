@@ -1,12 +1,37 @@
 .navigation-bar {
-    @apply h-14 px-4 sm:px-6 lg:px-8 py-2 flex flex-row justify-between sticky top-0;
-    background-color: var(--navigation-bg);
-    color: var(--navigation-fg);
+    @apply flex flex-col sticky top-0 px-4 sm:px-6;
     z-index: 10000;
-}
 
-.navigation-bar .link {
-    @apply flex flex-row items-center gap-1;
+    & > div {
+        @apply flex flex-row justify-between h-14 py-2 items-center;
+
+        &:nth-of-type(2) {
+            .link-list > li {
+                & > a,
+                & > button {
+                    @apply rounded-md p-2;
+                }
+            }
+            .link-list-end > li {
+                & > a,
+                & > button {
+                    @apply h-10 w-10 rounded-full flex flex-col justify-center items-center p-0;
+                }
+            }
+        }
+    }
+
+    .menu-button {
+        @apply hidden;
+    }
+
+    .link {
+        @apply flex flex-row items-center gap-2;
+    }
+
+    .user-link > span:nth-last-of-type(1) {
+        @apply hidden xl:inline-block;
+    }
 }
 
 .link-list,
@@ -24,72 +49,67 @@
 }
 
 .logo-link {
-    @apply flex flex-row gap-4 text-xl uppercase;
+    @apply flex flex-row items-center flex-nowrap gap-4 text-sm xl:text-xl uppercase;
 }
 .logo-link > img {
     @apply h-8 w-8;
+}
+
+.banner {
+    @apply min-w-max h-36 xl:h-48;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 .breadcrumbs {
     @apply flex flex-row gap-2 text-sm rounded-md p-4 m-4 mt-0;
 }
 
-.navigation-dropdown {
-    @apply rounded-md mt-4;
-}
-.navigation-dropdown:not(.sub) {
-    @apply py-2;
-}
-
-.navigation-dropdown > li.unpadded > hr {
-    @apply my-2 border-gray-700;
-}
-
-.navigation-dropdown > li.label {
-    @apply cursor-default my-2 uppercase px-8;
-}
-
-.navigation-dropdown > li .link {
-    @apply cursor-pointer flex flex-row gap-1 items-center px-8;
+.breadcrumbs a {
+    @apply flex flex-row;
 }
 
 .dark {
     .navigation-bar {
         @apply bg-gray-800 text-gray-200;
+
+        & > div:nth-of-type(2) {
+            .link-list,
+            .link-list-end {
+                & > li {
+                    & > a,
+                    & > button {
+                        @apply hover:bg-white/20;
+                    }
+                }
+            }
+        }
     }
 
     .breadcrumbs {
         @apply bg-gray-800 text-gray-400;
-    }
-    .navigation-dropdown > li.label {
-        @apply text-gray-400;
-    }
-    .navigation-dropdown {
-        @apply bg-gray-800;
-    }
-    .navigation-dropdown > li:not(.label):hover {
-        @apply bg-gray-400;
     }
 }
 
 .light {
     .navigation-bar {
         @apply bg-gray-400 text-gray-700;
+
+        & > div:nth-of-type(2) {
+            .link-list,
+            .link-list-end {
+                & > li {
+                    & > a,
+                    & > button {
+                        @apply hover:bg-black/20;
+                    }
+                }
+            }
+        }
     }
 
     .breadcrumbs {
         @apply bg-gray-400 text-gray-700;
-    }
-
-    .navigation-dropdown > li.label {
-        @apply text-gray-600;
-    }
-
-    .navigation-dropdown {
-        @apply bg-gray-400;
-    }
-
-    .navigation-dropdown > li:not(.label):hover {
-        @apply bg-gray-600;
     }
 }

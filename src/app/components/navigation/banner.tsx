@@ -2,8 +2,6 @@
 
 import React from "react";
 
-import Image from "next/image";
-
 type BannerTeamData = {
     team: string;
     banners: number;
@@ -36,13 +34,9 @@ export default function Banner(props: BannerProps) {
     }`;
 
     return (
-        <Image
-            alt="banner"
-            src={banner_src}
-            width="6000"
-            height="696"
-            quality={1}
-            className="w-max"
+        <div
+            className="banner"
+            style={{ backgroundImage: `url(${banner_src})` }}
         />
     );
 }
